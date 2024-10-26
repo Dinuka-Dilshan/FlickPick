@@ -2,12 +2,18 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Box, InputAdornment, TextField } from "@mui/material";
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { ROUTES } from "../../constants/routes";
 
 const SearchInput = () => {
   const [isClickedOutside, setIsClickedOutside] = useState(true);
-  const [text, setText] = useState("");
   const iconRef = useRef<SVGSVGElement>(null);
   const textFieldRef = useRef<HTMLInputElement>(null);
+  const [params, setParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [text, setText] = useState(params.get("searchText") ?? "");
+  const [goBackTo, setGoBackTo] = useState("");
 
   const handleClickOutSide = useCallback(
     (e: MouseEvent) => {
@@ -25,6 +31,28 @@ const SearchInput = () => {
   const handleClickInside = () => {
     setIsClickedOutside(false);
   };
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (location.pathname !== ROUTES.SEARCH) {
+      setGoBackTo(location.pathname);
+    }
+    setText(e.target.value);
+    if (!e.target.value) {
+      navigate(goBackTo);
+    } else {
+      navigate(ROUTES.SEARCH);
+    }
+  };
+
+  useEffect(() => {
+    if (location.pathname !== ROUTES.SEARCH || !text) {
+      return;
+    }
+
+    setParams({ searchText: text });
+  }, [location.pathname, setParams, text]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutSide);
@@ -55,7 +83,7 @@ const SearchInput = () => {
             inputRef={textFieldRef}
             sx={{ p: 0, margin: 0 }}
             size="small"
-            onChange={(e) => setText(e.target.value)}
+            onChange={handleOnChange}
             slotProps={{
               input: {
                 startAdornment: (

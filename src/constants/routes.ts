@@ -1,3 +1,6 @@
 export const ROUTES = {
-  HOME: "/",
+  DEFAULT: "/",
+  POPULAR_MOVIES: "/movies",
+  POPULAR_TVS: "/tvs",
+  SEARCH: "/search",
 };
