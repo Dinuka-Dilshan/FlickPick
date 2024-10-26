@@ -1,8 +1,9 @@
-import { Box, Grid2, Skeleton, Typography } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
 import useAppQuery from "../../Query/useAppQuery";
 import { PopularMovieResponse } from "../../types/apiResponses";
+import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
 import MovieCard from "../MovieCard/MovieCard";
 
 type Props = {
@@ -23,16 +24,10 @@ const PopularItemList = ({ varient }: Props) => {
   return (
     <Box>
       <Typography variant="h6" fontWeight="bold">
-        Most Popular {varient === "MOVIE" ? "Movies" : "Tv series"} Today
+        Most Popular {varient === "MOVIE" ? "Movies" : "Tv Series"} Today
       </Typography>
       {isFetching ? (
-        <Grid2 container spacing={1.5} mt={"1rem"}>
-          {[...Array(25)].map((_, index) => (
-            <Grid2 size={{ xs: 12, md: 2 }} key={index}>
-              <Skeleton variant="rounded" width="100%" height={300} />
-            </Grid2>
-          ))}
-        </Grid2>
+        <LoadingItemIndicator />
       ) : (
         <Grid2 container spacing={1.5} mt={"1rem"}>
           {data?.map((movie, index) => (
@@ -44,6 +39,7 @@ const PopularItemList = ({ varient }: Props) => {
                 rank={movie.rank}
                 duration={movie.duration}
                 ratings={movie.ratings}
+                imdbId={movie.imdbId}
               />
             </Grid2>
           ))}
