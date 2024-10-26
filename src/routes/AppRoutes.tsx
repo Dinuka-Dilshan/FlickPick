@@ -4,6 +4,7 @@ import { ROUTES } from "../constants/routes";
 import PopularMovies from "../pages/PopularMovies";
 import PopularTvs from "../pages/PopularTvs";
 import Search from "../pages/Search";
+import TitleDetails from "../pages/TitleDetails";
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,10 @@ const AppRoutes = () => {
           <Route path={ROUTES.POPULAR_MOVIES} element={<PopularMovies />} />
           <Route path={ROUTES.POPULAR_TVS} element={<PopularTvs />} />
           <Route path={ROUTES.SEARCH} element={<Search />} />
+          <Route
+            path={ROUTES.TITILE_DETAILS(":id")}
+            element={<TitleDetails />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

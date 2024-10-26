@@ -3,6 +3,7 @@ export type SearchMovieResult = {
   name: string;
   year: string;
   imdbUrl: string;
+  imdbId: string;
 };
 
 export type PopularMovie = {
@@ -15,6 +16,7 @@ export type PopularMovie = {
   ratings: string;
   votes: string;
   rank: number;
+  imdbId: string;
 };
 
 export type SearchMovieResponse = SearchMovieResult[];
