@@ -8,7 +8,7 @@ const AppBar = () => {
   return (
     <Box
       sx={{
-        px: { xs: "0.5rem", md: "4rem" },
+        px: { xs: "0.5rem", md: "10rem" },
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",

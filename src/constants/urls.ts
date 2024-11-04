@@ -1,7 +1,8 @@
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 export const URLS = {
-  POPULAR_TVS: "http://192.168.8.189:5000/toptvs",
-  POPULAR_MOVIES: "http://192.168.8.189:5000/topmovies",
-  SEARCH: (searchText: string) =>
-    `http://192.168.8.189:5000/search?searchText=${searchText}`,
-  TITLE_DETAILS: (title: string) => `http://192.168.8.189:5000/title/${title}`,
+  POPULAR_TVS: `${BASE_URL}/toptvs`,
+  POPULAR_MOVIES: `${BASE_URL}/topmovies`,
+  SEARCH: (searchText: string) => `${BASE_URL}/search?searchText=${searchText}`,
+  TITLE_DETAILS: (title: string) => `${BASE_URL}/title/${title}`,
 };

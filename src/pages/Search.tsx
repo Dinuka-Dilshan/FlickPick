@@ -13,7 +13,7 @@ const Search = () => {
   const searchText = params.get("searchText") ?? "";
 
   const debouncedSearchText = useDebounceValue({
-    delay: 500,
+    delay: 1000,
     value: searchText,
   });
 
@@ -37,8 +37,8 @@ const Search = () => {
             <Grid2 size={{ xs: 12, md: 2 }} key={index}>
               <MovieCard
                 image={movie.posterUrl}
-                name={movie.name}
-                year={movie.year}
+                name={movie.title}
+                year={movie.releaseYear}
                 rank={""}
                 duration={""}
                 ratings={""}
