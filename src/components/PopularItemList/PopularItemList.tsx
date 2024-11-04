@@ -31,13 +31,13 @@ const PopularItemList = ({ varient }: Props) => {
       ) : (
         <Grid2 container spacing={1.5} mt={"1rem"}>
           {data?.map((movie, index) => (
-            <Grid2 size={{ xs: 12, md: 2 }} key={index}>
+            <Grid2 size={{ xs: 6, md: 4, lg: 3 }} key={index}>
               <MovieCard
                 image={movie.posterUrl}
-                name={movie.name}
-                year={movie.year}
+                name={movie.title}
+                year={movie.releaseYear}
                 rank={movie.rank}
-                duration={movie.duration}
+                duration={movie.runtime}
                 ratings={movie.ratings}
                 imdbId={movie.imdbId}
               />

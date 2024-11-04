@@ -23,20 +23,44 @@ const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
       sx={{
         aspectRatio: 2 / 3,
         mb: 0,
+        cursor: "pointer",
       }}
       onClick={clickHandler}
     >
       <Box
-        component="img"
         height="100%"
         width="100%"
         sx={{
-          objectFit: "cover",
-          borderRadius: { xs: "0", md: "8px" },
+          borderRadius: "8px",
+          position: "relative",
         }}
-        src={image}
-      />
-      <Typography fontWeight={"bold"}>#{rank}</Typography>
+      >
+        <Box
+          component="img"
+          height="100%"
+          width="100%"
+          sx={{
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+          src={image}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            bgcolor: "primary.main",
+            p: "0.5rem",
+            borderTopLeftRadius: "8px",
+            borderBottomRightRadius: "8px",
+          }}
+        >
+          <Typography sx={{ color: "#fff" }} fontWeight={"bold"}>
+            #{rank}
+          </Typography>
+        </Box>
+      </Box>
       <Typography>{name} </Typography>
       <Typography variant="caption">{year}</Typography>
     </Box>

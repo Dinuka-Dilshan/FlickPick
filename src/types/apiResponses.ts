@@ -1,23 +1,38 @@
 export type SearchMovieResult = {
   posterUrl: string;
-  name: string;
-  year: string;
+  title: string;
+  releaseYear: string;
   imdbUrl: string;
   imdbId: string;
 };
 
 export type PopularMovie = {
   posterUrl: string;
-  name: string;
+  title: string;
   imdbUrl: string;
-  year: string;
-  duration: string;
-  rated: string;
+  releaseYear: string;
+  runtime: string;
+  certificate: string;
   ratings: string;
-  votes: string;
+  voteCount: string;
   rank: number;
   imdbId: string;
 };
 
+export type MovieDetails = {
+  title: string;
+  ratings: number;
+  voteCount: number;
+  releaseYear: number;
+  certificate: string;
+  runtime: string;
+  posterUrl: string;
+  videoUrls: string[];
+  genres: string[];
+  plot: string;
+  rank: string;
+};
+
 export type SearchMovieResponse = SearchMovieResult[];
 export type PopularMovieResponse = PopularMovie[];
+export type MovieDetailsResponse = MovieDetails;
