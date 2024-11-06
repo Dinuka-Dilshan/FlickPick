@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../hooks/useAuth";
 
 type Props = {
   queryKey: string;
@@ -15,13 +16,17 @@ const useAppQuery = <T, TError = unknown>({
   body,
   enabled = true,
 }: Props) => {
+  const { user } = useAuth();
   const result = useQuery<T, TError>({
     queryKey: [queryKey],
     queryFn: async () => {
       const response = await fetch(url, {
         method,
         body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${user?.accessToken}`,
+        },
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -29,7 +34,7 @@ const useAppQuery = <T, TError = unknown>({
       return response.json();
     },
     staleTime: Infinity,
-    enabled
+    enabled,
   });
 
   return result;

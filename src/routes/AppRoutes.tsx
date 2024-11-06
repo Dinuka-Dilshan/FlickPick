@@ -1,30 +1,37 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import MainLayout from "../components/Layout/MainLayout";
+import { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
-import PopularMovies from "../pages/PopularMovies";
-import PopularTvs from "../pages/PopularTvs";
-import Search from "../pages/Search";
-import TitleDetails from "../pages/TitleDetails";
+
+const MainLayout = lazy(() => import("../components/Layout/MainLayout"));
+const Login = lazy(() => import("../pages/Login"));
+const PopularMovies = lazy(() => import("../pages/PopularMovies"));
+const PopularTvs = lazy(() => import("../pages/PopularTvs"));
+const Search = lazy(() => import("../pages/Search"));
+const TitleDetails = lazy(() => import("../pages/TitleDetails"));
+const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
+    <Suspense fallback={<>Loading...</>}>
       <Routes>
-        <Route element={<MainLayout />}>
-          <Route
-            path={ROUTES.DEFAULT}
-            element={<Navigate to={ROUTES.POPULAR_MOVIES} />}
-          />
-          <Route path={ROUTES.POPULAR_MOVIES} element={<PopularMovies />} />
-          <Route path={ROUTES.POPULAR_TVS} element={<PopularTvs />} />
-          <Route path={ROUTES.SEARCH} element={<Search />} />
-          <Route
-            path={ROUTES.TITILE_DETAILS(":id")}
-            element={<TitleDetails />}
-          />
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route
+              path={ROUTES.DEFAULT}
+              element={<Navigate to={ROUTES.POPULAR_MOVIES} />}
+            />
+            <Route path={ROUTES.POPULAR_MOVIES} element={<PopularMovies />} />
+            <Route path={ROUTES.POPULAR_TVS} element={<PopularTvs />} />
+            <Route path={ROUTES.SEARCH} element={<Search />} />
+            <Route
+              path={ROUTES.TITILE_DETAILS(":id")}
+              element={<TitleDetails />}
+            />
+          </Route>
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Suspense>
   );
 };
 

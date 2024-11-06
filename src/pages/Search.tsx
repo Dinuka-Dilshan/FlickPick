@@ -1,11 +1,11 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
-import useAppQuery from "../Query/useAppQuery";
 import LoadingItemIndicator from "../components/LoadingItemIndicator/LoadingItemIndicator";
 import MovieCard from "../components/MovieCard/MovieCard";
 import { QUERY_KEYS } from "../constants/queryKeys";
 import { URLS } from "../constants/urls";
 import useDebounceValue from "../hooks/useDebounceValue";
+import useAppQuery from "../services/query/useAppQuery";
 import { SearchMovieResponse } from "../types/apiResponses";
 
 const Search = () => {

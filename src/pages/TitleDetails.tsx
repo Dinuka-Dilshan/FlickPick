@@ -1,9 +1,9 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box, Chip, Grid2, Skeleton, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import useAppQuery from "../Query/useAppQuery";
 import { QUERY_KEYS } from "../constants/queryKeys";
 import { URLS } from "../constants/urls";
+import useAppQuery from "../services/query/useAppQuery";
 import { MovieDetailsResponse } from "../types/apiResponses";
 
 const TitleDetails = () => {

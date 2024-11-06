@@ -1,7 +1,7 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
-import useAppQuery from "../../Query/useAppQuery";
+import useAppQuery from "../../services/query/useAppQuery";
 import { PopularMovieResponse } from "../../types/apiResponses";
 import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
 import MovieCard from "../MovieCard/MovieCard";
@@ -30,7 +30,7 @@ const PopularItemList = ({ varient }: Props) => {
         <LoadingItemIndicator />
       ) : (
         <Grid2 container spacing={1.5} mt={"1rem"}>
-          {data?.map((movie, index) => (
+          {data?.map?.((movie, index) => (
             <Grid2 size={{ xs: 6, md: 4, lg: 3 }} key={index}>
               <MovieCard
                 image={movie.posterUrl}
