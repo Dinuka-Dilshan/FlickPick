@@ -996,7 +996,15 @@
     "@smithy/types" "^3.6.0"
     tslib "^2.6.2"
 
-"@aws-sdk/types@^3.222.0", "@aws-sdk/types@3.679.0":
+"@aws-sdk/types@^3.222.0":
+  version "3.679.0"
+  resolved "https://registry.npmjs.org/@aws-sdk/types/-/types-3.679.0.tgz"
+  integrity sha512-NwVq8YvInxQdJ47+zz4fH3BRRLC6lL+WLkvr242PVBbUOLRyK/lkwHlfiKUoeVIMyK5NF+up6TRg71t/8Bny6Q==
+  dependencies:
+    "@smithy/types" "^3.5.0"
+    tslib "^2.6.2"
+
+"@aws-sdk/types@3.679.0":
   version "3.679.0"
   resolved "https://registry.npmjs.org/@aws-sdk/types/-/types-3.679.0.tgz"
   integrity sha512-NwVq8YvInxQdJ47+zz4fH3BRRLC6lL+WLkvr242PVBbUOLRyK/lkwHlfiKUoeVIMyK5NF+up6TRg71t/8Bny6Q==
