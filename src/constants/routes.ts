@@ -1,6 +1,7 @@
 export const ROUTES = {
   DEFAULT: "/",
   LOGIN: "/login",
+  SIGNUP: "/signup",
   POPULAR_MOVIES: "/movies",
   POPULAR_TVS: "/tvs",
   SEARCH: "/search",

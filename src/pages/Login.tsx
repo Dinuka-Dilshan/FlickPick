@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { PropsWithChildren, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Logo from "../components/AppBar/Logo";
 import { ROUTES } from "../constants/routes";
 import { useAuth } from "../hooks/useAuth";
@@ -34,10 +34,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, user, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     login({ username: email, password });
   };
+
+  const handleSignUp = () => navigate(ROUTES.SIGNUP);
 
   if (user) {
     return <Navigate to={ROUTES.DEFAULT} />;
@@ -90,13 +93,23 @@ const Login = () => {
           </Item>
           <Item mt="1.25rem">
             <Button
-              disabled={isLoading}
+              disabled={isLoading || email.length < 3 || password.length < 9}
               onClick={handleSubmit}
               fullWidth
               variant="contained"
               startIcon={isLoading ? <CircularProgress size="1.2rem" /> : null}
             >
               {isLoading ? "Checking Credentials..." : "Sign In"}
+            </Button>
+          </Item>
+          <Item display="flex" justifyContent="center" alignItems="center">
+            <Button
+              onClick={handleSignUp}
+              color="inherit"
+              sx={{ textTransform: "none" }}
+              size="small"
+            >
+              New to FlickPick? Sign up now.
             </Button>
           </Item>
         </Grid2>
