@@ -15,3 +15,9 @@ export function stringToColor(string: string) {
 
   return color;
 }
+
+export function camelToNormal(str: string) {
+  return str
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (firstChar) => firstChar.toUpperCase());
+}

@@ -2,23 +2,31 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  FormHelperText,
   Grid2,
   Grid2Props,
   InputLabel,
   LinearProgress,
   MenuItem,
   Select,
-  SelectChangeEvent,
   styled,
   TextField,
-  TextFieldProps,
   Typography,
 } from "@mui/material";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren } from "react";
 import { Navigate } from "react-router-dom";
 import Logo from "../components/AppBar/Logo";
 import { ROUTES } from "../constants/routes";
 import { useAuth } from "../hooks/useAuth";
+import useFormState from "../hooks/useFormState";
+import {
+  validateBirthday,
+  validateConfirmPassword,
+  validateEmail,
+  validateGender,
+  validateName,
+  validatePassword,
+} from "../utils/validations";
 
 const Wrapper = styled(Grid2)({
   width: "100vw",
@@ -37,36 +45,33 @@ const Item = ({ children, ...rest }: PropsWithChildren<Grid2Props>) => {
 };
 
 const SignUp = () => {
-  const { login, user, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
 
-  const [inputs, setInputs] = useState({
-    name: "",
-    password: "",
-    birthday: "",
-    gender: "",
-    confirmPassword: "",
-    email: "",
-  });
-
-  const handleSubmit = () => {
-    login({ username: inputs.email, password: inputs.password });
-  };
-
-  const registerInput = (
-    key: keyof typeof inputs,
-    type?: TextFieldProps["type"]
-  ) => ({
-    name: key,
-    fullWidth: true,
-    onChange: (
-      e:
-        | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        | SelectChangeEvent
-    ) => setInputs((inputs) => ({ ...inputs, [key]: e.target.value })),
-    label: key,
-    value: inputs[key],
-    size: "small" as TextFieldProps["size"],
-    type,
+  const { registerInput, handleSubmit, fields } = useFormState({
+    fields: {
+      name: { value: "", vaidator: (name) => validateName(name) },
+      password: {
+        value: "",
+        vaidator: (password) => validatePassword(password),
+      },
+      birthday: {
+        value: "",
+        vaidator: (birthday) => validateBirthday(birthday),
+      },
+      gender: { value: "", vaidator: (gender) => validateGender(gender) },
+      confirmPassword: {
+        value: "",
+        vaidator: (confirmPassword, state) =>
+          validateConfirmPassword(state?.password?.value, confirmPassword),
+      },
+      email: { value: "", vaidator: (email) => validateEmail(email) },
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+    onError: (values) => {
+      console.log(values);
+    },
   });
 
   if (user) {
@@ -109,12 +114,24 @@ const SignUp = () => {
               />
             </Item>
             <Item>
-              <FormControl size="small" fullWidth>
-                <InputLabel>Gender</InputLabel>
-                <Select {...registerInput("gender")}>
+              <FormControl
+                size="small"
+                fullWidth
+                error={registerInput("gender").error}
+              >
+                <InputLabel id="select-label">Gender</InputLabel>
+                <Select
+                  id="select-label"
+                  {...registerInput("gender", "", ["helperText"])}
+                >
                   <MenuItem value={"Male"}>Male</MenuItem>
                   <MenuItem value={"Female"}>Female</MenuItem>
                 </Select>
+                {registerInput("gender").error && (
+                  <FormHelperText>
+                    {registerInput("gender").helperText}
+                  </FormHelperText>
+                )}
               </FormControl>
             </Item>
             <Item>
@@ -128,11 +145,6 @@ const SignUp = () => {
             </Item>
             <Item mt="1.25rem">
               <Button
-                disabled={
-                  isLoading ||
-                  inputs.email.length < 3 ||
-                  inputs.password.length < 9
-                }
                 onClick={handleSubmit}
                 fullWidth
                 variant="contained"
