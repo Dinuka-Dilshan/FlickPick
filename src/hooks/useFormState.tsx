@@ -126,7 +126,7 @@ const useFormState = ({ fields, onSubmit, onError }: Props) => {
   const handleSubmit = useCallback(() => {
     setInputs(
       Object.entries(inputs).reduce((inputs, [key, field]) => {
-        const { error, isValid } = field.vaidator(field.value, {});
+        const { error, isValid } = field.vaidator(field.value, fieldsForComponent);
         return {
           ...inputs,
           [key]: {

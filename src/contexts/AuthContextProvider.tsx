@@ -52,9 +52,31 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     }
   }, [loggedInUser, navigate]);
 
+  const signUp = useCallback(
+    async (authParams: {
+      email: string;
+      password: string;
+      birthdate: string;
+      gender: string;
+      fullname: string;
+    }) => {
+      try {
+        setIsLoading(true);
+        const result = await Cognito.signUp(authParams);
+        console.log(result);
+      } catch (error) {
+        enqueueSnackbar(error?.message);
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+
   return (
     <AuthContext.Provider
-      value={{ login, logout, user: loggedInUser, isLoading }}
+      value={{ login, logout, user: loggedInUser, isLoading, signUp }}
     >
       {children}
     </AuthContext.Provider>

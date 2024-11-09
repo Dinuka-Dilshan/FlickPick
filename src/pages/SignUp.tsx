@@ -14,9 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { PropsWithChildren } from "react";
-import { Navigate } from "react-router-dom";
 import Logo from "../components/AppBar/Logo";
-import { ROUTES } from "../constants/routes";
 import { useAuth } from "../hooks/useAuth";
 import useFormState from "../hooks/useFormState";
 import {
@@ -45,9 +43,8 @@ const Item = ({ children, ...rest }: PropsWithChildren<Grid2Props>) => {
 };
 
 const SignUp = () => {
-  const { user, isLoading } = useAuth();
-
-  const { registerInput, handleSubmit, fields } = useFormState({
+  const { isLoading, signUp } = useAuth();
+  const { registerInput, handleSubmit, isFormValid } = useFormState({
     fields: {
       name: { value: "", vaidator: (name) => validateName(name) },
       password: {
@@ -62,21 +59,20 @@ const SignUp = () => {
       confirmPassword: {
         value: "",
         vaidator: (confirmPassword, state) =>
-          validateConfirmPassword(state?.password?.value, confirmPassword),
+          validateConfirmPassword(
+            state?.password?.value || "",
+            confirmPassword
+          ),
       },
       email: { value: "", vaidator: (email) => validateEmail(email) },
     },
     onSubmit: (values) => {
-      console.log(values);
+      console.log();
     },
     onError: (values) => {
       console.log(values);
     },
   });
-
-  if (user) {
-    return <Navigate to={ROUTES.DEFAULT} />;
-  }
 
   return (
     <Wrapper container>
@@ -145,6 +141,7 @@ const SignUp = () => {
             </Item>
             <Item mt="1.25rem">
               <Button
+                disabled={!isFormValid}
                 onClick={handleSubmit}
                 fullWidth
                 variant="contained"
@@ -152,7 +149,7 @@ const SignUp = () => {
                   isLoading ? <CircularProgress size="1.2rem" /> : null
                 }
               >
-                {isLoading ? "Checking Credentials..." : "Sign In"}
+                {isLoading ? "Creating Profile..." : " Sign Up"}
               </Button>
             </Item>
           </Grid2>

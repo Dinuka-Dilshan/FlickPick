@@ -3,6 +3,7 @@ import {
   GetUserCommand,
   GlobalSignOutCommand,
   InitiateAuthCommand,
+  SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { AuthenticatedUser } from "../../types/user";
 
@@ -55,4 +56,34 @@ const logOut = async (user: AuthenticatedUser) => {
   );
 };
 
-export const Cognito = { login, logOut };
+const signUp = async ({
+  password,
+  email,
+  birthdate,
+  gender,
+  fullname,
+}: {
+  email: string;
+  password: string;
+  birthdate: string;
+  gender: string;
+  fullname: string;
+}) => {
+  const command = new SignUpCommand({
+    ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+    Username: email,
+    Password: password,
+    UserAttributes: [
+      { Name: "email", Value: email },
+      { Name: "birthdate", Value: birthdate },
+      { Name: "gender", Value: gender },
+      { Name: "fullname", Value: fullname },
+    ],
+  });
+
+  const result = await client.send(command);
+
+  return result;
+};
+
+export const Cognito = { login, logOut, signUp };

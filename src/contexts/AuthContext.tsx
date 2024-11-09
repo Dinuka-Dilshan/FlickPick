@@ -6,10 +6,18 @@ export type AuthContext = {
   login: (params: { username: string; password: string }) => void;
   logout: () => void;
   isLoading: boolean;
+  signUp: (authParams: {
+    email: string;
+    password: string;
+    birthdate: string;
+    gender: string;
+    fullname: string;
+  }) => void
 };
 export const AuthContext = createContext<AuthContext>({
   login: () => null,
   logout: () => null,
   user: null,
   isLoading: false,
+  signUp: () => null,
 });

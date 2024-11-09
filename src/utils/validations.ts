@@ -63,6 +63,7 @@ export const validateConfirmPassword = (
   confirmPassword: string
 ) => {
   const isValid = password === confirmPassword;
+  console.log(password, confirmPassword);
   return { isValid, error: isValid ? null : "Passwords should be matched" };
 };
 
