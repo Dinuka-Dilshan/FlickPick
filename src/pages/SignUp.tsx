@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   CircularProgress,
   FormControl,
@@ -43,7 +44,7 @@ const Item = ({ children, ...rest }: PropsWithChildren<Grid2Props>) => {
 };
 
 const SignUp = () => {
-  const { isLoading, signUp } = useAuth();
+  const { isLoading, signUp, errorMessage, infoMessage } = useAuth();
   const { registerInput, handleSubmit, isFormValid } = useFormState({
     fields: {
       name: { value: "", vaidator: (name) => validateName(name) },
@@ -67,7 +68,13 @@ const SignUp = () => {
       email: { value: "", vaidator: (email) => validateEmail(email) },
     },
     onSubmit: (values) => {
-      console.log();
+      signUp({
+        birthdate: values.birthday.value,
+        email: values.email.value,
+        fullname: values.name.value,
+        gender: values.gender.value,
+        password: values.password.value,
+      });
     },
     onError: (values) => {
       console.log(values);
@@ -83,6 +90,20 @@ const SignUp = () => {
             container
             spacing={1.25}
           >
+            {errorMessage && (
+              <Item>
+                <Alert sx={{ p: "0.1rem 1rem" }} severity="error">
+                  {errorMessage}
+                </Alert>
+              </Item>
+            )}
+            {infoMessage && (
+              <Item>
+                <Alert sx={{ p: "0.1rem 1rem" }} severity="info">
+                  {infoMessage}
+                </Alert>
+              </Item>
+            )}
             {isLoading && (
               <Item>
                 <LinearProgress />

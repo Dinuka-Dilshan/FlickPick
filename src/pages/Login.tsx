@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   CircularProgress,
   Grid2,
@@ -33,7 +34,7 @@ const Item = ({ children, ...rest }: PropsWithChildren<Grid2Props>) => {
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, user, isLoading } = useAuth();
+  const { login, user, isLoading, errorMessage } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = () => {
@@ -54,6 +55,13 @@ const Login = () => {
           container
           spacing={1}
         >
+          {errorMessage && (
+            <Item>
+              <Alert sx={{ p: "0.1rem 1rem" }} severity="error">
+                {errorMessage}
+              </Alert>
+            </Item>
+          )}
           {isLoading && (
             <Item>
               <LinearProgress />

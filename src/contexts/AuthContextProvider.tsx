@@ -14,6 +14,8 @@ import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [infoMessage, setInfoMessage] = useState("");
   const [loggedInUser, setLoggedInUser] = useState<AuthenticatedUser | null>(
     () => getLoggedInUserFromLocalStrorage()
   );
@@ -23,6 +25,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     async (authParams: { username: string; password: string }) => {
       try {
         setIsLoading(true);
+        setErrorMessage("");
         const user = await Cognito.login(authParams);
         setLoggedInUser(user);
         setLoggedInUserToLocalStrorage(user);
@@ -30,6 +33,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         enqueueSnackbar("Hey, Welcome Back!");
       } catch (error) {
         enqueueSnackbar(error?.message);
+        setErrorMessage(error?.message);
       } finally {
         setIsLoading(false);
       }
@@ -61,12 +65,18 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       fullname: string;
     }) => {
       try {
+        setInfoMessage("");
+        setErrorMessage("");
         setIsLoading(true);
         const result = await Cognito.signUp(authParams);
-        console.log(result);
+        setInfoMessage(
+          !result.UserConfirmed
+            ? "A verification email has been sent. Please check your inbox."
+            : ""
+        );
       } catch (error) {
         enqueueSnackbar(error?.message);
-        console.log(error);
+        setErrorMessage(error?.message);
       } finally {
         setIsLoading(false);
       }
@@ -76,7 +86,15 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, user: loggedInUser, isLoading, signUp }}
+      value={{
+        login,
+        logout,
+        user: loggedInUser,
+        isLoading,
+        signUp,
+        errorMessage,
+        infoMessage,
+      }}
     >
       {children}
     </AuthContext.Provider>

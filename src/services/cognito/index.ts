@@ -77,7 +77,7 @@ const signUp = async ({
       { Name: "email", Value: email },
       { Name: "birthdate", Value: birthdate },
       { Name: "gender", Value: gender },
-      { Name: "fullname", Value: fullname },
+      { Name: "name", Value: fullname },
     ],
   });
 

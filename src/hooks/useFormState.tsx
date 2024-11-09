@@ -23,7 +23,7 @@ type Field = {
 type Props = {
   fields: { [key: string]: Omit<Field, "error" | "isValid" | "isTouched"> };
   onSubmit: (values: {
-    [key: string]: Omit<Field, "error" | "isValid" | "vaidator">;
+    [key: string]: Omit<Field, "isValid" | "vaidator">;
   }) => void;
   onError: (errors: { [key: string]: string | null }) => void;
 };
@@ -57,7 +57,7 @@ const useFormState = ({ fields, onSubmit, onError }: Props) => {
           },
         }),
         {} as {
-          [key: keyof typeof fields]: {
+          [key: string]: {
             value: string;
             isValid: boolean;
             error: string | null;
@@ -126,7 +126,10 @@ const useFormState = ({ fields, onSubmit, onError }: Props) => {
   const handleSubmit = useCallback(() => {
     setInputs(
       Object.entries(inputs).reduce((inputs, [key, field]) => {
-        const { error, isValid } = field.vaidator(field.value, fieldsForComponent);
+        const { error, isValid } = field.vaidator(
+          field.value,
+          fieldsForComponent
+        );
         return {
           ...inputs,
           [key]: {

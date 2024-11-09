@@ -12,7 +12,9 @@ export type AuthContext = {
     birthdate: string;
     gender: string;
     fullname: string;
-  }) => void
+  }) => void;
+  errorMessage: string;
+  infoMessage: string;
 };
 export const AuthContext = createContext<AuthContext>({
   login: () => null,
@@ -20,4 +22,6 @@ export const AuthContext = createContext<AuthContext>({
   user: null,
   isLoading: false,
   signUp: () => null,
+  errorMessage: "",
+  infoMessage: "",
 });
