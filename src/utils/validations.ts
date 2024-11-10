@@ -63,7 +63,6 @@ export const validateConfirmPassword = (
   confirmPassword: string
 ) => {
   const isValid = password === confirmPassword;
-  console.log(password, confirmPassword);
   return { isValid, error: isValid ? null : "Passwords should be matched" };
 };
 
@@ -75,3 +74,7 @@ export const validateGender = (gender: string) => {
   const isValid = gender === "Male" || gender === "Female";
   return { isValid, error: isValid ? null : "Gender is Invalid" };
 };
+export const skipValidation = () => ({
+  isValid: true,
+  error: null,
+});

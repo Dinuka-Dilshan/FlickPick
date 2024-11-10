@@ -15,6 +15,9 @@ export type AuthContext = {
   }) => void;
   errorMessage: string;
   infoMessage: string;
+  clearErrorMessage: () => void;
+  clearInfo: () => void;
+  verify: (params: { userName: string; otp: string }) => void;
 };
 export const AuthContext = createContext<AuthContext>({
   login: () => null,
@@ -24,4 +27,7 @@ export const AuthContext = createContext<AuthContext>({
   signUp: () => null,
   errorMessage: "",
   infoMessage: "",
+  clearErrorMessage: () => null,
+  clearInfo: () => null,
+  verify: () => null,
 });

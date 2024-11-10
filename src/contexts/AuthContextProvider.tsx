@@ -1,5 +1,5 @@
-import { PropsWithChildren, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { enqueueSnackbar } from "notistack";
 import { ROUTES } from "../constants/routes";
@@ -20,6 +20,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     () => getLoggedInUserFromLocalStrorage()
   );
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
 
   const login = useCallback(
     async (authParams: { username: string; password: string }) => {
@@ -32,8 +33,15 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         navigate(ROUTES.DEFAULT, { replace: true });
         enqueueSnackbar("Hey, Welcome Back!");
       } catch (error) {
-        enqueueSnackbar(error?.message);
-        setErrorMessage(error?.message);
+        if (error?.message?.includes("User is not confirmed.")) {
+          navigate(ROUTES.VERIFY_ACCOUNT, {
+            replace: true,
+            state: { userName: authParams.username },
+          });
+        } else {
+          enqueueSnackbar(error?.message);
+          setErrorMessage(error?.message);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -69,11 +77,12 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         setErrorMessage("");
         setIsLoading(true);
         const result = await Cognito.signUp(authParams);
-        setInfoMessage(
-          !result.UserConfirmed
-            ? "A verification email has been sent. Please check your inbox."
-            : ""
-        );
+        if (!result.UserConfirmed) {
+          navigate(ROUTES.VERIFY_ACCOUNT, {
+            replace: true,
+            state: { userName: authParams.email },
+          });
+        }
       } catch (error) {
         enqueueSnackbar(error?.message);
         setErrorMessage(error?.message);
@@ -81,8 +90,35 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         setIsLoading(false);
       }
     },
-    []
+    [navigate]
   );
+
+  const verify = useCallback(
+    async (request: { userName: string; otp: string }) => {
+      try {
+        setInfoMessage("");
+        setErrorMessage("");
+        setIsLoading(true);
+        await Cognito.verify(request);
+        setInfoMessage("Verification Succesful. Please Login");
+        navigate(ROUTES.LOGIN);
+      } catch (error) {
+        enqueueSnackbar(error?.message);
+        setErrorMessage(error?.message);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [navigate]
+  );
+
+  const clearInfo = () => setInfoMessage("");
+  const clearErrorMessage = () => setErrorMessage("");
+
+  useEffect(() => {
+    clearInfo();
+    clearErrorMessage();
+  }, [location]);
 
   return (
     <AuthContext.Provider
@@ -94,6 +130,9 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         signUp,
         errorMessage,
         infoMessage,
+        clearErrorMessage,
+        clearInfo,
+        verify,
       }}
     >
       {children}

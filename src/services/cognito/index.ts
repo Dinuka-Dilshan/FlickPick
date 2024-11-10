@@ -1,5 +1,6 @@
 import {
   CognitoIdentityProviderClient,
+  ConfirmSignUpCommand,
   GetUserCommand,
   GlobalSignOutCommand,
   InitiateAuthCommand,
@@ -82,8 +83,18 @@ const signUp = async ({
   });
 
   const result = await client.send(command);
-
+  console.log(result);
   return result;
 };
 
-export const Cognito = { login, logOut, signUp };
+const verify = async ({ otp, userName }: { userName: string; otp: string }) => {
+  await client.send(
+    new ConfirmSignUpCommand({
+      ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+      ConfirmationCode: otp,
+      Username: userName,
+    })
+  );
+};
+
+export const Cognito = { login, logOut, signUp, verify };
