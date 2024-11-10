@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
 import AuthLayout from "../components/AuthLayout/AuthLayout";
 import AuthLayoutItem from "../components/AuthLayout/AuthLayoutItem";
+import PasswordInput from "../components/PasswordInput/PasswordInput";
 import { useAuth } from "../hooks/useAuth";
 import useFormState from "../hooks/useFormState";
 import { skipValidation } from "../utils/validations";
-import PasswordInput from "../components/PasswordInput/PasswordInput";
 
 const Login = () => {
   const { login } = useAuth();
@@ -17,8 +17,8 @@ const Login = () => {
     onError: () => {},
     onSubmit: (values) => {
       login({
-        username: values.username.value,
-        password: values.password.value,
+        userName: values.username.value,
+        passWord: values.password.value,
       });
     },
   });

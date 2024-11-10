@@ -1,12 +1,17 @@
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
+import { SignUpCommandOutput } from "@aws-sdk/client-cognito-identity-provider";
+import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
+import { PropsWithChildren } from "react";
+import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
-import { Cognito } from "../services/cognito";
+import {
+  Cognito,
+  CognitoLoginProps,
+  CognitoSignupProps,
+  CognitoVerifyProps,
+} from "../services/cognito";
 import { AuthenticatedUser } from "../types/user";
 import {
-  getLoggedInUserFromLocalStrorage,
   removeLoggedInUserFromLocalStrorage,
   setLoggedInUserToLocalStrorage,
 } from "../utils/localStorage";
@@ -14,125 +19,93 @@ import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [infoMessage, setInfoMessage] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState<AuthenticatedUser | null>(
-    () => getLoggedInUserFromLocalStrorage()
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation();
-
-  const login = useCallback(
-    async (authParams: { username: string; password: string }) => {
-      try {
-        setIsLoading(true);
-        setErrorMessage("");
-        const user = await Cognito.login(authParams);
-        setLoggedInUser(user);
-        setLoggedInUserToLocalStrorage(user);
-        navigate(ROUTES.DEFAULT, { replace: true });
-        enqueueSnackbar("Hey, Welcome Back!");
-      } catch (error) {
-        if (error?.message?.includes("User is not confirmed.")) {
-          navigate(ROUTES.VERIFY_ACCOUNT, {
-            replace: true,
-            state: { userName: authParams.username },
-          });
-        } else {
-          enqueueSnackbar(error?.message);
-          setErrorMessage(error?.message);
-        }
-      } finally {
-        setIsLoading(false);
+  const {
+    mutate: login,
+    isPending: isLoginLoading,
+    data: user,
+    reset: resetLogin,
+  } = useMutation<AuthenticatedUser, Error, CognitoLoginProps>({
+    onError: (error, props) => {
+      if (error.message.includes("User is not confirmed.")) {
+        navigate(ROUTES.VERIFY_ACCOUNT, {
+          replace: true,
+          state: { userName: props.userName },
+        });
+      } else {
+        enqueueSnackbar(error.message);
       }
     },
-    [navigate]
-  );
+    onSuccess: (user) => {
+      setLoggedInUserToLocalStrorage(user);
+      navigate(ROUTES.DEFAULT, { replace: true });
+      enqueueSnackbar("Hey, Welcome Back!");
+    },
+    mutationFn: async (props) => await Cognito.login(props),
+  });
 
-  const logout = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      await Cognito.logOut(loggedInUser!);
-      setLoggedInUser(null);
+  const { mutate: logout, isPending: isLogOutLoading } = useMutation<
+    void,
+    Error,
+    void
+  >({
+    onError: () => {
+      enqueueSnackbar("Logout failed! please try again later");
+    },
+    onSuccess: () => {
       removeLoggedInUserFromLocalStrorage();
       navigate(ROUTES.LOGIN, { replace: true });
       enqueueSnackbar("Bye, See you again!");
-    } catch {
-      enqueueSnackbar("Logout failed! please try again later");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [loggedInUser, navigate]);
+      resetLogin();
+    },
+    mutationFn: async () => await Cognito.logOut(user!),
+  });
 
-  const signUp = useCallback(
-    async (authParams: {
-      email: string;
-      password: string;
-      birthdate: string;
-      gender: string;
-      fullname: string;
-    }) => {
-      try {
-        setInfoMessage("");
-        setErrorMessage("");
-        setIsLoading(true);
-        const result = await Cognito.signUp(authParams);
-        if (!result.UserConfirmed) {
-          navigate(ROUTES.VERIFY_ACCOUNT, {
-            replace: true,
-            state: { userName: authParams.email },
-          });
-        }
-      } catch (error) {
-        enqueueSnackbar(error?.message);
-        setErrorMessage(error?.message);
-      } finally {
-        setIsLoading(false);
+  const { mutate: signUp, isPending: isSignUpLoading } = useMutation<
+    SignUpCommandOutput,
+    Error,
+    CognitoSignupProps
+  >({
+    onError: (error) => {
+      enqueueSnackbar(error.message);
+    },
+    onSuccess: (signUpData, props) => {
+      if (!signUpData.UserConfirmed) {
+        navigate(ROUTES.VERIFY_ACCOUNT, {
+          replace: true,
+          state: { userName: props.email },
+        });
       }
     },
-    [navigate]
-  );
+    mutationFn: async (props) => await Cognito.signUp(props),
+  });
 
-  const verify = useCallback(
-    async (request: { userName: string; otp: string }) => {
-      try {
-        setInfoMessage("");
-        setErrorMessage("");
-        setIsLoading(true);
-        await Cognito.verify(request);
-        setInfoMessage("Verification Succesful. Please Login");
-        navigate(ROUTES.LOGIN);
-      } catch (error) {
-        enqueueSnackbar(error?.message);
-        setErrorMessage(error?.message);
-      } finally {
-        setIsLoading(false);
-      }
+  const { mutate: verify, isPending: isVerifyLoading } = useMutation<
+    void,
+    Error,
+    CognitoVerifyProps
+  >({
+    onError: (error) => {
+      enqueueSnackbar(error.message);
     },
-    [navigate]
-  );
-
-  const clearInfo = () => setInfoMessage("");
-  const clearErrorMessage = () => setErrorMessage("");
-
-  useEffect(() => {
-    clearInfo();
-    clearErrorMessage();
-  }, [location]);
+    onSuccess: () => {
+      navigate(ROUTES.LOGIN);
+    },
+    mutationFn: async (props) => await Cognito.verify(props),
+  });
 
   return (
     <AuthContext.Provider
       value={{
+        isLoading:
+          isLoginLoading ||
+          isLogOutLoading ||
+          isSignUpLoading ||
+          isVerifyLoading,
         login,
         logout,
-        user: loggedInUser,
-        isLoading,
         signUp,
-        errorMessage,
-        infoMessage,
-        clearErrorMessage,
-        clearInfo,
         verify,
+        user: user ?? null,
       }}
     >
       {children}
