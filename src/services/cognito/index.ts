@@ -8,21 +8,37 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { AuthenticatedUser } from "../../types/user";
 
+export type CognitoLoginProps = {
+  userName: string;
+  passWord: string;
+};
+
+export type CognitoSignupProps = {
+  email: string;
+  password: string;
+  birthdate: string;
+  gender: string;
+  fullname: string;
+};
+
+export type CognitoVerifyProps = { userName: string; otp: string };
+
+export type CognitoUserAttributes = {
+  name: string;
+  gender: string;
+  email: string;
+  birthdate: string;
+};
+
 const client = new CognitoIdentityProviderClient({
   region: import.meta.env.VITE_COGNITO_CLIENT_REGION,
 });
 
-const login = async ({
-  password,
-  username,
-}: {
-  username: string;
-  password: string;
-}) => {
+const login = async ({ passWord, userName }: CognitoLoginProps) => {
   const command = new InitiateAuthCommand({
     AuthFlow: "USER_PASSWORD_AUTH",
     ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
-    AuthParameters: { USERNAME: username, PASSWORD: password },
+    AuthParameters: { USERNAME: userName, PASSWORD: passWord },
   });
 
   const result = await client.send(command);
@@ -36,7 +52,7 @@ const login = async ({
   const userData = user.UserAttributes?.reduce(
     (userData, curr) =>
       curr?.Name ? { [curr?.Name]: curr.Value, ...userData } : userData,
-    {}
+    {} as CognitoUserAttributes
   );
 
   return {
@@ -63,31 +79,25 @@ const signUp = async ({
   birthdate,
   gender,
   fullname,
-}: {
-  email: string;
-  password: string;
-  birthdate: string;
-  gender: string;
-  fullname: string;
-}) => {
+}: CognitoSignupProps) => {
   const command = new SignUpCommand({
     ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
     Username: email,
     Password: password,
     UserAttributes: [
-      { Name: "email", Value: email },
+      { Name: "name", Value: email },
       { Name: "birthdate", Value: birthdate },
       { Name: "gender", Value: gender },
       { Name: "name", Value: fullname },
-    ],
+    ] as { Name: keyof CognitoUserAttributes; Value: string }[],
   });
 
   const result = await client.send(command);
-  console.log(result);
+
   return result;
 };
 
-const verify = async ({ otp, userName }: { userName: string; otp: string }) => {
+const verify = async ({ otp, userName }: CognitoVerifyProps) => {
   await client.send(
     new ConfirmSignUpCommand({
       ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
