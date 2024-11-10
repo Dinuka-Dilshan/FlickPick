@@ -1,8 +1,9 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { URLS } from "../../constants/urls";
-import useAppQuery from "../../Query/useAppQuery";
-import { PopularMovieResponse } from "../../types/apiResponses";
+import useAuth from "../../hooks/useAuth";
+import useAppQuery from "../../services/query/useAppQuery";
+import { getPopularMoviesTvs } from "../../services/s3";
+import { PopularMovie } from "../../types/apiResponses";
 import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
 import MovieCard from "../MovieCard/MovieCard";
 
@@ -11,15 +12,20 @@ type Props = {
 };
 
 const PopularItemList = ({ varient }: Props) => {
-  const { data, error, isFetching } = useAppQuery<PopularMovieResponse>({
-    queryKey:
-      varient === "MOVIE" ? QUERY_KEYS.POPULAR_MOVIES : QUERY_KEYS.POPULAR_TVS,
-    url: varient === "MOVIE" ? URLS.POPULAR_MOVIES : URLS.POPULAR_TVS,
+  const { user } = useAuth();
+  const { data, error, isFetching } = useAppQuery<{
+    movies: PopularMovie[];
+    tvs: PopularMovie[];
+  }>({
+    queryKey: QUERY_KEYS.POPULAR_MOVIES_TVS,
+    queryFn: () => getPopularMoviesTvs(user?.idToken as string),
   });
 
   if (error) {
     return <Box>Somthing went wrong! refresh the browser</Box>;
   }
+
+  const list = varient === "MOVIE" ? data?.movies : data?.tvs;
 
   return (
     <Box>
@@ -30,7 +36,7 @@ const PopularItemList = ({ varient }: Props) => {
         <LoadingItemIndicator />
       ) : (
         <Grid2 container spacing={1.5} mt={"1rem"}>
-          {data?.map((movie, index) => (
+          {list?.map?.((movie, index) => (
             <Grid2 size={{ xs: 6, md: 4, lg: 3 }} key={index}>
               <MovieCard
                 image={movie.posterUrl}

@@ -48,11 +48,14 @@ const SearchInput = () => {
 
   useEffect(() => {
     if (location.pathname !== ROUTES.SEARCH || !text) {
+      params.delete("searchText");
+      setText("");
+      setIsClickedOutside(true);
       return;
     }
 
     setParams({ searchText: text });
-  }, [location.pathname, setParams, text]);
+  }, [location.pathname, params, setParams, text]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutSide);
@@ -81,6 +84,7 @@ const SearchInput = () => {
           <TextField
             value={text}
             inputRef={textFieldRef}
+            autoFocus
             sx={{ p: 0, margin: 0 }}
             size="small"
             onChange={handleOnChange}

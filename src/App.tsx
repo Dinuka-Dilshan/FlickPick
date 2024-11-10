@@ -1,15 +1,23 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import queryClient from "./Query/QueryClient";
+import { SnackbarProvider } from "notistack";
+import { BrowserRouter } from "react-router-dom";
+import AuthContextProvider from "./contexts/AuthContextProvider";
 import AppRoutes from "./routes/AppRoutes";
+import queryClient from "./services/query/QueryClient";
 import AppThemeProvider from "./theme/AppThemeProvider";
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AppThemeProvider>
-        <AppRoutes />
-      </AppThemeProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+          <AppThemeProvider>
+            <AppRoutes />
+            <SnackbarProvider />
+          </AppThemeProvider>
+        </AuthContextProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 }
 
