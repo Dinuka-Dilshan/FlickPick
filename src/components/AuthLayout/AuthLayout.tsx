@@ -8,7 +8,8 @@ import {
 import { PropsWithChildren } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import { useAuth } from "../../hooks/useAuth";
+
+import useAuth from "../../hooks/useAuth";
 import Logo from "../AppBar/Logo";
 import AuthLayoutItem from "./AuthLayoutItem";
 import AuthMessages from "./AuthMessages";

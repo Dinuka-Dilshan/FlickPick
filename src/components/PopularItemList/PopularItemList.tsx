@@ -1,6 +1,6 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import useAppQuery from "../../services/query/useAppQuery";
 import { getPopularMoviesTvs } from "../../services/s3";
 import { PopularMovie } from "../../types/apiResponses";

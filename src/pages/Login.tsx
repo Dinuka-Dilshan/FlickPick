@@ -2,12 +2,12 @@ import { TextField } from "@mui/material";
 import AuthLayout from "../components/AuthLayout/AuthLayout";
 import AuthLayoutItem from "../components/AuthLayout/AuthLayoutItem";
 import PasswordInput from "../components/PasswordInput/PasswordInput";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import useFormState from "../hooks/useFormState";
 import { skipValidation } from "../utils/validations";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const { handleSubmit, registerInput, isFormValid } = useFormState({
     fields: {
@@ -25,7 +25,7 @@ const Login = () => {
 
   return (
     <AuthLayout
-      disableSubmit={!isFormValid}
+      disableSubmit={!isFormValid || isLoading}
       onSubmit={handleSubmit}
       showNewToFlickPick
       submitButtonText={{

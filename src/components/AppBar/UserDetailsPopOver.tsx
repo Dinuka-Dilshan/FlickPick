@@ -7,7 +7,8 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+
 
 type Props = {
   anchorEl: Element | null;

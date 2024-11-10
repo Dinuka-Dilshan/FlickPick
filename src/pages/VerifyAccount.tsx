@@ -4,7 +4,8 @@ import OTPInput from "react-otp-input";
 import { useLocation } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout/AuthLayout";
 import AuthLayoutItem from "../components/AuthLayout/AuthLayoutItem";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
+
 
 const VerifyAccount = () => {
   const { verify, isLoading } = useAuth();

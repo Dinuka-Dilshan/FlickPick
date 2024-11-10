@@ -9,7 +9,7 @@ import {
 import AuthLayout from "../components/AuthLayout/AuthLayout";
 import AuthLayoutItem from "../components/AuthLayout/AuthLayoutItem";
 import PasswordInput from "../components/PasswordInput/PasswordInput";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import useFormState from "../hooks/useFormState";
 import {
   validateBirthday,

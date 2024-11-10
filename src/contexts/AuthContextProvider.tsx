@@ -1,8 +1,9 @@
 import { SignUpCommandOutput } from "@aws-sdk/client-cognito-identity-provider";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
-import { PropsWithChildren } from "react";
-import { useNavigate } from "react-router-dom";
+import { PropsWithChildren, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { MUTATION_KEYS } from "../constants/mutationKeys";
 import { ROUTES } from "../constants/routes";
 import {
   Cognito,
@@ -12,6 +13,7 @@ import {
 } from "../services/cognito";
 import { AuthenticatedUser } from "../types/user";
 import {
+  getLoggedInUserFromLocalStrorage,
   removeLoggedInUserFromLocalStrorage,
   setLoggedInUserToLocalStrorage,
 } from "../utils/localStorage";
@@ -19,13 +21,19 @@ import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [user, setUser] = useState<AuthenticatedUser | null>(() =>
+    getLoggedInUserFromLocalStrorage()
+  );
+  const [errorMessage, setErrorMessage] = useState("");
+
   const {
     mutate: login,
     isPending: isLoginLoading,
-    data: user,
     reset: resetLogin,
   } = useMutation<AuthenticatedUser, Error, CognitoLoginProps>({
     onError: (error, props) => {
+      setErrorMessage(error.message);
       if (error.message.includes("User is not confirmed.")) {
         navigate(ROUTES.VERIFY_ACCOUNT, {
           replace: true,
@@ -36,11 +44,13 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       }
     },
     onSuccess: (user) => {
+      setUser(user);
       setLoggedInUserToLocalStrorage(user);
       navigate(ROUTES.DEFAULT, { replace: true });
       enqueueSnackbar("Hey, Welcome Back!");
     },
     mutationFn: async (props) => await Cognito.login(props),
+    mutationKey: [MUTATION_KEYS.LOGIN],
   });
 
   const { mutate: logout, isPending: isLogOutLoading } = useMutation<
@@ -48,16 +58,19 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     Error,
     void
   >({
-    onError: () => {
+    onError: (error) => {
       enqueueSnackbar("Logout failed! please try again later");
+      setErrorMessage(error.message);
     },
     onSuccess: () => {
       removeLoggedInUserFromLocalStrorage();
+      setUser(null);
       navigate(ROUTES.LOGIN, { replace: true });
       enqueueSnackbar("Bye, See you again!");
       resetLogin();
     },
     mutationFn: async () => await Cognito.logOut(user!),
+    mutationKey: [MUTATION_KEYS.LOGOUT],
   });
 
   const { mutate: signUp, isPending: isSignUpLoading } = useMutation<
@@ -66,6 +79,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     CognitoSignupProps
   >({
     onError: (error) => {
+      setErrorMessage(error.message);
       enqueueSnackbar(error.message);
     },
     onSuccess: (signUpData, props) => {
@@ -77,6 +91,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       }
     },
     mutationFn: async (props) => await Cognito.signUp(props),
+    mutationKey: [MUTATION_KEYS.SIGNUP],
   });
 
   const { mutate: verify, isPending: isVerifyLoading } = useMutation<
@@ -85,13 +100,19 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     CognitoVerifyProps
   >({
     onError: (error) => {
+      setErrorMessage(error.message);
       enqueueSnackbar(error.message);
     },
     onSuccess: () => {
       navigate(ROUTES.LOGIN);
     },
     mutationFn: async (props) => await Cognito.verify(props),
+    mutationKey: [MUTATION_KEYS.VERIFY],
   });
+
+  useEffect(() => {
+    setErrorMessage("");
+  }, [location]);
 
   return (
     <AuthContext.Provider
@@ -106,6 +127,8 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         signUp,
         verify,
         user: user ?? null,
+        errorMessage,
+        clearErrorMessage: () => setErrorMessage(""),
       }}
     >
       {children}

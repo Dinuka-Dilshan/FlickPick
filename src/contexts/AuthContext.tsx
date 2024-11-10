@@ -13,10 +13,8 @@ export type AuthContext = {
   isLoading: boolean;
   signUp: (authParams: CognitoSignupProps) => void;
   verify: (params: CognitoVerifyProps) => void;
-  // errorMessage: string;
-  // infoMessage: string;
-  // clearErrorMessage: () => void;
-  // clearInfo: () => void;
+  errorMessage?: string;
+  clearErrorMessage: () => void;
 };
 export const AuthContext = createContext<AuthContext>({
   login: () => null,
@@ -24,9 +22,7 @@ export const AuthContext = createContext<AuthContext>({
   user: null,
   isLoading: false,
   signUp: () => null,
-  // errorMessage: "",
-  // infoMessage: "",
-  // clearErrorMessage: () => null,
-  // clearInfo: () => null,
+  errorMessage: "",
+  clearErrorMessage: () => null,
   verify: () => null,
 });
