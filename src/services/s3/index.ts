@@ -21,6 +21,8 @@ export const getPopularMoviesTvs = async (idToken: string) => {
     new GetObjectCommand({
       Bucket: import.meta.env.VITE_S3BUCKET,
       Key: `popular-movies.json`,
+      ResponseCacheControl: "no-store",
+      IfNoneMatch: `"${Date.now()}"`,
     })
   );
 
@@ -28,6 +30,8 @@ export const getPopularMoviesTvs = async (idToken: string) => {
     new GetObjectCommand({
       Bucket: import.meta.env.VITE_S3BUCKET,
       Key: `popular-tvs.json`,
+      ResponseCacheControl: "no-store",
+      IfNoneMatch: `"${Date.now()}"`,
     })
   );
 
