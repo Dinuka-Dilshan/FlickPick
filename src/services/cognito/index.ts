@@ -77,10 +77,12 @@ const login = async ({ passWord, userName }: CognitoLoginProps) => {
   } as AuthenticatedUser;
 };
 
-const logOut = async (user: AuthenticatedUser) => {
-  await client.send(
-    new GlobalSignOutCommand({ AccessToken: user.accessToken })
-  );
+const logOut = async (user: AuthenticatedUser, isGlobal?: boolean) => {
+  if (isGlobal) {
+    await client.send(
+      new GlobalSignOutCommand({ AccessToken: user.accessToken })
+    );
+  }
 };
 
 const signUp = async ({
