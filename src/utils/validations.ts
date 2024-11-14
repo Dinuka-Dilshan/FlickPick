@@ -1,3 +1,5 @@
+import { AuthenticatedUser } from "../types/user";
+
 export const validateEmail = (email: string) => {
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   return { isValid, error: isValid ? null : "Email is Invalid" };
@@ -78,3 +80,23 @@ export const skipValidation = () => ({
   isValid: true,
   error: null,
 });
+
+export const isAccessTokenValid = (user: AuthenticatedUser) => {
+  if (user.accessTokenExpiresOn >= Date.now() + 1000 * 60 * 5) {
+    // at least 5 minutes valid
+
+    return true;
+  }
+
+  return false;
+};
+
+export const isRefreshTokenValid = (user: AuthenticatedUser) => {
+  if (user.refreshTokenExpiresOn >= Date.now() + 1000 * 60 * 5) {
+    // at least 5 minutes valid
+
+    return true;
+  }
+
+  return false;
+};

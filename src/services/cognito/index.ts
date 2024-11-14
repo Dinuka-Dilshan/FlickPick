@@ -55,15 +55,25 @@ const login = async ({ passWord, userName }: CognitoLoginProps) => {
     {} as CognitoUserAttributes
   );
 
+  const accessTokenExpiresOn =
+    new Date(
+      Date.now() + (result?.AuthenticationResult?.ExpiresIn ?? 0) * 1000 // cognito set to 1 hour
+    ).getTime() ?? 0;
+
+  const refreshTokenExpiresOn = new Date(
+    Date.now() + 1000 * 60 * 60 * 24 * 29
+  ).getTime(); // cognito set to 30 days but we use 29 days here ):
+
   return {
     accessToken: result.AuthenticationResult?.AccessToken ?? "",
     birthday: userData?.birthdate ?? "",
     email: userData?.email ?? "",
-    expiresIn: result.AuthenticationResult?.ExpiresIn ?? 0,
+    accessTokenExpiresOn,
     gender: userData?.gender ?? "",
     idToken: result.AuthenticationResult?.IdToken ?? "",
     name: userData?.name ?? "",
     refreshToken: result.AuthenticationResult?.RefreshToken ?? "",
+    refreshTokenExpiresOn: refreshTokenExpiresOn,
   } as AuthenticatedUser;
 };
 
@@ -107,4 +117,25 @@ const verify = async ({ otp, userName }: CognitoVerifyProps) => {
   );
 };
 
-export const Cognito = { login, logOut, signUp, verify };
+const refreshTokens = async (user: AuthenticatedUser) => {
+  const command = new InitiateAuthCommand({
+    AuthFlow: "REFRESH_TOKEN",
+    ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+    AuthParameters: { REFRESH_TOKEN: user.refreshToken },
+  });
+
+  const result = await client.send(command);
+  const accessTokenExpiresOn =
+    new Date(
+      Date.now() + (result?.AuthenticationResult?.ExpiresIn ?? 0) * 1000 // cognito set to 1 hour
+    ).getTime() ?? 0;
+
+  return {
+    ...user,
+    accessTokenExpiresOn,
+    accessToken: result.AuthenticationResult?.AccessToken ?? "",
+    idToken: result.AuthenticationResult?.IdToken ?? "",
+  } as AuthenticatedUser;
+};
+
+export const Cognito = { login, logOut, signUp, verify, refreshTokens };

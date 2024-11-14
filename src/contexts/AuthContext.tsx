@@ -1,3 +1,4 @@
+import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { createContext } from "react";
 import {
   CognitoLoginProps,
@@ -15,6 +16,12 @@ export type AuthContext = {
   verify: (params: CognitoVerifyProps) => void;
   errorMessage?: string;
   clearErrorMessage: () => void;
+  refresh: UseMutateAsyncFunction<
+    AuthenticatedUser,
+    Error,
+    AuthenticatedUser,
+    unknown
+  >;
 };
 export const AuthContext = createContext<AuthContext>({
   login: () => null,
@@ -25,4 +32,16 @@ export const AuthContext = createContext<AuthContext>({
   errorMessage: "",
   clearErrorMessage: () => null,
   verify: () => null,
+  refresh: () =>
+    Promise.resolve({
+      accessToken: "",
+      accessTokenExpiresOn: 0,
+      birthday: "",
+      email: "",
+      gender: "",
+      idToken: "",
+      name: "",
+      refreshToken: "",
+      refreshTokenExpiresOn: 0,
+    }),
 });

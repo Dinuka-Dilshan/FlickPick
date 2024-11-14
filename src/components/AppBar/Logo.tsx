@@ -1,16 +1,17 @@
 import { Typography, TypographyProps } from "@mui/material";
 
-const Logo = (props: TypographyProps) => {
+const Logo = ({ sx, ...rest }: TypographyProps) => {
   return (
     <Typography
       sx={{
-        fontWeight: 700,
-        color: "primary.main",
-        fontSize: "1.5rem",
+        fontWeight: 600,
+        fontSize: "1.2rem",
+        color: "#E7E7E7",
+        ...sx,
       }}
-      {...props}
+      {...rest}
     >
-      <span style={{ color: "#1A1A1A" }}>Flick</span>Pick
+      FlickPick
     </Typography>
   );
 };
