@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
+import { AuthenticatedUser } from "../../types/user";
+import {
+  isAccessTokenValid,
+  isRefreshTokenValid,
+} from "../../utils/validations";
 
 type Props<T> = {
   queryKey: string;
@@ -18,18 +23,27 @@ const useAppQuery = <T, TError = unknown>({
   enabled = true,
   queryFn,
 }: Props<T>) => {
-  const { user } = useAuth();
+  const { user, refresh } = useAuth();
+
   const result = useQuery<T, TError>({
     queryKey: [queryKey],
     queryFn: queryFn
       ? queryFn
       : async () => {
+          let refreshedUser: AuthenticatedUser | null = null;
+
+          if (user && !isAccessTokenValid(user) && isRefreshTokenValid(user)) {
+            refreshedUser = await refresh(user);
+          }
+
           const response = await fetch(url || "", {
             method,
             body: JSON.stringify(body),
             headers: {
               "Content-Type": "application/json",
-              Authorization: `${user?.accessToken}`,
+              Authorization: refreshedUser
+                ? `${refreshedUser.accessToken}`
+                : `${user?.accessToken}`,
             },
           });
           if (!response.ok) {

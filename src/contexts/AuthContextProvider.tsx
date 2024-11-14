@@ -1,7 +1,7 @@
 import { SignUpCommandOutput } from "@aws-sdk/client-cognito-identity-provider";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MUTATION_KEYS } from "../constants/mutationKeys";
 import { ROUTES } from "../constants/routes";
@@ -17,14 +17,13 @@ import {
   removeLoggedInUserFromLocalStrorage,
   setLoggedInUserToLocalStrorage,
 } from "../utils/localStorage";
+import { isAccessTokenValid, isRefreshTokenValid } from "../utils/validations";
 import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState<AuthenticatedUser | null>(() =>
-    getLoggedInUserFromLocalStrorage()
-  );
+  const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const {
@@ -110,9 +109,43 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     mutationKey: [MUTATION_KEYS.VERIFY],
   });
 
+  const { mutateAsync: refresh, isPending: isRefreshLoading } = useMutation<
+    AuthenticatedUser,
+    Error,
+    AuthenticatedUser
+  >({
+    onError: (error) => {
+      setErrorMessage(error.message);
+      enqueueSnackbar(error.message);
+    },
+    onSuccess: (user) => {
+      setUser(user);
+      setLoggedInUserToLocalStrorage(user);
+    },
+    mutationFn: async (props) => await Cognito.refreshTokens(props),
+    mutationKey: [MUTATION_KEYS.VERIFY],
+  });
+
   useEffect(() => {
     setErrorMessage("");
   }, [location]);
+
+  useLayoutEffect(() => {
+    const cachedUser = getLoggedInUserFromLocalStrorage();
+
+    if (!cachedUser) {
+      return;
+    }
+
+    if (isAccessTokenValid(cachedUser)) {
+      setUser(cachedUser);
+      return;
+    }
+
+    if (isRefreshTokenValid(cachedUser)) {
+      refresh(cachedUser);
+    }
+  }, [login, refresh]);
 
   return (
     <AuthContext.Provider
@@ -121,11 +154,13 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
           isLoginLoading ||
           isLogOutLoading ||
           isSignUpLoading ||
-          isVerifyLoading,
+          isVerifyLoading ||
+          isRefreshLoading,
         login,
         logout,
         signUp,
         verify,
+        refresh,
         user: user ?? null,
         errorMessage,
         clearErrorMessage: () => setErrorMessage(""),

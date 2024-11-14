@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
-import { getLoggedInUserFromLocalStrorage } from "../utils/localStorage";
+import useAuth from "../hooks/useAuth";
 
 const ProtectedRoute = () => {
-  const user = getLoggedInUserFromLocalStrorage();
+  const { user } = useAuth();
 
   if (!user) {
     return <Navigate to={ROUTES.LOGIN} />;
