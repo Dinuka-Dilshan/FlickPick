@@ -1,4 +1,5 @@
 FlickPick – For picking and saving your favorite flicks
 
-![image](https://github.com/user-attachments/assets/3ee9b277-a28d-457d-907e-cf05a7c628cd)
+![image](https://github.com/user-attachments/assets/897d32f6-93fa-45be-8752-28ddc4ce7066)
+
 
