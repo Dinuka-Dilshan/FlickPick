@@ -25,7 +25,7 @@ const TitleDetails = () => {
             variant="rounded"
             width="100%"
             height="100%"
-            sx={{ borderRadius: "16px" }}
+            sx={{ borderRadius: "12px" }}
           />
         </Grid2>
         <Grid2 size={{ xs: 8 }} sx={{ height: "8vh" }}></Grid2>
@@ -34,7 +34,7 @@ const TitleDetails = () => {
             variant="rounded"
             width="100%"
             height="100%"
-            sx={{ borderRadius: "16px" }}
+            sx={{ borderRadius: "12px" }}
           />
         </Grid2>
         <Grid2 size={{ xs: 8 }} sx={{ height: commonHeight }}>
@@ -42,7 +42,7 @@ const TitleDetails = () => {
             variant="rounded"
             width="100%"
             height="100%"
-            sx={{ borderRadius: "16px" }}
+            sx={{ borderRadius: "12px" }}
           />
         </Grid2>
         <Grid2 size={{ xs: 8 }} sx={{ height: "8vh" }}>
@@ -50,7 +50,7 @@ const TitleDetails = () => {
             variant="rounded"
             width="100%"
             height="100%"
-            sx={{ borderRadius: "16px" }}
+            sx={{ borderRadius: "12px" }}
           />
         </Grid2>
       </Grid2>
@@ -66,92 +66,121 @@ const TitleDetails = () => {
   }
 
   return (
-    <Grid2 container rowSpacing={1} columnSpacing={1} height="100%" pb="2rem">
-      <Grid2 size={{ xs: 12 }}>
-        <Grid2 container justifyContent="space-between">
-          <Grid2>
-            <Typography variant="h2" fontWeight="bold">
-              {data?.title}
-            </Typography>
-          </Grid2>
-          <Grid2>
-            <Box display="flex" alignItems="center" gap={1}>
-              <FavoriteIcon sx={{ fontSize: "2rem" }} />
-              <Box>
-                <Typography variant="h5" fontWeight="bold" component={"span"}>
-                  {data?.ratings}
-                  <Typography component={"span"} fontWeight="bold">
-                    /10
+    <>
+      <Grid2 container rowSpacing={1} columnSpacing={1} height="100%">
+        <Grid2 size={{ xs: 12 }}>
+          <Grid2 container justifyContent="space-between">
+            <Grid2>
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{ color: "#EFEFEF" }}
+              >
+                {data?.title}
+              </Typography>
+            </Grid2>
+            <Grid2>
+              <Box display="flex" alignItems="center" gap={1}>
+                <FavoriteIcon sx={{ fontSize: "2rem" }} />
+                <Box>
+                  <Typography
+                    variant="h5"
+                    fontWeight="bold"
+                    component={"span"}
+                    sx={{ color: "#EFEFEF" }}
+                  >
+                    {data?.ratings}
+                    <Typography
+                      component={"span"}
+                      fontWeight="bold"
+                      sx={{ color: "#EFEFEF" }}
+                    >
+                      /10
+                    </Typography>
                   </Typography>
-                </Typography>
-                <Typography fontWeight="bold">
-                  {Intl.NumberFormat("en", { notation: "compact" }).format(
-                    data.voteCount
-                  )}
-                </Typography>
+                  <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>
+                    {Intl.NumberFormat("en", { notation: "compact" }).format(
+                      data.voteCount
+                    )}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            </Grid2>
           </Grid2>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ color: "#EFEFEF" }}
+            >
+              {data?.releaseYear}
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ color: "#EFEFEF" }}
+            >
+              - {data?.certificate} -
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ color: "#EFEFEF" }}
+            >
+              {data?.runtime}
+            </Typography>
+          </Box>
         </Grid2>
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Typography variant="subtitle1" fontWeight="bold">
-            {data?.releaseYear}
-          </Typography>
-          <Typography variant="subtitle1" fontWeight="bold">
-            - {data?.certificate} -
-          </Typography>
-          <Typography variant="subtitle1" fontWeight="bold">
-            {data?.runtime}
-          </Typography>
-        </Box>
-      </Grid2>
 
-      <Grid2 size={{ xs: 12, lg: 3.5 }} height="100%">
-        <Box
-          component="img"
-          src={data?.posterUrl}
-          sx={{
-            borderRadius: "16px",
-            width: "100%",
-            height: commonHeight,
-            objectFit: "cover",
-            border: "none",
-          }}
-        />
-      </Grid2>
+        <Grid2 size={{ xs: 12, lg: 3.5 }} height="100%">
+          <Box
+            component="img"
+            src={data?.posterUrl}
+            sx={{
+              borderRadius: "12px",
+              width: "100%",
+              height: commonHeight,
+              objectFit: "cover",
+              border: "none",
+            }}
+          />
+        </Grid2>
 
-      <Grid2 size={{ xs: 12, lg: 8.5 }} height="100%">
-        <Box
-          component={"video"}
-          autoPlay
-          muted
-          loop
-          src={data?.videoUrls?.[0]}
-          sx={{
-            borderRadius: "16px",
-            width: "100%",
-            height: commonHeight,
-            display: { xs: "none", lg: "block" },
-            objectFit: "cover",
-          }}
-        />
+        <Grid2 size={{ xs: 12, lg: 8.5 }} height="100%">
+          <Box
+            component={"video"}
+            autoPlay
+            muted
+            loop
+            src={data?.videoUrls?.[0]}
+            sx={{
+              borderRadius: "12px",
+              width: "100%",
+              height: commonHeight,
+              display: { xs: "none", lg: "block" },
+              objectFit: "cover",
+            }}
+          />
+        </Grid2>
+        <Grid2
+          size={{ xs: 8 }}
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="center"
+          gap={1}
+          order={4}
+        >
+          {data?.genres?.map((genre, i) => (
+            <Chip key={i} label={genre} />
+          ))}
+        </Grid2>
+        <Grid2 size={{ xs: 12, lg: 8 }}>
+          <Typography variant="subtitle1" sx={{ color: "#EFEFEF" }}>
+            {data?.plot}
+          </Typography>
+        </Grid2>
       </Grid2>
-      <Grid2
-        size={{ xs: 8 }}
-        display="flex"
-        justifyContent="flex-start"
-        alignItems="center"
-        gap={1}
-        order={4}
-      >
-        {data?.genres?.map((genre, i) => (
-          <Chip key={i} label={genre} />
-        ))}
-      </Grid2>
-      <Grid2 size={{ xs: 12, lg: 8 }}>
-        <Typography variant="subtitle1">{data?.plot}</Typography>
-      </Grid2>
-    </Grid2>
+    </>
   );
 };
 

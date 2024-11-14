@@ -29,15 +29,15 @@ const PopularItemList = ({ varient }: Props) => {
 
   return (
     <Box>
-      <Typography variant="h6" fontWeight="bold">
-        Most Popular {varient === "MOVIE" ? "Movies" : "Tv Series"} Today
+      <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>
+        Top Chart: {varient === "MOVIE" ? "Movies" : "Tv Shows"}
       </Typography>
       {isFetching ? (
         <LoadingItemIndicator />
       ) : (
-        <Grid2 container spacing={1.5} mt={"1rem"}>
+        <Grid2 container spacing={2} mt={"1rem"}>
           {list?.map?.((movie, index) => (
-            <Grid2 size={{ xs: 6, md: 4, lg: 3 }} key={index}>
+            <Grid2 size={{ xs: 6, md: 4, lg: 12 / 5 }} key={index}>
               <MovieCard
                 image={movie.posterUrl}
                 name={movie.title}

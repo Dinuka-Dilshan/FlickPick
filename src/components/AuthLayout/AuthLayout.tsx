@@ -51,7 +51,7 @@ const AuthLayout = ({
       <Grid2 size={{ xs: 11, md: 4, lg: 3 }}>
         <form>
           <Grid2
-            sx={{ p: "1.5rem", bgcolor: "#fff", borderRadius: "8px" }}
+            sx={{ p: "1.5rem", bgcolor: "#fff", borderRadius: "12px" }}
             container
             spacing={1}
           >
@@ -59,7 +59,7 @@ const AuthLayout = ({
               <AuthMessages />
             </AuthLayoutItem>
             <AuthLayoutItem>
-              <Logo textAlign="center" />
+              <Logo textAlign="center" sx={{ color: "#1F1F1F" }} />
             </AuthLayoutItem>
             <AuthLayoutItem mb="1rem">
               <Typography

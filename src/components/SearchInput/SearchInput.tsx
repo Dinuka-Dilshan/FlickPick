@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 
 const SearchInput = () => {
-  const [isClickedOutside, setIsClickedOutside] = useState(true);
+  const [isClickedOutside, setIsClickedOutside] = useState(false);
   const iconRef = useRef<SVGSVGElement>(null);
   const textFieldRef = useRef<HTMLInputElement>(null);
   const [params, setParams] = useSearchParams();
@@ -71,7 +71,7 @@ const SearchInput = () => {
           component={motion.svg}
           ref={iconRef}
           onClick={handleClickInside}
-          sx={{ m: 0, p: 0 }}
+          sx={{ m: 0, p: 0, color: "#E7E7E7" }}
         />
       )}
 
@@ -92,9 +92,10 @@ const SearchInput = () => {
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <SearchIcon sx={{ color: "#E7E7E7" }} />
                   </InputAdornment>
                 ),
+                style: { color: "#E7E7E7" },
               },
             }}
           />

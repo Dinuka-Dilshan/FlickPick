@@ -23,7 +23,7 @@ const useAppQuery = <T, TError = unknown>({
   enabled = true,
   queryFn,
 }: Props<T>) => {
-  const { user, refresh } = useAuth();
+  const { user, refresh, logout } = useAuth();
 
   const result = useQuery<T, TError>({
     queryKey: [queryKey],
@@ -32,8 +32,12 @@ const useAppQuery = <T, TError = unknown>({
       : async () => {
           let refreshedUser: AuthenticatedUser | null = null;
 
-          if (user && !isAccessTokenValid(user) && isRefreshTokenValid(user)) {
-            refreshedUser = await refresh(user);
+          if (user && !isAccessTokenValid(user)) {
+            if (isRefreshTokenValid(user)) {
+              refreshedUser = await refresh(user);
+            } else {
+              logout();
+            }
           }
 
           const response = await fetch(url || "", {

@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 
-
 type Props = {
   anchorEl: Element | null;
   open: boolean;
@@ -48,10 +47,18 @@ const UserDetailsPopOver = ({ anchorEl, open, onClose }: Props) => {
           justifyContent="center"
           alignItems="flex-start"
         >
-          <Typography fontSize="0.75rem" fontWeight="bold">
+          <Typography
+            fontSize="0.75rem"
+            fontWeight="bold"
+            sx={{ color: "#1F1F1F" }}
+          >
             {user?.name}
           </Typography>
-          <Typography fontSize="0.75rem" component="span">
+          <Typography
+            fontSize="0.75rem"
+            component="span"
+            sx={{ color: "#1F1F1F" }}
+          >
             {user?.email}
           </Typography>
         </Grid2>

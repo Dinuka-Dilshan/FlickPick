@@ -25,7 +25,7 @@ const Search = () => {
 
   return (
     <Box>
-      <Typography variant="h5">
+      <Typography sx={{ color: "#E7E7E7" }}>
         Show results for{" "}
         <span style={{ fontWeight: "bold" }}>"{searchText}"</span>
       </Typography>
@@ -34,7 +34,7 @@ const Search = () => {
       ) : (
         <Grid2 container spacing={1.5} mt={"1rem"}>
           {data?.map((movie, index) => (
-            <Grid2 size={{ xs: 12, md: 2 }} key={index}>
+            <Grid2 size={{ xs: 6, md: 4, lg: 12 / 5 }} key={index}>
               <MovieCard
                 image={movie.posterUrl}
                 name={movie.title}

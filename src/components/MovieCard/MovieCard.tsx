@@ -21,8 +21,6 @@ const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
   return (
     <Box
       sx={{
-        aspectRatio: 2 / 3,
-        mb: 0,
         cursor: "pointer",
       }}
       onClick={clickHandler}
@@ -31,8 +29,9 @@ const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
         height="100%"
         width="100%"
         sx={{
-          borderRadius: "8px",
+          borderRadius: "12px",
           position: "relative",
+          aspectRatio: 2 / 3,
         }}
       >
         <Box
@@ -41,28 +40,37 @@ const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
           width="100%"
           sx={{
             objectFit: "cover",
-            borderRadius: "8px",
+            borderRadius: "12px",
+            boxShadow:
+              "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
           src={image}
         />
+      </Box>
+      <Box sx={{ px: "0.2rem", display: "flex", gap: 1, alignItems: "center" }}>
+        <Box>
+          <Typography
+            sx={{ color: "#B3B3B3", fontSize: "3.5rem", fontWeight: 600 }}
+          >
+            {rank}
+          </Typography>
+        </Box>
         <Box
           sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            bgcolor: "primary.main",
-            p: "0.5rem",
-            borderTopLeftRadius: "8px",
-            borderBottomRightRadius: "8px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            flexDirection: "column",
           }}
         >
-          <Typography sx={{ color: "#fff" }} fontWeight={"bold"}>
-            #{rank}
+          <Typography sx={{ color: "#EFEFEF", fontSize: "0.9rem" }}>
+            {name}
+          </Typography>
+          <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
+            {year}
           </Typography>
         </Box>
       </Box>
-      <Typography>{name} </Typography>
-      <Typography variant="caption">{year}</Typography>
     </Box>
   );
 };
