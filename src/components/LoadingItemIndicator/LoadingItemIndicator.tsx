@@ -1,14 +1,47 @@
 import { Grid2, Skeleton } from "@mui/material";
 
-const LoadingItemIndicator = () => {
+type Props = {
+  itemCount: number;
+  itemsPerRow: {
+    xs?: number;
+    md?: number;
+    lg?: number;
+  };
+  itemHeight?: {
+    xs?: number;
+    md?: number;
+    lg?: number;
+  };
+  isLoading: boolean;
+};
+
+const LoadingItemIndicator = ({
+  itemCount,
+  itemsPerRow,
+  itemHeight,
+  isLoading,
+}: Props) => {
+  if (!isLoading) {
+    return null;
+  }
   return (
     <Grid2 container spacing={1.5} mt={"1rem"}>
-      {[...Array(25)].map((_, index) => (
-        <Grid2 size={{ xs: 6, md: 4, lg: 12 / 5 }} key={index}>
+      {[...Array(itemCount)].map((_, index) => (
+        <Grid2
+          size={{
+            xs: 12 / (itemsPerRow.xs || 1),
+            md: 12 / (itemsPerRow.md || 1),
+            lg: 12 / (itemsPerRow.lg || 1),
+          }}
+          key={index}
+        >
           <Skeleton
             variant="rounded"
             width="100%"
-            sx={{ borderRadius: "12px", height: { xs: 300, lg: 350 } }}
+            sx={{
+              borderRadius: "12px",
+              height: { xs: itemHeight?.xs, lg: itemHeight?.lg },
+            }}
           />
         </Grid2>
       ))}

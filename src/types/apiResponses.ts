@@ -1,9 +1,8 @@
 export type SearchMovieResult = {
-  posterUrl: string;
-  title: string;
-  releaseYear: string;
-  imdbUrl: string;
   imdbId: string;
+  posterUrl: string;
+  releaseYear: string;
+  title: string;
 };
 
 export type PopularMovie = {

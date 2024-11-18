@@ -6,26 +6,28 @@ import {
   isRefreshTokenValid,
 } from "../../utils/validations";
 
-type Props<T> = {
+type Props<T,K> = {
   queryKey: string;
   url?: string;
   method?: "GET" | "POST";
   body?: object;
   enabled?: boolean;
   queryFn?: () => Promise<T>;
+  select?: ((data: T) => K) | undefined;
 };
 
-const useAppQuery = <T, TError = unknown>({
+const useAppQuery = <T, TError = unknown, K = T>({
   queryKey,
   url,
   method = "GET",
   body,
   enabled = true,
   queryFn,
-}: Props<T>) => {
+  select,
+}: Props<T,K>) => {
   const { user, refresh, logout } = useAuth();
 
-  const result = useQuery<T, TError>({
+  const result = useQuery<T, TError, K>({
     queryKey: [queryKey],
     queryFn: queryFn
       ? queryFn
@@ -57,6 +59,7 @@ const useAppQuery = <T, TError = unknown>({
         },
     staleTime: Infinity,
     enabled,
+    select,
   });
 
   return result;
