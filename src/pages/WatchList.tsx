@@ -4,7 +4,7 @@ import { URLS } from "../constants/urls";
 import useAppQuery from "../services/query/useAppQuery";
 
 const WatchList = () => {
-  const { data, isFetching } = useAppQuery({
+  const { data } = useAppQuery({
     url: URLS.WATCH_LIST(),
     queryKey: QUERY_KEYS.WATCH_LIST,
   });
