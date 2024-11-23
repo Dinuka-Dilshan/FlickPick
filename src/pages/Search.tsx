@@ -6,8 +6,7 @@ import { QUERY_KEYS } from "../constants/queryKeys";
 import { URLS } from "../constants/urls";
 import useDebounceValue from "../hooks/useDebounceValue";
 import useAppQuery from "../services/query/useAppQuery";
-import { SearchMovieResponse } from "../types/apiResponses";
-import { ImdbSearchResponse } from "../utils/imdbApi";
+import { SearchMovieResponse, SearchMovieResult } from "../types/apiResponses";
 
 const Search = () => {
   const [params] = useSearchParams();
@@ -19,7 +18,7 @@ const Search = () => {
   });
 
   const { data, isFetching } = useAppQuery<
-    ImdbSearchResponse,
+    SearchMovieResult,
     Error,
     SearchMovieResponse
   >({
