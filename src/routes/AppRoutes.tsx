@@ -2,14 +2,15 @@ import { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from "../components/Layout/MainLayout";
 import { ROUTES } from "../constants/routes";
+import Login from "../pages/Login";
 import PopularMovies from "../pages/PopularMovies";
 import PopularTvs from "../pages/PopularTvs";
+import Search from "../pages/Search";
 import SignUp from "../pages/SignUp";
 import TitleDetails from "../pages/TitleDetails";
 import VerifyAccount from "../pages/VerifyAccount";
+import WatchList from "../pages/WatchList";
 import ProtectedRoute from "./ProtectedRoute";
-import Login from "../pages/Login";
-import Search from "../pages/Search";
 
 // const MainLayout = lazy(() => import("../components/Layout/MainLayout"));
 // const Login = lazy(() => import("../pages/Login"));
@@ -39,6 +40,7 @@ const AppRoutes = () => {
               path={ROUTES.TITILE_DETAILS(":id")}
               element={<TitleDetails />}
             />
+            <Route path={ROUTES.WISH_LIST} element={<WatchList />} />
           </Route>
         </Route>
       </Routes>

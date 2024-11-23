@@ -5,4 +5,6 @@ export const URLS = {
   POPULAR_MOVIES: `${BASE_URL}/topmovies`,
   SEARCH: (searchText: string) => `${BASE_URL}/search?searchText=${searchText}`,
   TITLE_DETAILS: (title: string) => `${BASE_URL}/title/${title}`,
+  WATCH_LIST: (imdbId?: string) =>
+    imdbId ? `${BASE_URL}/watchlist?imdbId=${imdbId}` : `${BASE_URL}/watchlist`,
 };

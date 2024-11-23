@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { MutationFunction, useMutation } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import { AuthenticatedUser } from "../../types/user";
 import {
@@ -6,32 +6,25 @@ import {
   isRefreshTokenValid,
 } from "../../utils/validations";
 
-type Props<T,K> = {
-  queryKey: string;
+type Props<T, K> = {
   url?: string;
-  method?: "GET" | "POST";
-  body?: object;
-  enabled?: boolean;
-  queryFn?: () => Promise<T>;
-  select?: ((data: T) => K) | undefined;
+  method?: "GET" | "POST" | "DELETE";
+  mutationFn?: MutationFunction<T, K>;
+  onSuccess?: (data: T, variables: K) => Promise<unknown>;
 };
 
-const useAppQuery = <T, TError = unknown, K = T>({
-  queryKey,
+const useAppMutation = <T, TError = unknown, K = T>({
   url,
-  method = "GET",
-  body,
-  enabled = true,
-  queryFn,
-  select,
-}: Props<T,K>) => {
+  method = "POST",
+  mutationFn,
+  onSuccess,
+}: Props<T, K>) => {
   const { user, refresh, logout } = useAuth();
 
-  const result = useQuery<T, TError, K>({
-    queryKey: [queryKey],
-    queryFn: queryFn
-      ? queryFn
-      : async () => {
+  const result = useMutation<T, TError, K>({
+    mutationFn: mutationFn
+      ? mutationFn
+      : async (data) => {
           let refreshedUser: AuthenticatedUser | null = null;
 
           if (user && !isAccessTokenValid(user)) {
@@ -44,7 +37,7 @@ const useAppQuery = <T, TError = unknown, K = T>({
 
           const response = await fetch(url || "", {
             method,
-            body: JSON.stringify(body),
+            body: JSON.stringify(data),
             headers: {
               "Content-Type": "application/json",
               Authorization: refreshedUser
@@ -57,12 +50,10 @@ const useAppQuery = <T, TError = unknown, K = T>({
           }
           return response.json();
         },
-    staleTime: Infinity,
-    enabled,
-    select,
+    onSuccess,
   });
 
   return result;
 };
 
-export default useAppQuery;
+export default useAppMutation;

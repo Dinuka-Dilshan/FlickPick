@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
+import WishListButton from "../WatchListButton/WatchListButton";
 
 type Props = {
   name: string;
@@ -22,9 +23,13 @@ const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
     <Box
       sx={{
         cursor: "pointer",
+        position: "relative",
       }}
       onClick={clickHandler}
     >
+      <WishListButton
+        movie={{ imdbId, posterUrl: image, releaseYear: year, title: name }}
+      />
       <Box
         height="100%"
         width="100%"
@@ -41,8 +46,7 @@ const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
           sx={{
             objectFit: "cover",
             borderRadius: "12px",
-            boxShadow:
-              "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
           src={image}
         />

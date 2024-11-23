@@ -1,9 +1,8 @@
 export type SearchMovieResult = {
-  posterUrl: string;
-  title: string;
-  releaseYear: string;
-  imdbUrl: string;
   imdbId: string;
+  posterUrl: string;
+  releaseYear: string;
+  title: string;
 };
 
 export type PopularMovie = {
@@ -33,6 +32,16 @@ export type MovieDetails = {
   rank: string;
 };
 
+export type WatchListItem = {
+  Title: string;
+  SK: string;
+  PK: string;
+  AddedOn: number;
+  Image: string;
+  Year: string;
+};
+
 export type SearchMovieResponse = SearchMovieResult[];
 export type PopularMovieResponse = PopularMovie[];
 export type MovieDetailsResponse = MovieDetails;
+export type WatchListResponse = WatchListItem[];

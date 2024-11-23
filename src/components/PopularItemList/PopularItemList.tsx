@@ -32,9 +32,17 @@ const PopularItemList = ({ varient }: Props) => {
       <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>
         Top Chart: {varient === "MOVIE" ? "Movies" : "Tv Shows"}
       </Typography>
-      {isFetching ? (
-        <LoadingItemIndicator />
-      ) : (
+      <LoadingItemIndicator
+        isLoading={isFetching}
+        itemCount={25}
+        itemsPerRow={{
+          xs: 2,
+          md: 3,
+          lg: 5,
+        }}
+        itemHeight={{ xs: 250, md: 300, lg: 350 }}
+      />
+      {!isFetching && (
         <Grid2 container spacing={2} mt={"1rem"}>
           {list?.map?.((movie, index) => (
             <Grid2 size={{ xs: 6, md: 4, lg: 12 / 5 }} key={index}>
