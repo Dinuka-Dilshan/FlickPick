@@ -26,7 +26,7 @@ const PopularItemList = ({ varient }: Props) => {
   }
 
   const list = varient === "MOVIE" ? data?.movies : data?.tvs;
-  console.log(data);
+
   return (
     <Box>
       <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>

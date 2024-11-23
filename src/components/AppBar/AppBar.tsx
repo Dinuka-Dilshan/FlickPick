@@ -60,6 +60,10 @@ const AppBar = () => {
             to={ROUTES.POPULAR_TVS}
             text={<Typography>Tvs</Typography>}
           />
+          <AppNavLink
+            to={ROUTES.WISH_LIST}
+            text={<Typography>Wish List</Typography>}
+          />
           <SearchInput />
           <ProfileAvatar />
         </Container>

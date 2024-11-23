@@ -103,6 +103,11 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
           text={<Typography>Tvs</Typography>}
           onClick={handleOpen}
         />
+        <AppNavLink
+          to={ROUTES.WISH_LIST}
+          text={<Typography>Wish List</Typography>}
+          onClick={handleOpen}
+        />
         <Button
           disabled={isLoading}
           onClick={logout}

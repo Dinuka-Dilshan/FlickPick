@@ -2,6 +2,7 @@ import { Box, Grid2, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 import { SearchMovieResult } from "../../types/apiResponses";
+import WishListButton from "../WishListButton/WishListButton";
 
 type Props = {
   movie: SearchMovieResult;
@@ -12,15 +13,16 @@ const MiniMovieCard = ({ movie, onClick }: Props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    onClick()
+    onClick();
     navigate(ROUTES.TITILE_DETAILS(movie.imdbId));
   };
   return (
     <Grid2
       container
-      sx={{ borderRadius: "12px", cursor: "pointer" }}
+      sx={{ borderRadius: "12px", cursor: "pointer", position: "relative" }}
       onClick={clickHandler}
     >
+      <WishListButton movie={movie} />
       <Grid2 size={{ xs: 4 }}>
         <Box
           component="img"

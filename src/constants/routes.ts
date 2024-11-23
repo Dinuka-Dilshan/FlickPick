@@ -7,4 +7,5 @@ export const ROUTES = {
   SEARCH: "/search",
   TITILE_DETAILS: (title: string) => `/title/${title}`,
   VERIFY_ACCOUNT: "/verify",
+  WISH_LIST: "/wishlist",
 };

@@ -32,6 +32,16 @@ export type MovieDetails = {
   rank: string;
 };
 
+export type WishListItem = {
+  Title: string;
+  SK: string;
+  PK: string;
+  AddedOn: number;
+  Image: string;
+  Year: string;
+};
+
 export type SearchMovieResponse = SearchMovieResult[];
 export type PopularMovieResponse = PopularMovie[];
 export type MovieDetailsResponse = MovieDetails;
+export type WishListResponse = WishListItem[];
