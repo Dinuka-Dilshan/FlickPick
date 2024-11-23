@@ -10,19 +10,19 @@ import useAppQuery from "../../services/query/useAppQuery";
 import { WishListMovie } from "../../types/apiRequests";
 import {
   SearchMovieResult,
-  WishListItem,
-  WishListResponse,
+  WatchListItem,
+  WatchListResponse,
 } from "../../types/apiResponses";
 import "./style.css";
 type Props = {
   movie: SearchMovieResult;
 };
 
-const WishListButton = ({ movie }: Props) => {
+const WatchListButton = ({ movie }: Props) => {
   const queryClient = useQueryClient();
-  const { data, isFetching } = useAppQuery<WishListResponse>({
-    queryKey: QUERY_KEYS.WISH_LIST,
-    url: URLS.WISH_LIST(),
+  const { data, isFetching } = useAppQuery<WatchListResponse>({
+    queryKey: QUERY_KEYS.WATCH_LIST,
+    url: URLS.WATCH_LIST(),
   });
 
   const isAddedToWishList = useMemo(
@@ -31,15 +31,15 @@ const WishListButton = ({ movie }: Props) => {
   );
 
   const { mutate, isPending } = useAppMutation<
-    WishListItem,
+    WatchListItem,
     Error,
     WishListMovie | undefined
   >({
-    url: URLS.WISH_LIST(isAddedToWishList ? movie.imdbId : ""),
+    url: URLS.WATCH_LIST(isAddedToWishList ? movie.imdbId : ""),
     method: isAddedToWishList ? "DELETE" : "POST",
     onSuccess: async (addedItem) => {
-      queryClient.setQueryData<WishListResponse>(
-        [QUERY_KEYS.WISH_LIST],
+      queryClient.setQueryData<WatchListResponse>(
+        [QUERY_KEYS.WATCH_LIST],
         (prev) => {
           if (isAddedToWishList) {
             return prev?.filter(
@@ -91,4 +91,4 @@ const WishListButton = ({ movie }: Props) => {
   );
 };
 
-export default WishListButton;
+export default WatchListButton;

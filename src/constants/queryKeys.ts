@@ -2,5 +2,5 @@ export const QUERY_KEYS = {
   POPULAR_MOVIES_TVS: "POPULAR_MOVIES_TVS",
   SEARCH_MOVIES_TVS: (searchText: string) => `SEARCH_MOVIES_TVS-${searchText}`,
   TITLE_DETAILS: (title: string) => `TITLE_DETAILS-${title}`,
-  WISH_LIST: "WISH_LIST",
+  WATCH_LIST: "WATCH_LIST",
 };

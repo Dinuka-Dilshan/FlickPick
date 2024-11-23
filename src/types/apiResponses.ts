@@ -32,7 +32,7 @@ export type MovieDetails = {
   rank: string;
 };
 
-export type WishListItem = {
+export type WatchListItem = {
   Title: string;
   SK: string;
   PK: string;
@@ -44,4 +44,4 @@ export type WishListItem = {
 export type SearchMovieResponse = SearchMovieResult[];
 export type PopularMovieResponse = PopularMovie[];
 export type MovieDetailsResponse = MovieDetails;
-export type WishListResponse = WishListItem[];
+export type WatchListResponse = WatchListItem[];

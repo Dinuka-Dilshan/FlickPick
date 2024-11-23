@@ -105,7 +105,7 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
         />
         <AppNavLink
           to={ROUTES.WISH_LIST}
-          text={<Typography>Wish List</Typography>}
+          text={<Typography>Watch List</Typography>}
           onClick={handleOpen}
         />
         <Button

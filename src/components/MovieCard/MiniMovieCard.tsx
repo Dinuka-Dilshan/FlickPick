@@ -2,7 +2,7 @@ import { Box, Grid2, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 import { SearchMovieResult } from "../../types/apiResponses";
-import WishListButton from "../WishListButton/WishListButton";
+import WishListButton from "../WatchListButton/WatchListButton";
 
 type Props = {
   movie: SearchMovieResult;

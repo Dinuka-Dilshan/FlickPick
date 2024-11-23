@@ -62,7 +62,7 @@ const AppBar = () => {
           />
           <AppNavLink
             to={ROUTES.WISH_LIST}
-            text={<Typography>Wish List</Typography>}
+            text={<Typography>Watch List</Typography>}
           />
           <SearchInput />
           <ProfileAvatar />

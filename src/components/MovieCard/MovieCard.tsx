@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import WishListButton from "../WishListButton/WishListButton";
+import WishListButton from "../WatchListButton/WatchListButton";
 
 type Props = {
   name: string;
