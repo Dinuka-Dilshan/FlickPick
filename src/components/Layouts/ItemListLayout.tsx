@@ -1,6 +1,6 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { ReactNode } from "react";
-import LoadingItemIndicator from "../../LoadingItemIndicator/LoadingItemIndicator";
+import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
 
 type Props<T> = {
   title: string;
