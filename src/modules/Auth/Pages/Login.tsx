@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
-import AuthLayout from "../components/AuthLayout/AuthLayout";
-import AuthLayoutItem from "../components/AuthLayout/AuthLayoutItem";
-import PasswordInput from "../components/PasswordInput/PasswordInput";
-import useAuth from "../hooks/useAuth";
-import useFormState from "../hooks/useFormState";
-import { skipValidation } from "../utils/validations";
+import PasswordInput from "../../../components/PasswordInput/PasswordInput";
+import useAuth from "../../../hooks/useAuth";
+import useFormState from "../../../hooks/useFormState";
+import { skipValidation } from "../../../utils/validations";
+import AuthLayout from "../AuthLayout/AuthLayout";
+import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
 
 const Login = () => {
   const { login, isLoading } = useAuth();

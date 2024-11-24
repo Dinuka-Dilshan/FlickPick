@@ -4,8 +4,8 @@ import {
   CognitoLoginProps,
   CognitoSignupProps,
   CognitoVerifyProps,
-} from "../services/cognito";
-import { AuthenticatedUser } from "../types/user";
+} from "../../../services/cognito";
+import { AuthenticatedUser } from "../../../types/user";
 
 export type AuthContext = {
   user: AuthenticatedUser | null;

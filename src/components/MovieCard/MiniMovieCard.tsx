@@ -1,11 +1,12 @@
-import { Box, Grid2, Typography } from "@mui/material";
+import { Grid2, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import { SearchMovieResult } from "../../types/apiResponses";
-import WishListButton from "../WatchListButton/WatchListButton";
+import { Movie } from "../../types/movie";
+import MoviePoster from "./MoviePoster";
+import WishListButton from "./WatchListButton/WatchListButton";
 
 type Props = {
-  movie: SearchMovieResult;
+  movie: Movie;
   onClick: () => void;
 };
 
@@ -24,17 +25,7 @@ const MiniMovieCard = ({ movie, onClick }: Props) => {
     >
       <WishListButton movie={movie} />
       <Grid2 size={{ xs: 4 }}>
-        <Box
-          component="img"
-          width="100%"
-          height="100%"
-          sx={{
-            objectFit: "cover",
-            borderRadius: "12px",
-            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-          }}
-          src={movie.posterUrl}
-        />
+        <MoviePoster image={movie.posterUrl} />
       </Grid2>
       <Grid2 size={{ xs: 8 }} sx={{ p: "1rem" }}>
         <Typography sx={{ color: "#EFEFEF", fontSize: "1rem" }}>

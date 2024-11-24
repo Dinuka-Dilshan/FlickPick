@@ -7,10 +7,10 @@ import {
 } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { ROUTES } from "../../constants/routes";
+import { ROUTES } from "../../../constants/routes";
 
-import useAuth from "../../hooks/useAuth";
-import Logo from "../AppBar/Logo";
+import Logo from "../../../components/AppBar/Logo";
+import useAuth from "../../../hooks/useAuth";
 import AuthLayoutItem from "./AuthLayoutItem";
 import AuthMessages from "./AuthMessages";
 

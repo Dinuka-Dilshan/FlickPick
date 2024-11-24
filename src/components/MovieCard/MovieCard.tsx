@@ -1,82 +1,123 @@
-import { Box, Typography } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { createContext, PropsWithChildren, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import WishListButton from "../WatchListButton/WatchListButton";
+import { Movie } from "../../types/movie";
+import MoviePoster from "./MoviePoster";
+import WishListButton from "./WatchListButton/WatchListButton";
 
-type Props = {
-  name: string;
-  image: string;
-  year: string;
-  rank: number | string;
-  duration: string;
-  ratings: string;
-  imdbId: string;
+const Container = styled(Box)({
+  cursor: "pointer",
+  position: "relative",
+});
+
+const ImageContainer = styled(Box)({
+  borderRadius: "12px",
+  position: "relative",
+  aspectRatio: 2 / 3,
+  height: "100%",
+  width: "100%",
+});
+
+const DetailsContainer = styled(Box)({
+  padding: "1rem 0.2rem",
+  display: "flex",
+  gap: 1,
+  alignItems: "center",
+});
+
+const MovieCardContext = createContext<Movie | undefined>(undefined);
+
+const useMovieCardContext = () => {
+  const context = useContext(MovieCardContext);
+  if (!context) {
+    throw new Error("useMovieCardContext use within Movie Card");
+  }
+
+  return context;
 };
 
-const MovieCard = ({ name, image, year, rank, imdbId }: Props) => {
+const MovieCard = ({
+  movie,
+  children,
+}: PropsWithChildren<{
+  movie: Movie;
+}>) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    navigate(ROUTES.TITILE_DETAILS(imdbId));
+    navigate(ROUTES.TITILE_DETAILS(movie.imdbId));
   };
   return (
-    <Box
-      sx={{
-        cursor: "pointer",
-        position: "relative",
-      }}
-      onClick={clickHandler}
-    >
-      <WishListButton
-        movie={{ imdbId, posterUrl: image, releaseYear: year, title: name }}
-      />
-      <Box
-        height="100%"
-        width="100%"
+    <MovieCardContext.Provider value={movie}>
+      <Container onClick={clickHandler}>
+        <WishListButton movie={movie} />
+        <ImageContainer>
+          <MoviePoster image={movie.posterUrl} />
+        </ImageContainer>
+        <DetailsContainer>{children}</DetailsContainer>
+      </Container>
+    </MovieCardContext.Provider>
+  );
+};
+
+MovieCard.ReleaseYear = function MovieCardReleaseYear() {
+  const movie = useMovieCardContext();
+
+  return (
+    <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
+      {movie.releaseYear}
+    </Typography>
+  );
+};
+
+MovieCard.Rank = function MovieCardRank() {
+  const movie = useMovieCardContext();
+
+  return (
+    <Box>
+      <Typography
         sx={{
-          borderRadius: "12px",
-          position: "relative",
-          aspectRatio: 2 / 3,
+          color: "#B3B3B3",
+          fontSize: "3.5rem",
+          fontWeight: 600,
+          lineHeight: 0,
         }}
       >
-        <Box
-          component="img"
-          height="100%"
-          width="100%"
-          sx={{
-            objectFit: "cover",
-            borderRadius: "12px",
-            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-          }}
-          src={image}
-        />
-      </Box>
-      <Box sx={{ px: "0.2rem", display: "flex", gap: 1, alignItems: "center" }}>
-        <Box>
-          <Typography
-            sx={{ color: "#B3B3B3", fontSize: "3.5rem", fontWeight: 600 }}
-          >
-            {rank}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            flexDirection: "column",
-          }}
-        >
-          <Typography sx={{ color: "#EFEFEF", fontSize: "0.9rem" }}>
-            {name}
-          </Typography>
-          <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
-            {year}
-          </Typography>
-        </Box>
-      </Box>
+        {movie.rank}
+      </Typography>
     </Box>
   );
 };
+
+MovieCard.Title = function MovieCardTitle() {
+  const movie = useMovieCardContext();
+
+  return (
+    <Typography sx={{ color: "#EFEFEF", fontSize: "0.9rem" }}>
+      {movie.title}
+    </Typography>
+  );
+};
+
+MovieCard.AddedOn = function MovieCardAddedOn() {
+  const movie = useMovieCardContext();
+
+  return (
+    <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
+      {formatDistanceToNow(new Date(movie?.addedOn || Date.now()), {
+        addSuffix: true,
+      }).replace(/^about /, "")}
+    </Typography>
+  );
+};
+
+MovieCard.TitleContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  flexDirection: "column",
+});
 
 export default MovieCard;

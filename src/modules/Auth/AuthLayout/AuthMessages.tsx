@@ -1,5 +1,5 @@
 import { Alert, Box, LinearProgress } from "@mui/material";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
 const AuthMessages = () => {
   const { isLoading, errorMessage, clearErrorMessage } = useAuth();

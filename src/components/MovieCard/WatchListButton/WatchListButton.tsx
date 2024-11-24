@@ -3,19 +3,15 @@ import DoneIcon from "@mui/icons-material/DoneOutlined";
 import { Box, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { QUERY_KEYS } from "../../constants/queryKeys";
-import { URLS } from "../../constants/urls";
-import useAppMutation from "../../services/query/useAppMutation";
-import useAppQuery from "../../services/query/useAppQuery";
-import { WishListMovie } from "../../types/apiRequests";
-import {
-  SearchMovieResult,
-  WatchListItem,
-  WatchListResponse,
-} from "../../types/apiResponses";
+import { QUERY_KEYS } from "../../../constants/queryKeys";
+import { URLS } from "../../../constants/urls";
+import useAppMutation from "../../../services/query/useAppMutation";
+import useAppQuery from "../../../services/query/useAppQuery";
+import { WatchListResponse } from "../../../types/apiResponses";
+import { Movie } from "../../../types/movie";
 import "./style.css";
 type Props = {
-  movie: SearchMovieResult;
+  movie: Movie;
 };
 
 const WatchListButton = ({ movie }: Props) => {
@@ -26,31 +22,27 @@ const WatchListButton = ({ movie }: Props) => {
   });
 
   const isAddedToWishList = useMemo(
-    () => data?.some((item) => item.SK.split("#")[1] === movie.imdbId),
+    () => data?.some((item) => item.imdbId === movie.imdbId),
     [data, movie.imdbId]
   );
 
-  const { mutate, isPending } = useAppMutation<
-    WatchListItem,
-    Error,
-    WishListMovie | undefined
-  >({
-    url: URLS.WATCH_LIST(isAddedToWishList ? movie.imdbId : ""),
-    method: isAddedToWishList ? "DELETE" : "POST",
-    onSuccess: async (addedItem) => {
-      queryClient.setQueryData<WatchListResponse>(
-        [QUERY_KEYS.WATCH_LIST],
-        (prev) => {
-          if (isAddedToWishList) {
-            return prev?.filter(
-              (item) => item.SK.split("#")[1] !== movie.imdbId
-            );
+  const { mutate, isPending } = useAppMutation<Movie, Error, Movie | undefined>(
+    {
+      url: URLS.WATCH_LIST(isAddedToWishList ? movie.imdbId : ""),
+      method: isAddedToWishList ? "DELETE" : "POST",
+      onSuccess: async (addedItem) => {
+        queryClient.setQueryData<WatchListResponse>(
+          [QUERY_KEYS.WATCH_LIST],
+          (prev) => {
+            if (isAddedToWishList) {
+              return prev?.filter((item) => item.imdbId !== movie.imdbId);
+            }
+            return prev ? [...prev, addedItem] : [addedItem];
           }
-          return prev ? [...prev, addedItem] : [addedItem];
-        }
-      );
-    },
-  });
+        );
+      },
+    }
+  );
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();

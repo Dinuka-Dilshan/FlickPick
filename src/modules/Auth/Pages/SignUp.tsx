@@ -6,11 +6,9 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import AuthLayout from "../components/AuthLayout/AuthLayout";
-import AuthLayoutItem from "../components/AuthLayout/AuthLayoutItem";
-import PasswordInput from "../components/PasswordInput/PasswordInput";
-import useAuth from "../hooks/useAuth";
-import useFormState from "../hooks/useFormState";
+import PasswordInput from "../../../components/PasswordInput/PasswordInput";
+import useAuth from "../../../hooks/useAuth";
+import useFormState from "../../../hooks/useFormState";
 import {
   validateBirthday,
   validateConfirmPassword,
@@ -18,10 +16,13 @@ import {
   validateGender,
   validateName,
   validatePassword,
-} from "../utils/validations";
+} from "../../../utils/validations";
+import AuthLayout from "../AuthLayout/AuthLayout";
+import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
+
 const SignUp = () => {
   const { signUp } = useAuth();
-  const { registerInput, handleSubmit, isFormValid, fields } = useFormState({
+  const { registerInput, handleSubmit, isFormValid } = useFormState({
     fields: {
       name: { value: "", vaidator: (name) => validateName(name) },
       password: {
@@ -53,7 +54,7 @@ const SignUp = () => {
       console.log(values);
     },
   });
-  console.log(isFormValid, fields);
+
   return (
     <AuthLayout
       disableSubmit={!isFormValid}

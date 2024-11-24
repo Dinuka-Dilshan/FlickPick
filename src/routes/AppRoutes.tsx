@@ -1,24 +1,15 @@
 import { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import MainLayout from "../components/Layout/MainLayout";
 import { ROUTES } from "../constants/routes";
-import Login from "../pages/Login";
-import PopularMovies from "../pages/PopularMovies";
-import PopularTvs from "../pages/PopularTvs";
-import Search from "../pages/Search";
-import SignUp from "../pages/SignUp";
-import TitleDetails from "../pages/TitleDetails";
-import VerifyAccount from "../pages/VerifyAccount";
-import WatchList from "../pages/WatchList";
+import Login from "../modules/Auth/Pages/Login";
+import SignUp from "../modules/Auth/Pages/SignUp";
+import VerifyAccount from "../modules/Auth/Pages/VerifyAccount";
+import PopularMoviesTvs from "../modules/PopularList/Pages/PopularMoviesTvs";
+import Search from "../modules/Search/Pages/Search";
+import TitleDetails from "../modules/TitleDetails/Pages/TitleDetails";
+import WatchList from "../modules/WatchList/Pages/WatchList";
+import MainLayout from "./MainLayout";
 import ProtectedRoute from "./ProtectedRoute";
-
-// const MainLayout = lazy(() => import("../components/Layout/MainLayout"));
-// const Login = lazy(() => import("../pages/Login"));
-// const PopularMovies = lazy(() => import("../pages/PopularMovies"));
-// const PopularTvs = lazy(() => import("../pages/PopularTvs"));
-// const Search = lazy(() => import("../pages/Search"));
-// const TitleDetails = lazy(() => import("../pages/TitleDetails"));
-// const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 
 const AppRoutes = () => {
   return (
@@ -33,8 +24,14 @@ const AppRoutes = () => {
               path={ROUTES.DEFAULT}
               element={<Navigate to={ROUTES.POPULAR_MOVIES} />}
             />
-            <Route path={ROUTES.POPULAR_MOVIES} element={<PopularMovies />} />
-            <Route path={ROUTES.POPULAR_TVS} element={<PopularTvs />} />
+            <Route
+              path={ROUTES.POPULAR_MOVIES}
+              element={<PopularMoviesTvs varient="MOVIE" />}
+            />
+            <Route
+              path={ROUTES.POPULAR_TVS}
+              element={<PopularMoviesTvs varient="TV" />}
+            />
             <Route path={ROUTES.SEARCH} element={<Search />} />
             <Route
               path={ROUTES.TITILE_DETAILS(":id")}
