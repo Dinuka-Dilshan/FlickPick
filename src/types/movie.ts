@@ -12,9 +12,5 @@ export type Movie = {
   videoUrls?: string[];
   genres?: string[];
   plot?: string;
+  addedOn?: number;
 };
-
-export type WatchListMovie = Pick<
-  Movie,
-  "imdbId" | "posterUrl" | "title" | "releaseYear"
-> & { addedOn: number };

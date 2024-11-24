@@ -22,7 +22,7 @@ import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
 
 const SignUp = () => {
   const { signUp } = useAuth();
-  const { registerInput, handleSubmit, isFormValid, fields } = useFormState({
+  const { registerInput, handleSubmit, isFormValid } = useFormState({
     fields: {
       name: { value: "", vaidator: (name) => validateName(name) },
       password: {

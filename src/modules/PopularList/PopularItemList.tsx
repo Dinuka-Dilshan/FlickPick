@@ -24,7 +24,15 @@ const PopularItemList = ({ varient }: Props) => {
       error={error}
       isLoading={isFetching}
       itemList={list || []}
-      itemRenderer={(movie) => <MovieCard movie={movie} />}
+      itemRenderer={(movie) => (
+        <MovieCard movie={movie}>
+          <MovieCard.Rank />
+          <MovieCard.TitleContainer>
+            <MovieCard.Title />
+            <MovieCard.ReleaseYear />
+          </MovieCard.TitleContainer>
+        </MovieCard>
+      )}
       title={`Top Chart: ${varient === "MOVIE" ? "Movies" : "Tv Shows"}`}
     />
   );

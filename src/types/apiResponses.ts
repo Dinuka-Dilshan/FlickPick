@@ -1,4 +1,4 @@
-import { Movie, WatchListMovie } from "./movie";
+import { Movie } from "./movie";
 
 export type SearchMovieResponse = Movie[];
 export type PopularMovieResponse = {
@@ -6,4 +6,4 @@ export type PopularMovieResponse = {
   tvs: Movie[];
 };
 export type MovieDetailsResponse = Movie;
-export type WatchListResponse = WatchListMovie[];
+export type WatchListResponse = Movie[];
