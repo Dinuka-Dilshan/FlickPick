@@ -1,10 +1,10 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box, Chip, Grid2, Skeleton, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { QUERY_KEYS } from "../constants/queryKeys";
-import { URLS } from "../constants/urls";
-import useAppQuery from "../services/query/useAppQuery";
-import { MovieDetailsResponse } from "../types/apiResponses";
+import { QUERY_KEYS } from "../../../constants/queryKeys";
+import { URLS } from "../../../constants/urls";
+import useAppQuery from "../../../services/query/useAppQuery";
+import { MovieDetailsResponse } from "../../../types/apiResponses";
 
 const TitleDetails = () => {
   const params = useParams();
@@ -100,7 +100,7 @@ const TitleDetails = () => {
                   </Typography>
                   <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>
                     {Intl.NumberFormat("en", { notation: "compact" }).format(
-                      data.voteCount
+                      Number(data?.voteCount || 0)
                     )}
                   </Typography>
                 </Box>

@@ -3,21 +3,24 @@ import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { PropsWithChildren, useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MUTATION_KEYS } from "../constants/mutationKeys";
-import { ROUTES } from "../constants/routes";
+import { MUTATION_KEYS } from "../../../constants/mutationKeys";
+import { ROUTES } from "../../../constants/routes";
 import {
   Cognito,
   CognitoLoginProps,
   CognitoSignupProps,
   CognitoVerifyProps,
-} from "../services/cognito";
-import { AuthenticatedUser } from "../types/user";
+} from "../../../services/cognito";
+import { AuthenticatedUser } from "../../../types/user";
 import {
   getLoggedInUserFromLocalStrorage,
   removeLoggedInUserFromLocalStrorage,
   setLoggedInUserToLocalStrorage,
-} from "../utils/localStorage";
-import { isAccessTokenValid, isRefreshTokenValid } from "../utils/validations";
+} from "../../../utils/localStorage";
+import {
+  isAccessTokenValid,
+  isRefreshTokenValid,
+} from "../../../utils/validations";
 import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
