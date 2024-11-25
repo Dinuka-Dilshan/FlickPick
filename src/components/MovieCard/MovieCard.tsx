@@ -1,4 +1,5 @@
 import { Box, styled, Typography } from "@mui/material";
+import { SxProps, Theme } from "@mui/system";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { createContext, PropsWithChildren, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -38,12 +39,11 @@ const useMovieCardContext = () => {
   return context;
 };
 
-const MovieCard = ({
-  movie,
-  children,
-}: PropsWithChildren<{
+type Props = PropsWithChildren<{
   movie: Movie;
-}>) => {
+  imageStyles?: SxProps<Theme>;
+}>;
+const MovieCard = ({ movie, children, imageStyles }: Props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
@@ -54,9 +54,9 @@ const MovieCard = ({
       <Container onClick={clickHandler}>
         <WishListButton movie={movie} />
         <ImageContainer>
-          <MoviePoster image={movie.posterUrl} />
+          <MoviePoster image={movie.posterUrl} sx={imageStyles} />
         </ImageContainer>
-        <DetailsContainer>{children}</DetailsContainer>
+        {children && <DetailsContainer>{children}</DetailsContainer>}
       </Container>
     </MovieCardContext.Provider>
   );
