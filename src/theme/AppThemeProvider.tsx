@@ -3,7 +3,6 @@ import type { PropsWithChildren } from "react";
 
 const theme = createTheme({
   components: {
-    
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
@@ -32,7 +31,6 @@ const theme = createTheme({
       },
     },
   },
-  
 });
 
 const AppThemeProvider = ({ children }: PropsWithChildren) => {

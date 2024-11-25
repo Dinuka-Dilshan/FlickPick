@@ -1,7 +1,8 @@
-import { styled } from "@mui/system";
+import { styled, SxProps, Theme } from "@mui/system";
 
 type Props = {
   image: string;
+  sx?: SxProps<Theme>;
 };
 
 const Image = styled("img")({
@@ -13,8 +14,8 @@ const Image = styled("img")({
   aspectRatio: 2 / 3,
 });
 
-const MoviePoster = ({ image }: Props) => {
-  return <Image src={image} />;
+const MoviePoster = ({ image, sx }: Props) => {
+  return <Image src={image} sx={sx} />;
 };
 
 export default MoviePoster;
