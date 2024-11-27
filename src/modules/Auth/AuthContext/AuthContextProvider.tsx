@@ -26,9 +26,10 @@ import { AuthContext } from "./AuthContext";
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState<AuthenticatedUser | null>(null);
+  const [user, setUser] = useState<AuthenticatedUser | null>();
   const [errorMessage, setErrorMessage] = useState("");
   const client = useQueryClient();
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const {
     mutate: login,
@@ -49,7 +50,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     onSuccess: (user) => {
       setUser(user);
       setLoggedInUserToLocalStrorage(user);
-      navigate(ROUTES.DEFAULT, { replace: true });
+      navigate(location.state?.from || ROUTES.DEFAULT, { replace: true });
       enqueueSnackbar("Hey, Welcome Back!");
     },
     mutationFn: async (props) => await Cognito.login(props),
@@ -121,7 +122,9 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   >({
     onError: (error) => {
       setErrorMessage(error.message);
-      enqueueSnackbar(error.message);
+      removeLoggedInUserFromLocalStrorage();
+      setUser(null);
+      enqueueSnackbar("Session expired. Please log in again.");
     },
     onSuccess: (user) => {
       setUser(user);
@@ -139,19 +142,21 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     const cachedUser = getLoggedInUserFromLocalStrorage();
 
     if (!cachedUser) {
+      setIsInitializing(false);
       return;
     }
 
     if (isAccessTokenValid(cachedUser)) {
       setUser(cachedUser);
+      setIsInitializing(false);
       return;
     }
 
     if (isRefreshTokenValid(cachedUser)) {
       refresh(cachedUser);
+      setIsInitializing(false);
     }
   }, [login, refresh]);
-
   return (
     <AuthContext.Provider
       value={{
@@ -169,6 +174,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
         user: user ?? null,
         errorMessage,
         clearErrorMessage: () => setErrorMessage(""),
+        isInitializing,
       }}
     >
       {children}
