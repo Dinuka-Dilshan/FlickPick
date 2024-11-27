@@ -1,4 +1,3 @@
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import {
   Avatar,
   Box,
@@ -37,13 +36,14 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
       ModalProps={{
         keepMounted: true,
       }}
+      anchor="bottom"
       sx={{
         display: { xs: "block", sm: "none" },
         "& .MuiDrawer-paper": {
           boxSizing: "border-box",
-          width: "75vw",
+          width: "100vw",
           borderTopRightRadius: "20px",
-          borderBottomRightRadius: "20px",
+          borderTopLeftRadius: "20px",
           bgcolor: "#2D2D2D",
         },
       }}
@@ -53,12 +53,12 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
           bgcolor: "#2D2D2D",
           height: "100%",
           p: "2rem",
-          gap: 2,
+          gap: 1.5,
           display: "flex",
           flexDirection: "column",
         }}
       >
-        <Grid2 container gap={1.5} mb="1rem">
+        <Grid2 container gap={1.5}>
           <Grid2
             size={{ xs: 2 }}
             display="flex"
@@ -112,8 +112,13 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
           disabled={isLoading}
           onClick={logout}
           size="medium"
-          startIcon={<LogoutOutlinedIcon />}
-          sx={{ textTransform: "none", px: "1rem", marginTop: "auto" }}
+          sx={{
+            textTransform: "none",
+            px: "1rem",
+            marginTop: "auto",
+            bgcolor: "#0072F5",
+            mt: "1rem",
+          }}
           variant="contained"
           fullWidth
         >

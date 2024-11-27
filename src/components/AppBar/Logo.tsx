@@ -7,6 +7,10 @@ const Logo = ({ sx, ...rest }: TypographyProps) => {
         fontWeight: 600,
         fontSize: "1.2rem",
         color: "#E7E7E7",
+        background: "linear-gradient(90deg, #9333ea, #f472b6)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        ml: { xs: 0, lg: "-0.5rem" },
         ...sx,
       }}
       {...rest}
