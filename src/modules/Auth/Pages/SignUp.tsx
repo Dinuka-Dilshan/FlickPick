@@ -63,11 +63,11 @@ const SignUp = () => {
       subtitle=" Let's enter your details to create an account"
     >
       <AuthLayoutItem>
-        <TextField {...registerInput("name", "text")} />
+        <TextField {...registerInput({ key: "name", type: "text" })} />
       </AuthLayoutItem>
       <AuthLayoutItem>
         <TextField
-          {...registerInput("birthday", "date")}
+          {...registerInput({ key: "birthday", type: "date" })}
           slotProps={{ inputLabel: { shrink: true } }}
         />
       </AuthLayoutItem>
@@ -75,31 +75,35 @@ const SignUp = () => {
         <FormControl
           size="small"
           fullWidth
-          error={registerInput("gender").error}
+          error={registerInput({ key: "gender" }).error}
         >
           <InputLabel id="select-label">Gender</InputLabel>
           <Select
             id="select-label"
-            {...registerInput("gender", "", ["helperText"])}
+            {...registerInput({ key: "gender", excludeProps: ["helperText"] })}
           >
             <MenuItem value={"Male"}>Male</MenuItem>
             <MenuItem value={"Female"}>Female</MenuItem>
           </Select>
-          {registerInput("gender").error && (
+          {registerInput({ key: "gender" }).error && (
             <FormHelperText>
-              {registerInput("gender").helperText}
+              {registerInput({ key: "gender" }).helperText}
             </FormHelperText>
           )}
         </FormControl>
       </AuthLayoutItem>
       <AuthLayoutItem>
-        <TextField {...registerInput("email", "email")} />
+        <TextField {...registerInput({ key: "email", type: "email" })} />
       </AuthLayoutItem>
       <AuthLayoutItem>
-        <PasswordInput {...registerInput("password", "password")} />
+        <PasswordInput
+          {...registerInput({ key: "password", type: "password" })}
+        />
       </AuthLayoutItem>
       <AuthLayoutItem>
-        <PasswordInput {...registerInput("confirmPassword", "password")} />
+        <PasswordInput
+          {...registerInput({ key: "confirmPassword", type: "password" })}
+        />
       </AuthLayoutItem>
     </AuthLayout>
   );

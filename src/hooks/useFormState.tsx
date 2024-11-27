@@ -69,11 +69,17 @@ const useFormState = ({ fields, onSubmit, onError }: Props) => {
   );
 
   const registerInput = useCallback(
-    (
-      key: keyof typeof inputs,
-      type?: TextFieldProps["type"],
-      excludeProps?: string[]
-    ) => {
+    ({
+      key,
+      excludeProps,
+      label,
+      type,
+    }: {
+      key: keyof typeof inputs;
+      type?: TextFieldProps["type"];
+      excludeProps?: string[];
+      label?: string;
+    }) => {
       const isError = !inputs[key].isValid && inputs[key].isTouched;
       const fieldProps = {
         name: key.toString(),
@@ -99,7 +105,7 @@ const useFormState = ({ fields, onSubmit, onError }: Props) => {
               },
             };
           }),
-        label: camelToNormal(key.toString()),
+        label: label || camelToNormal(key.toString()),
         value: inputs[key].value,
         size: "small" as TextFieldProps["size"],
         type,

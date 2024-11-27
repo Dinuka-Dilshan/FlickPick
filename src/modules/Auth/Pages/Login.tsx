@@ -35,10 +35,12 @@ const Login = () => {
       subtitle={"Let's enter your details to login"}
     >
       <AuthLayoutItem>
-        <TextField {...registerInput("username", "text")} />
+        <TextField
+          {...registerInput({ key: "username", type: "text", label: "Email" })}
+        />
       </AuthLayoutItem>
       <AuthLayoutItem>
-        <PasswordInput {...registerInput("password", "password")} />
+        <PasswordInput {...registerInput({key:"password",type: "password"})} />
       </AuthLayoutItem>
     </AuthLayout>
   );
