@@ -9,4 +9,5 @@ export default defineConfig({
     open: true,
     host: true,
   },
+  build: { sourcemap: false },
 });

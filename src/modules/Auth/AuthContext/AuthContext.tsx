@@ -22,6 +22,7 @@ export type AuthContext = {
     AuthenticatedUser,
     unknown
   >;
+  isInitializing: boolean;
 };
 export const AuthContext = createContext<AuthContext>({
   login: () => null,
@@ -44,4 +45,5 @@ export const AuthContext = createContext<AuthContext>({
       refreshToken: "",
       refreshTokenExpiresOn: 0,
     }),
+  isInitializing: true,
 });

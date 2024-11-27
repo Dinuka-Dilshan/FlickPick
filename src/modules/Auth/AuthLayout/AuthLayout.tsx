@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { PropsWithChildren } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../constants/routes";
 
 import Logo from "../../../components/AppBar/Logo";
@@ -39,9 +39,10 @@ const AuthLayout = ({
   onSubmit,
 }: Props) => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
   if (user) {
-    return <Navigate to={ROUTES.DEFAULT} />;
+    return <Navigate to={location.state?.from || ROUTES.DEFAULT} />;
   }
 
   const handleSignUp = () => navigate(ROUTES.SIGNUP);
