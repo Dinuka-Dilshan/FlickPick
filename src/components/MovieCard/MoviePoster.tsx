@@ -15,7 +15,7 @@ const Image = styled("img")({
 });
 
 const MoviePoster = ({ image, sx }: Props) => {
-  return <Image src={image} sx={sx} />;
+  return <Image src={image} sx={sx} loading="lazy" />;
 };
 
 export default MoviePoster;
