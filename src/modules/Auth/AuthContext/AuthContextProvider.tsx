@@ -1,5 +1,5 @@
 import { SignUpCommandOutput } from "@aws-sdk/client-cognito-identity-provider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { PropsWithChildren, useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -28,6 +28,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const location = useLocation();
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const client = useQueryClient();
 
   const {
     mutate: login,
@@ -68,6 +69,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       removeLoggedInUserFromLocalStrorage();
       setUser(null);
       navigate(ROUTES.LOGIN, { replace: true });
+      client.clear();
       enqueueSnackbar("Bye, See you again!");
       resetLogin();
     },
