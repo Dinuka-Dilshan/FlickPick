@@ -18,7 +18,7 @@ const TitleDetails = () => {
     enabled: !!title,
   });
 
-  const commonHeight = "500px";
+  const commonHeight = "600px";
 
   if (isFetching) {
     return (
@@ -76,7 +76,7 @@ const TitleDetails = () => {
           imageStyles={{ height: { lg: commonHeight } }}
         />
       </Grid2>
-      <Grid2 size={{ xs: 0, lg: 8.5 }} height="100%" order={{ xs: 1, lg: 3 }}>
+      <Grid2 size={{ xs: 0, lg: 8.5 }}  order={{ xs: 1, lg: 3 }}>
         <Box
           component={"video"}
           autoPlay
