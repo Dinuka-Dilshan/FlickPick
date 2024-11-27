@@ -13,12 +13,9 @@ import useAuth from "../../hooks/useAuth";
 
 const ProfileAvatar = () => {
   const { user, isLoading, logout } = useAuth();
-  const [first] = user?.name ? user.name.split(" ") : "";
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   const isPopOverOpen = Boolean(anchorEl);
-
-  const displayName = first?.[0];
 
   const handleOnClosePopOver = () => setAnchorEl(null);
 
@@ -31,14 +28,12 @@ const ProfileAvatar = () => {
       <Avatar
         onClick={handleOnClickAvatar}
         sx={{
-          width: 32,
-          height: 32,
+          width: 28,
+          height: 28,
           cursor: "pointer",
-          backgroundColor: "#0A84FF",
+          backgroundColor: "#0072F5",
         }}
-      >
-        {displayName}
-      </Avatar>
+      ></Avatar>
       <Popover
         open={isPopOverOpen}
         anchorEl={anchorEl}
@@ -59,9 +54,7 @@ const ProfileAvatar = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Avatar sx={{ width: "32px", height: "32px" }}>
-              {displayName}
-            </Avatar>
+            <Avatar sx={{ width: "32px", height: "32px" }}></Avatar>
           </Grid2>
           <Grid2
             size={{ xs: 9 }}

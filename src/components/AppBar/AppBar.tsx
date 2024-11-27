@@ -20,8 +20,9 @@ const Wrapper = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  height: "6.7vh",
-  backgroundColor: "#000000",
+  height: "7vh",
+  background: "#1f1f1f", // Uniform dark grey
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Adds depth without overwhelming
 });
 
 const Container = styled(Box)({
@@ -42,7 +43,7 @@ const AppBar = () => {
       sx={{
         px: {
           xs: "0.25rem",
-          md: "10rem",
+          md: "5rem",
           position: "sticky",
           top: 0,
           zIndex: 1000,
@@ -54,15 +55,15 @@ const AppBar = () => {
         <Container>
           <AppNavLink
             to={ROUTES.POPULAR_MOVIES}
-            text={<Typography>Movies</Typography>}
+            text={<Typography fontSize={"0.9rem"}>Movies</Typography>}
           />
           <AppNavLink
             to={ROUTES.POPULAR_TVS}
-            text={<Typography>Tvs</Typography>}
+            text={<Typography fontSize={"0.9rem"}>Tvs</Typography>}
           />
           <AppNavLink
             to={ROUTES.WISH_LIST}
-            text={<Typography>Watch List</Typography>}
+            text={<Typography fontSize={"0.9rem"}>Watch List</Typography>}
           />
           <SearchInput />
           <ProfileAvatar />

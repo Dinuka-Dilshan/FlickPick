@@ -89,6 +89,7 @@ const TitleDetails = () => {
             height: commonHeight,
             display: { xs: "none", lg: "block" },
             objectFit: "cover",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
         />
       </Grid2>
@@ -178,7 +179,7 @@ const TitleDetails = () => {
           </Box>
         </Grid2>
       </Grid2>
-      <Grid2 container size={{ xs: 12, lg: 6 }} order={{ xs: 1, lg: 4 }}>
+      <Grid2 container size={{ xs: 12, lg: 8 }} order={{ xs: 1, lg: 4 }}>
         <TitleDetailText
           chips
           value={
@@ -192,9 +193,13 @@ const TitleDetails = () => {
               {data?.genres?.map((genre, i) => (
                 <Chip
                   size="small"
-                  sx={{ bgcolor: "#fff" }}
+                  sx={{ bgcolor: "#FFF" }}
                   key={i}
-                  label={<Typography variant="caption">{genre}</Typography>}
+                  label={
+                    <Typography variant="caption" fontWeight="bold">
+                      {genre}
+                    </Typography>
+                  }
                 />
               ))}
             </Box>

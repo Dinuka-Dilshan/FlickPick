@@ -24,7 +24,7 @@ const ImageContainer = styled(Box)({
 const DetailsContainer = styled(Box)({
   padding: "1rem 0.2rem",
   display: "flex",
-  gap: 1,
+  gap: 8,
   alignItems: "center",
 });
 
