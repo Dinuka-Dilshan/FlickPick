@@ -35,4 +35,11 @@ export type Movie = {
   creators?: string[];
   addedOn?: number;
   rank?: number;
+  moreLikeThis?: {
+    posterUrl: string;
+    title: string;
+    releaseYear: string;
+    titleType: string;
+    imdbId: string;
+  }[];
 };
