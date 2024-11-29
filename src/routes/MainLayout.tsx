@@ -9,9 +9,9 @@ const MainLayout = () => {
       <AppBar />
       <Box
         sx={{
-          px: { xs: "0.5rem", md: "5rem" },
+          px: { xs: "0.75rem", md: "5rem" },
           pt: "1rem",
-          backgroundColor: "#2D2D2D",
+          backgroundColor: "#1F1F1F",
           minHeight: "92vh",
         }}
       >

@@ -11,7 +11,6 @@ const Image = styled("img")({
   boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
   height: "100%",
   width: "100%",
-  aspectRatio: 2 / 3,
 });
 
 const MoviePoster = ({ image, sx }: Props) => {
