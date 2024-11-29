@@ -21,7 +21,7 @@ const Wrapper = styled(Box)({
   justifyContent: "space-between",
   alignItems: "center",
   height: "7vh",
-  background: "#1f1f1f", // Uniform dark grey
+  background: "#171717", // Uniform dark grey
   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Adds depth without overwhelming
 });
 
@@ -42,7 +42,7 @@ const AppBar = () => {
     <Wrapper
       sx={{
         px: {
-          xs: "0.25rem",
+          xs: "0.5rem",
           md: "5rem",
           position: "sticky",
           top: 0,
