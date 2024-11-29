@@ -1,7 +1,8 @@
 import ArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
-import { Box, Chip, Grid2, Skeleton, Typography } from "@mui/material";
+import { Box, Grid2, Skeleton, Typography } from "@mui/material";
 import { format } from "date-fns";
+import { useKeenSlider } from "keen-slider/react";
 import { useParams } from "react-router-dom";
 import MovieCard from "../../../components/MovieCard/MovieCard";
 import { QUERY_KEYS } from "../../../constants/queryKeys";
@@ -9,7 +10,14 @@ import { URLS } from "../../../constants/urls";
 import useAppQuery from "../../../services/query/useAppQuery";
 import { MovieDetailsResponse } from "../../../types/apiResponses";
 import TitleDetailText from "../TitleDetailText";
+
 const TitleDetails = () => {
+  const [sliderRef] = useKeenSlider({
+    slides: {
+      perView: 2.5,
+      spacing: 10,
+    },
+  });
   const params = useParams();
   const title = params.id ?? "";
   const { data, isFetching, isError } = useAppQuery<MovieDetailsResponse>({
@@ -18,12 +26,11 @@ const TitleDetails = () => {
     enabled: !!title,
   });
 
-  const commonHeight = "600px";
 
   if (isFetching) {
     return (
-      <Grid2 container height="100%" rowSpacing={1} columnSpacing={1}>
-        <Grid2 size={{ xs: 4 }} sx={{ height: "8vh" }}>
+      <Grid2 container height="100%" rowSpacing={1} columnSpacing={1} mb='2rem'>
+        <Grid2 size={{ xs: 12 }} sx={{ height: "10vh" }}>
           <Skeleton
             variant="rounded"
             width="100%"
@@ -31,8 +38,7 @@ const TitleDetails = () => {
             sx={{ borderRadius: "12px" }}
           />
         </Grid2>
-        <Grid2 size={{ xs: 8 }} sx={{ height: "8vh" }}></Grid2>
-        <Grid2 size={{ xs: 4 }} sx={{ height: commonHeight }}>
+        <Grid2 size={{ xs: 12 }} sx={{ height: 400 }}>
           <Skeleton
             variant="rounded"
             width="100%"
@@ -40,7 +46,7 @@ const TitleDetails = () => {
             sx={{ borderRadius: "12px" }}
           />
         </Grid2>
-        <Grid2 size={{ xs: 8 }} sx={{ height: commonHeight }}>
+        <Grid2 size={{ xs: 6 }} sx={{ height: 150 }}>
           <Skeleton
             variant="rounded"
             width="100%"
@@ -48,7 +54,15 @@ const TitleDetails = () => {
             sx={{ borderRadius: "12px" }}
           />
         </Grid2>
-        <Grid2 size={{ xs: 8 }} sx={{ height: "8vh" }}>
+        <Grid2 size={{ xs: 6 }} sx={{ height: 150 }}>
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height="100%"
+            sx={{ borderRadius: "12px" }}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12 }} sx={{ height: "10vh" }}>
           <Skeleton
             variant="rounded"
             width="100%"
@@ -69,14 +83,34 @@ const TitleDetails = () => {
   }
 
   return (
-    <Grid2 container rowSpacing={1} columnSpacing={1} pb="1rem">
-      <Grid2 size={{ xs: 12, lg: 3.5 }} order={{ xs: 1, lg: 2 }}>
-        <MovieCard
-          movie={data}
-          imageStyles={{ height: { lg: commonHeight } }}
-        />
+    <Grid2 container rowSpacing={1.2} columnSpacing={1.2} pb="1rem">
+      <Grid2 container size={{ xs: 12 }} gap={0}>
+        <Grid2 size={{ xs: 12 }}>
+          <Typography variant="h6" fontWeight="bold" sx={{ color: "#EFEFEF" }}>
+            {data?.title}
+          </Typography>
+        </Grid2>
+        <Grid2
+          size={{ xs: 12 }}
+          gap={1.5}
+          display={"flex"}
+          alignItems="baseline"
+        >
+          <Typography variant="subtitle1" sx={{ color: "#EFEFEF" }}>
+            {data?.releaseYear}
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#EFEFEF" }}>
+            |
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "#EFEFEF" }}>
+            {data?.titleType}
+          </Typography>
+        </Grid2>
       </Grid2>
-      <Grid2 size={{ xs: 0, lg: 8.5 }}  order={{ xs: 1, lg: 3 }}>
+      <Grid2 size={{ xs: 12, lg: 3.5 }}>
+        <MovieCard movie={data} imageStyles={{ height: { lg: "100%" } }} />
+      </Grid2>
+      <Grid2 size={{ xs: 0, lg: 8.5 }}>
         <Box
           component={"video"}
           autoPlay
@@ -86,130 +120,50 @@ const TitleDetails = () => {
           sx={{
             borderRadius: "12px",
             width: "100%",
-            height: commonHeight,
+            height: "100%",
             display: { xs: "none", lg: "block" },
             objectFit: "cover",
             boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
         />
       </Grid2>
-      <Grid2 container size={{ xs: 12 }} order={{ xs: 1, lg: 1 }}>
-        <Grid2 size={{ xs: 12 }}>
-          <Typography variant="h6" fontWeight="bold" sx={{ color: "#EFEFEF" }}>
-            {data?.title}
-          </Typography>
-        </Grid2>
-        <Grid2
-          display="flex"
-          alignItems="center"
-          gap={1}
-          justifyContent="space-between"
-          size={{ xs: 12 }}
-        >
-          <Box
-            display="flex"
-            alignItems="center"
-            gap={1}
-            justifyContent="space-between"
-          >
-            <Typography
-              variant="subtitle1"
-              fontWeight="bold"
-              sx={{ color: "#B3B3B3" }}
-            >
-              {data?.releaseYear}
-            </Typography>
-            {data?.ratings && (
-              <Chip
-                variant="filled"
-                color="success"
-                size="small"
-                label={
-                  <Typography
-                    fontWeight="bold"
-                    component={"span"}
-                    sx={{ color: "#B3B3B3", fontSize: "0.9rem" }}
-                  >
-                    {data?.ratings}
-                    /10
-                  </Typography>
-                }
-              />
-            )}
-            {data?.certificate && (
-              <Chip
-                variant="filled"
-                color="secondary"
-                size="small"
-                label={
-                  <Typography
-                    fontWeight="bold"
-                    component={"span"}
-                    sx={{ color: "#B3B3B3", fontSize: "0.9rem" }}
-                  >
-                    {data?.certificate}
-                  </Typography>
-                }
-              />
-            )}
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <Chip
-              variant="filled"
-              sx={{ bgcolor: "#fff" }}
-              size="small"
-              label={
-                <Typography
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  fontWeight="bold"
-                >
-                  #{data?.meterRanking?.currentRank}
-                  {data?.meterRanking?.rankChange?.changeDirection ===
-                  "DOWN" ? (
-                    <ArrowDownIcon fontSize="small" color="error" />
-                  ) : data?.meterRanking?.rankChange?.changeDirection ===
-                    "UP" ? (
-                    <ArrowUpIcon fontSize="small" color="success" />
-                  ) : null}
-                </Typography>
-              }
-            />
-          </Box>
-        </Grid2>
-      </Grid2>
-      <Grid2 container size={{ xs: 12, lg: 8 }} order={{ xs: 1, lg: 4 }}>
+      <Grid2 container size={{ xs: 12, lg: 6 }}>
         <TitleDetailText
-          chips
+          label="IMDB Rating"
+          value={`${data.ratings}/10  | ${Intl.NumberFormat("en", {
+            notation: "compact",
+          }).format(Number(data?.voteCount || 0))} votes`}
+        />
+        <TitleDetailText
+          label="IMDB Rank"
           value={
-            <Box
+            <Typography
               display="flex"
               alignItems="center"
-              gap={1}
-              py="0.85rem"
-              sx={{ overflowX: { xs: "scroll", lg: "auto" } }}
+              justifyContent="center"
+              gap={1.2}
             >
-              {data?.genres?.map((genre, i) => (
-                <Chip
-                  size="small"
-                  sx={{ bgcolor: "#FFF" }}
-                  key={i}
-                  label={
-                    <Typography variant="caption" fontWeight="bold">
-                      {genre}
-                    </Typography>
-                  }
-                />
-              ))}
-            </Box>
+              {data?.meterRanking?.currentRank}
+              {data?.meterRanking?.rankChange?.changeDirection === "DOWN" ? (
+                <Box display="flex" alignItems="center" justifyContent="center">
+                  <ArrowDownIcon fontSize="medium" color="error" />
+                  <Typography color="error">
+                    {data?.meterRanking?.rankChange?.difference}
+                  </Typography>
+                </Box>
+              ) : data?.meterRanking?.rankChange?.changeDirection === "UP" ? (
+                <Box display="flex" alignItems="center" justifyContent="center">
+                  <ArrowUpIcon fontSize="medium" color="success" />
+                  <Typography color="success">
+                    {data?.meterRanking?.rankChange?.difference}
+                  </Typography>
+                </Box>
+              ) : null}
+            </Typography>
           }
         />
-        <TitleDetailText
-          value={data?.plot}
-          showDivider={{ bottom: false, top: false }}
-          valueFontStyles={{ fontWeight: "normal" }}
-        />
+        <TitleDetailText size={{ xs: 12 }} value={data?.plot} />
+        <TitleDetailText label="Content Rating" value={data.certificate} />
         <TitleDetailText
           label="Release Date"
           value={
@@ -217,25 +171,44 @@ const TitleDetails = () => {
               ? format(new Date(data.releaseDate), "dd MMM yyyy")
               : null
           }
-          showDivider={{ bottom: false, top: true }}
         />
-        <TitleDetailText
-          label="Runtime"
-          value={data.runtime}
-          showDivider={{ bottom: false, top: true }}
-        />
-        <TitleDetailText
-          label="IMDB Rating"
-          value={`${data.ratings}/10 from  ${Intl.NumberFormat("en", {
-            notation: "compact",
-          }).format(Number(data?.voteCount || 0))} votes`}
-          showDivider={{ bottom: false, top: true }}
-        />
-        <TitleDetailText
-          label="Creator"
-          value={data.creators?.join(",")}
-          showDivider={{ bottom: false, top: true }}
-        />
+        <TitleDetailText label="Runtime" value={data.runtime} />
+        <TitleDetailText label="Creator" value={data.creators?.[0]} />
+      </Grid2>
+
+      <Grid2 size={{ xs: 12 }} container mt="1rem">
+        <Grid2 size={{ xs: 12 }}>
+          <Typography sx={{ color: "#EFEFEF" }}>More like this</Typography>
+        </Grid2>
+        <div ref={sliderRef} className="keen-slider">
+          {data?.moreLikeThis?.map((movie) => (
+            <div className="keen-slider__slide">
+              <MovieCard
+                movie={movie}
+                hideWishListButton
+                key={movie.imdbId}
+                containerStyles={{
+                  bgcolor: "#2C3032",
+                  p: "0.5rem",
+                  borderRadius: "12px",
+                }}
+                hideAnimation
+              >
+                <MovieCard.TitleContainer>
+                  <MovieCard.Title
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      width: "100px",
+                    }}
+                  />
+                  <MovieCard.ReleaseYear />
+                </MovieCard.TitleContainer>
+              </MovieCard>
+            </div>
+          ))}
+        </div>
       </Grid2>
     </Grid2>
   );
