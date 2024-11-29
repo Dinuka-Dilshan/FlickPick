@@ -1,6 +1,7 @@
 import { Box, styled, Typography } from "@mui/material";
 import { SxProps, Theme } from "@mui/system";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { motion } from "framer-motion";
 import { createContext, PropsWithChildren, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
@@ -8,7 +9,7 @@ import { Movie } from "../../types/movie";
 import MoviePoster from "./MoviePoster";
 import WishListButton from "./WatchListButton/WatchListButton";
 
-const Container = styled(Box)({
+const Container = styled(motion.div)({
   cursor: "pointer",
   position: "relative",
 });
@@ -42,8 +43,37 @@ const useMovieCardContext = () => {
 type Props = PropsWithChildren<{
   movie: Movie;
   imageStyles?: SxProps<Theme>;
+  hideWishListButton?: boolean;
+  containerStyles?: SxProps<Theme>;
+  hideAnimation?: boolean;
 }>;
-const MovieCard = ({ movie, children, imageStyles }: Props) => {
+
+const animation = {
+  whileHover: {
+    scale: [1, 1.07, 1.06],
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+    },
+  },
+  initial: { scale: 1 },
+  animate: { scale: 1 },
+  whileTap: {
+    scale: 1.08,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
+const MovieCard = ({
+  movie,
+  children,
+  imageStyles,
+  hideWishListButton,
+  containerStyles,
+  hideAnimation,
+}: Props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
@@ -51,8 +81,12 @@ const MovieCard = ({ movie, children, imageStyles }: Props) => {
   };
   return (
     <MovieCardContext.Provider value={movie}>
-      <Container onClick={clickHandler}>
-        <WishListButton movie={movie} />
+      <Container
+        {...(hideAnimation ? {} : animation)}
+        onClick={clickHandler}
+        sx={containerStyles}
+      >
+        {!hideWishListButton && <WishListButton movie={movie} />}
         <ImageContainer>
           <MoviePoster image={movie.posterUrl} sx={imageStyles} />
         </ImageContainer>
@@ -91,11 +125,17 @@ MovieCard.Rank = function MovieCardRank() {
   );
 };
 
-MovieCard.Title = function MovieCardTitle() {
+MovieCard.Title = function MovieCardTitle({ sx }: { sx?: SxProps<Theme> }) {
   const movie = useMovieCardContext();
 
   return (
-    <Typography sx={{ color: "#EFEFEF", fontSize: "0.9rem" }}>
+    <Typography
+      sx={{
+        color: "#EFEFEF",
+        fontSize: "0.9rem",
+        ...sx,
+      }}
+    >
       {movie.title}
     </Typography>
   );

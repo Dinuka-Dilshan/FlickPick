@@ -1,6 +1,7 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
+import EmptyListMessage from "./EmptyListMessage";
 
 type Props<T> = {
   title: string;
@@ -8,6 +9,12 @@ type Props<T> = {
   isLoading: boolean;
   itemRenderer: (item: T) => ReactNode;
   itemList: T[];
+  emptyMessage?: {
+    show: boolean;
+    message: string;
+    actionLabel: string;
+    action: () => void;
+  };
 };
 
 const ItemListLayout = <T,>({
@@ -16,6 +23,7 @@ const ItemListLayout = <T,>({
   itemRenderer,
   itemList,
   error,
+  emptyMessage,
 }: Props<T>) => {
   if (error) {
     return <Box>Somthing went wrong! refresh the browser</Box>;
@@ -35,6 +43,15 @@ const ItemListLayout = <T,>({
         }}
         itemHeight={{ xs: 250, md: 300, lg: 350 }}
       />
+      {emptyMessage?.show && (
+        <EmptyListMessage
+          isLoading={isLoading}
+          itemList={itemList}
+          message={emptyMessage.message}
+          actionLabel={emptyMessage.actionLabel}
+          action={emptyMessage.action}
+        />
+      )}
       {!isLoading && (
         <Grid2 container spacing={2} mt={"1rem"}>
           {itemList?.map?.((movie, index) => (

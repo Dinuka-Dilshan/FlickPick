@@ -36,7 +36,7 @@ const theme = createTheme({
 const AppThemeProvider = ({ children }: PropsWithChildren) => {
   return (
     <>
-      <GlobalStyles styles={{ body: { backgroundColor: "#2D2D2D" } }} />
+      <GlobalStyles styles={{ body: { backgroundColor: "#1F1F1F" } }} />
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </>
   );
