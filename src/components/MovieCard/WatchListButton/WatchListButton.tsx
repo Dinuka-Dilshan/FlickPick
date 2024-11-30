@@ -1,13 +1,7 @@
 import AddIcon from "@mui/icons-material/AddOutlined";
 import DoneIcon from "@mui/icons-material/DoneOutlined";
 import { Box, Tooltip } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { QUERY_KEYS } from "../../../constants/queryKeys";
-import { URLS } from "../../../constants/urls";
-import useAppMutation from "../../../services/query/useAppMutation";
-import useAppQuery from "../../../services/query/useAppQuery";
-import { WatchListResponse } from "../../../types/apiResponses";
+import useMutateWatchList from "../../../hooks/useMutateWatchList";
 import { Movie } from "../../../types/movie";
 import "./style.css";
 type Props = {
@@ -15,38 +9,13 @@ type Props = {
 };
 
 const WatchListButton = ({ movie }: Props) => {
-  const queryClient = useQueryClient();
-  const { data, isFetching } = useAppQuery<WatchListResponse>({
-    queryKey: QUERY_KEYS.WATCH_LIST,
-    url: URLS.WATCH_LIST(),
+  const { handleAddRemove, isAddedToWishList, isLoading } = useMutateWatchList({
+    movie,
   });
-
-  const isAddedToWishList = useMemo(
-    () => data?.some((item) => item.imdbId === movie.imdbId),
-    [data, movie.imdbId]
-  );
-
-  const { mutate, isPending } = useAppMutation<Movie, Error, Movie | undefined>(
-    {
-      url: URLS.WATCH_LIST(isAddedToWishList ? movie.imdbId : ""),
-      method: isAddedToWishList ? "DELETE" : "POST",
-      onSuccess: async (addedItem) => {
-        queryClient.setQueryData<WatchListResponse>(
-          [QUERY_KEYS.WATCH_LIST],
-          (prev) => {
-            if (isAddedToWishList) {
-              return prev?.filter((item) => item.imdbId !== movie.imdbId);
-            }
-            return prev ? [...prev, addedItem] : [addedItem];
-          }
-        );
-      },
-    }
-  );
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    mutate(isAddedToWishList ? undefined : movie);
+    handleAddRemove();
   };
 
   return (
@@ -68,7 +37,7 @@ const WatchListButton = ({ movie }: Props) => {
         borderBottomRightRadius: "12px",
       }}
     >
-      {isFetching || isPending ? (
+      {isLoading ? (
         <div className="loader"></div>
       ) : (
         <Tooltip title="Add to Wishlist">

@@ -1,20 +1,34 @@
+import BookmarkIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import CheckOutIcon from "@mui/icons-material/CheckOutlined";
 import ArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
-import { Box, Grid2, Skeleton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid2,
+  Skeleton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { format } from "date-fns";
 import { useKeenSlider } from "keen-slider/react";
 import { useParams } from "react-router-dom";
 import MovieCard from "../../../components/MovieCard/MovieCard";
 import { QUERY_KEYS } from "../../../constants/queryKeys";
 import { URLS } from "../../../constants/urls";
+import useMutateWatchList from "../../../hooks/useMutateWatchList";
 import useAppQuery from "../../../services/query/useAppQuery";
 import { MovieDetailsResponse } from "../../../types/apiResponses";
 import TitleDetailText from "../TitleDetailText";
 
 const TitleDetails = () => {
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
+  const isLg = useMediaQuery(theme.breakpoints.up("lg"));
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: 2.5,
+      perView: isLg ? 8.5 : isMd ? 6.5 : 2.5,
       spacing: 10,
     },
   });
@@ -26,10 +40,13 @@ const TitleDetails = () => {
     enabled: !!title,
   });
 
+  const { handleAddRemove, isAddedToWishList, isLoading } = useMutateWatchList({
+    movie: data,
+  });
 
   if (isFetching) {
     return (
-      <Grid2 container height="100%" rowSpacing={1} columnSpacing={1} mb='2rem'>
+      <Grid2 container height="100%" rowSpacing={1} columnSpacing={1} mb="2rem">
         <Grid2 size={{ xs: 12 }} sx={{ height: "10vh" }}>
           <Skeleton
             variant="rounded"
@@ -107,15 +124,16 @@ const TitleDetails = () => {
           </Typography>
         </Grid2>
       </Grid2>
-      <Grid2 size={{ xs: 12, lg: 3.5 }}>
-        <MovieCard movie={data} imageStyles={{ height: { lg: "100%" } }} />
+      <Grid2 size={{ xs: 12, lg: 2.75 }} height="400">
+        <MovieCard hideWishListButton movie={data} />
       </Grid2>
-      <Grid2 size={{ xs: 0, lg: 8.5 }}>
+      <Grid2 size={{ xs: 0, lg: 6.25 }}>
         <Box
           component={"video"}
           autoPlay
           muted
           loop
+          controls
           src={data?.videoUrls?.[0]}
           sx={{
             borderRadius: "12px",
@@ -127,12 +145,16 @@ const TitleDetails = () => {
           }}
         />
       </Grid2>
-      <Grid2 container size={{ xs: 12, lg: 6 }}>
+      <Grid2 container size={{ xs: 12, lg: 3 }}>
         <TitleDetailText
           label="IMDB Rating"
-          value={`${data.ratings}/10  | ${Intl.NumberFormat("en", {
-            notation: "compact",
-          }).format(Number(data?.voteCount || 0))} votes`}
+          value={
+            data.ratings
+              ? `${data.ratings}/10  | ${Intl.NumberFormat("en", {
+                  notation: "compact",
+                }).format(Number(data?.voteCount || 0))}`
+              : "Not Released Yet"
+          }
         />
         <TitleDetailText
           label="IMDB Rank"
@@ -172,43 +194,112 @@ const TitleDetails = () => {
               : null
           }
         />
-        <TitleDetailText label="Runtime" value={data.runtime} />
-        <TitleDetailText label="Creator" value={data.creators?.[0]} />
+        <TitleDetailText label="Runtime" value={data?.runtime} />
+        <TitleDetailText label="Creator" value={data?.creators?.[0]} />
+        <Grid2
+          size={{ xs: 12, lg: 12 }}
+          container
+          sx={{ display: { xs: "none", lg: "flex" } }}
+        >
+          <Grid2 size={{ xs: 6, lg: 12 }}>
+            <Button
+              color="info"
+              fullWidth
+              sx={{ textTransform: "none" }}
+              variant="outlined"
+            >
+              <CheckOutIcon color="inherit" sx={{ mr: "0.2rem" }} /> Watched
+            </Button>
+          </Grid2>
+          <Grid2 size={{ xs: 6, lg: 12 }}>
+            <Button
+              disabled={isLoading}
+              fullWidth
+              sx={{
+                textTransform: "none",
+                bgcolor: isAddedToWishList ? "#2A2C31" : "",
+              }}
+              variant="outlined"
+              onClick={handleAddRemove}
+            >
+              <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
+              {isLoading
+                ? isAddedToWishList
+                  ? "Removing..."
+                  : "Adding..."
+                : "Want to watch"}
+            </Button>
+          </Grid2>
+        </Grid2>
+      </Grid2>
+
+      <Grid2 size={{ xs: 12 }} sx={{ display: { lg: "none" } }} container>
+        <Grid2 size={{ xs: 6, lg: 12 }}>
+          <Button
+            color="info"
+            fullWidth
+            sx={{ textTransform: "none" }}
+            variant="outlined"
+          >
+            <CheckOutIcon color="inherit" sx={{ mr: "0.2rem" }} /> Watched
+          </Button>
+        </Grid2>
+        <Grid2 size={{ xs: 6, lg: 12 }}>
+          <Button
+            disabled={isLoading}
+            fullWidth
+            sx={{
+              textTransform: "none",
+              bgcolor: isAddedToWishList ? "#2A2C31" : "",
+            }}
+            variant="outlined"
+            onClick={handleAddRemove}
+          >
+            <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
+            {isLoading
+              ? isAddedToWishList
+                ? "Removing..."
+                : "Adding..."
+              : "Want to watch"}
+          </Button>
+        </Grid2>
       </Grid2>
 
       <Grid2 size={{ xs: 12 }} container mt="1rem">
         <Grid2 size={{ xs: 12 }}>
           <Typography sx={{ color: "#EFEFEF" }}>More like this</Typography>
         </Grid2>
-        <div ref={sliderRef} className="keen-slider">
-          {data?.moreLikeThis?.map((movie) => (
-            <div className="keen-slider__slide">
-              <MovieCard
-                movie={movie}
-                hideWishListButton
-                key={movie.imdbId}
-                containerStyles={{
-                  bgcolor: "#2C3032",
-                  p: "0.5rem",
-                  borderRadius: "12px",
-                }}
-                hideAnimation
-              >
-                <MovieCard.TitleContainer>
-                  <MovieCard.Title
-                    sx={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      width: "100px",
-                    }}
-                  />
-                  <MovieCard.ReleaseYear />
-                </MovieCard.TitleContainer>
-              </MovieCard>
-            </div>
-          ))}
-        </div>
+        <Grid2 size={{ xs: 12 }}>
+          <div ref={sliderRef} className="keen-slider">
+            {data?.moreLikeThis?.map((movie) => (
+              <div className="keen-slider__slide" key={movie.imdbId}>
+                <MovieCard
+                  movie={movie}
+                  hideWishListButton
+                  key={movie.imdbId}
+                  containerStyles={{
+                    bgcolor: "#2C3032",
+                    p: "0.5rem",
+                    borderRadius: "12px",
+                  }}
+                  hideAnimation
+                >
+                  <MovieCard.TitleContainer>
+                    <MovieCard.Title
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        width: "100px",
+                      }}
+                    />
+                    <MovieCard.ReleaseYear />
+                  </MovieCard.TitleContainer>
+                </MovieCard>
+              </div>
+            ))}
+          </div>
+        </Grid2>
       </Grid2>
     </Grid2>
   );
