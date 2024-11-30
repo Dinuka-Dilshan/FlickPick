@@ -116,10 +116,10 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
             textTransform: "none",
             px: "1rem",
             marginTop: "auto",
-            bgcolor: "#0072F5",
+           
             mt: "1rem",
           }}
-          variant="contained"
+          variant="outlined"
           fullWidth
         >
           Logout
