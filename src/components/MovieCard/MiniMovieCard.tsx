@@ -7,14 +7,14 @@ import WishListButton from "./WatchListButton/WatchListButton";
 
 type Props = {
   movie: Movie;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 const MiniMovieCard = ({ movie, onClick }: Props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    onClick();
+    onClick?.();
     navigate(ROUTES.TITILE_DETAILS(movie.imdbId));
   };
   return (

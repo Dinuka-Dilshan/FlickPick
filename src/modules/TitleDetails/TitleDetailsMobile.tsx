@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+import AddToFlickHistory from "../../components/FlickHistoryButton/FlickHistoryButton";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
@@ -185,14 +186,7 @@ const TitleDetailsMobile = () => {
 
       <Grid2 size={{ xs: 12 }} sx={{ display: { lg: "none" } }} container>
         <Grid2 size={{ xs: 6, lg: 12 }}>
-          <Button
-            color="info"
-            fullWidth
-            sx={{ textTransform: "none" }}
-            variant="outlined"
-          >
-            <CheckOutIcon color="inherit" sx={{ mr: "0.2rem" }} /> Watched
-          </Button>
+          <AddToFlickHistory movie={data} />
         </Grid2>
         <Grid2 size={{ xs: 6, lg: 12 }}>
           <Button
@@ -205,7 +199,9 @@ const TitleDetailsMobile = () => {
             variant="outlined"
             onClick={handleAddRemove}
           >
-            <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
+            {!isLoading && (
+              <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
+            )}
             {isLoading
               ? isAddedToWishList
                 ? "Removing..."

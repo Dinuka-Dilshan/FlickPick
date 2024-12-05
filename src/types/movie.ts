@@ -42,4 +42,6 @@ export type Movie = {
     titleType: string;
     imdbId: string;
   }[];
+  isAlreadyWatched?: boolean;
+  watchedOn?: number;
 };

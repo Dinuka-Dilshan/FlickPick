@@ -12,6 +12,7 @@ import { useState } from "react";
 import { ROUTES } from "../../constants/routes";
 import SearchInput from "../SearchInput/SearchInput";
 import AppNavLink from "./AppNavLink";
+import BottomNavBar from "./BottomNavBar";
 import Logo from "./Logo";
 import MobileDrawer from "./MobileDrawer";
 import ProfileAvatar from "./ProfileAvatar";
@@ -39,50 +40,53 @@ const AppBar = () => {
   const handleOpen = () => setIsOpen((p) => !p);
 
   return (
-    <Wrapper
-      sx={{
-        px: {
-          xs: "0.5rem",
-          md: "5rem",
-          position: "sticky",
-          top: 0,
-          zIndex: 1000,
-        },
-      }}
-    >
-      <AppNavLink to={ROUTES.DEFAULT} text={<Logo />} />
-      {isLargeScreen ? (
-        <Container>
-          <AppNavLink
-            to={ROUTES.POPULAR_MOVIES}
-            text={<Typography fontSize={"0.9rem"}>Movies</Typography>}
-          />
-          <AppNavLink
-            to={ROUTES.POPULAR_TVS}
-            text={<Typography fontSize={"0.9rem"}>Tvs</Typography>}
-          />
-          <AppNavLink
-            to={ROUTES.WISH_LIST}
-            text={<Typography fontSize={"0.9rem"}>Watch List</Typography>}
-          />
-          <SearchInput />
-          <ProfileAvatar />
-        </Container>
-      ) : (
-        <IconButton
-          edge="start"
-          size="large"
-          sx={{
-            color: "#E7E7E7",
-          }}
-          onClick={handleOpen}
-        >
-          <MenuIcon />
-        </IconButton>
-      )}
+    <>
+      <Wrapper
+        sx={{
+          px: {
+            xs: "0.5rem",
+            md: "5rem",
+            position: "sticky",
+            top: 0,
+            zIndex: 1000,
+          },
+        }}
+      >
+        <AppNavLink to={ROUTES.DEFAULT} text={<Logo />} />
+        {isLargeScreen ? (
+          <Container>
+            <AppNavLink
+              to={ROUTES.POPULAR_MOVIES}
+              text={<Typography fontSize={"0.9rem"}>Movies</Typography>}
+            />
+            <AppNavLink
+              to={ROUTES.POPULAR_TVS}
+              text={<Typography fontSize={"0.9rem"}>Tvs</Typography>}
+            />
+            <AppNavLink
+              to={ROUTES.WISH_LIST}
+              text={<Typography fontSize={"0.9rem"}>Watch List</Typography>}
+            />
+            <SearchInput />
+            <ProfileAvatar />
+          </Container>
+        ) : (
+          <IconButton
+            edge="start"
+            size="large"
+            sx={{
+              color: "#E7E7E7",
+            }}
+            onClick={handleOpen}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+        <MobileDrawer handleOpen={handleOpen} isOpen={isOpen} />
+      </Wrapper>
 
-      <MobileDrawer handleOpen={handleOpen} isOpen={isOpen} />
-    </Wrapper>
+      <BottomNavBar />
+    </>
   );
 };
 

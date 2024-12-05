@@ -48,6 +48,12 @@ const useAppMutation = <T, TError = unknown, K = T>({
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
+          if (
+            response.status === 204 ||
+            response.headers.get("content-length") === "0"
+          ) {
+            return null;
+          }
           return response.json();
         },
     onSuccess,

@@ -1,19 +1,15 @@
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Grid2, InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
-import { QUERY_KEYS } from "../../constants/queryKeys";
-import { URLS } from "../../constants/urls";
-import useDebounceValue from "../../hooks/useDebounceValue";
-import useAppQuery from "../../services/query/useAppQuery";
-import { SearchMovieResponse } from "../../types/apiResponses";
-import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
-import MiniMovieCard from "../MovieCard/MiniMovieCard";
+import LoadingItemIndicator from "../../../components/LoadingItemIndicator/LoadingItemIndicator";
+import MiniMovieCard from "../../../components/MovieCard/MiniMovieCard";
+import { QUERY_KEYS } from "../../../constants/queryKeys";
+import { URLS } from "../../../constants/urls";
+import useDebounceValue from "../../../hooks/useDebounceValue";
+import useAppQuery from "../../../services/query/useAppQuery";
+import { SearchMovieResponse } from "../../../types/apiResponses";
 
-type Props = {
-  onDrawerClose: () => void;
-};
-
-const SearchDrawerContent = ({ onDrawerClose }: Props) => {
+const SearchMobile = () => {
   const [searchText, setSearchText] = useState("");
   const debouncedSearchText = useDebounceValue({
     delay: 1000,
@@ -30,7 +26,7 @@ const SearchDrawerContent = ({ onDrawerClose }: Props) => {
   ) => setSearchText(e.target.value);
 
   return (
-    <Box sx={{ width: "100vw", minHeight: "100vh", p: "1rem" }}>
+    <Box>
       <TextField
         fullWidth
         value={searchText}
@@ -68,7 +64,7 @@ const SearchDrawerContent = ({ onDrawerClose }: Props) => {
       <Grid2 container spacing={1.5} mt="1rem">
         {data?.map((movie) => (
           <Grid2 key={movie.imdbId} size={{ xs: 12 }}>
-            <MiniMovieCard movie={movie} onClick={onDrawerClose} />
+            <MiniMovieCard movie={movie} />
           </Grid2>
         ))}
       </Grid2>
@@ -76,4 +72,4 @@ const SearchDrawerContent = ({ onDrawerClose }: Props) => {
   );
 };
 
-export default SearchDrawerContent;
+export default SearchMobile;

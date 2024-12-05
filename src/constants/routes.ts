@@ -8,4 +8,5 @@ export const ROUTES = {
   TITILE_DETAILS: (title: string) => `/title/${title}`,
   VERIFY_ACCOUNT: "/verify",
   WISH_LIST: "/wishlist",
+  FLICK_HISTORY: "/history",
 };
