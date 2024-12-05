@@ -17,7 +17,7 @@ const FlickHistory = () => {
       itemList={data || []}
       itemRenderer={(movie) => (
         <MovieCard
-          movie={{ ...movie, posterUrl: movie.image,  }}
+          movie={{ ...movie, posterUrl: movie.image, runtime: "" }}
           hideWishListButton
         >
           <MovieCard.TitleContainer>
