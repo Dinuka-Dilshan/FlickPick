@@ -1,9 +1,20 @@
-import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import AppBar from "../components/AppBar/AppBar";
-import SearchDrawer from "../components/SearchDrawer/SearchDrawer";
 
 const MainLayout = () => {
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [location.pathname]);
+
   return (
     <>
       <AppBar />
@@ -13,10 +24,10 @@ const MainLayout = () => {
           pt: "1rem",
           backgroundColor: "#1F1F1F",
           minHeight: "92vh",
+          mb: !isLargeScreen ? "12vh" : "",
         }}
       >
         <Outlet />
-        <SearchDrawer />
       </Box>
     </>
   );

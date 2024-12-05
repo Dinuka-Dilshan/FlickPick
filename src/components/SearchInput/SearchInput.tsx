@@ -71,7 +71,11 @@ const SearchInput = () => {
           component={motion.svg}
           ref={iconRef}
           onClick={handleClickInside}
-          sx={{ m: 0, p: 0, color: "#E7E7E7" }}
+          sx={{
+            m: 0,
+            p: 0,
+            color: "#E7E7E7",
+          }}
         />
       )}
 

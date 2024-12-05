@@ -10,9 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { ROUTES } from "../../constants/routes";
 import useAuth from "../../hooks/useAuth";
-import AppNavLink from "./AppNavLink";
 
 type Props = {
   isOpen: boolean;
@@ -93,26 +91,7 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
             <Divider />
           </Grid2>
         </Grid2>
-        <AppNavLink
-          to={ROUTES.POPULAR_MOVIES}
-          text={<Typography>Movies</Typography>}
-          onClick={handleOpen}
-        />
-        <AppNavLink
-          to={ROUTES.POPULAR_TVS}
-          text={<Typography>Tvs</Typography>}
-          onClick={handleOpen}
-        />
-        <AppNavLink
-          to={ROUTES.WISH_LIST}
-          text={<Typography>Watch List</Typography>}
-          onClick={handleOpen}
-        />
-        <AppNavLink
-          to={ROUTES.FLICK_HISTORY}
-          text={<Typography>Flick History</Typography>}
-          onClick={handleOpen}
-        />
+
         <Button
           disabled={isLoading}
           onClick={logout}
