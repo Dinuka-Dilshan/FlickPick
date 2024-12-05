@@ -108,6 +108,11 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
           text={<Typography>Watch List</Typography>}
           onClick={handleOpen}
         />
+        <AppNavLink
+          to={ROUTES.FLICK_HISTORY}
+          text={<Typography>Flick History</Typography>}
+          onClick={handleOpen}
+        />
         <Button
           disabled={isLoading}
           onClick={logout}
@@ -116,7 +121,7 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
             textTransform: "none",
             px: "1rem",
             marginTop: "auto",
-           
+
             mt: "1rem",
           }}
           variant="outlined"

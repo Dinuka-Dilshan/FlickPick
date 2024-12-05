@@ -8,11 +8,18 @@ const MainLayout = lazy(() => import("./MainLayout"));
 const Login = lazy(() => import("../modules/Auth/Pages/Login"));
 const SignUp = lazy(() => import("../modules/Auth/Pages/SignUp"));
 const VerifyAccount = lazy(() => import("../modules/Auth/Pages/VerifyAccount"));
-const PopularMoviesTvs = lazy(() => import("../modules/PopularList/Pages/PopularMoviesTvs"));
+const PopularMoviesTvs = lazy(
+  () => import("../modules/PopularList/Pages/PopularMoviesTvs")
+);
 const Search = lazy(() => import("../modules/Search/Pages/Search"));
-const TitleDetails = lazy(() => import("../modules/TitleDetails/Pages/TitleDetails"));
+const TitleDetails = lazy(
+  () => import("../modules/TitleDetails/Pages/TitleDetails")
+);
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 const WatchList = lazy(() => import("../modules/WatchList/Pages/WatchList"));
+const FlickHistory = lazy(
+  () => import("../modules/FlickHistory/Pages/FlickHistory")
+);
 
 const AppRoutes = () => {
   return (
@@ -41,6 +48,7 @@ const AppRoutes = () => {
               element={<TitleDetails />}
             />
             <Route path={ROUTES.WISH_LIST} element={<WatchList />} />
+            <Route path={ROUTES.FLICK_HISTORY} element={<FlickHistory />} />
           </Route>
         </Route>
       </Routes>

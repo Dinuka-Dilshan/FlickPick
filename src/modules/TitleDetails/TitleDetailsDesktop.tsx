@@ -57,6 +57,7 @@ const DetailsItem = ({
   showImdb,
   halfWidth,
   containerSx,
+  largeContentText,
 }: {
   title: string;
   value?: string;
@@ -64,6 +65,7 @@ const DetailsItem = ({
   showImdb?: boolean;
   halfWidth?: boolean;
   containerSx?: SxProps<Theme>;
+  largeContentText?: boolean;
 }) => {
   if (!value && !component) return null;
   return (
@@ -102,7 +104,12 @@ const DetailsItem = ({
           </svg>
         )}
       </Box>
-      {value && <Text value={value} />}
+      {value && (
+        <Text
+          value={value}
+          sx={{ fontSize: largeContentText ? "1.5rem" : "" }}
+        />
+      )}
       {component}
     </Grid2>
   );
@@ -188,12 +195,7 @@ const TitleDetailsDesktop = () => {
           title="Rating"
           showImdb
           component={
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="baseline"
-              flexDirection="column"
-            >
+            <Box display="flex" alignItems="baseline" gap={1}>
               {data.ratings && (
                 <Text
                   sx={{ fontSize: "1.5rem" }}
@@ -203,9 +205,9 @@ const TitleDetailsDesktop = () => {
               <Text
                 value={
                   data.ratings
-                    ? ` ${Intl.NumberFormat("en", {
+                    ? `${Intl.NumberFormat("en", {
                         notation: "compact",
-                      }).format(Number(data?.voteCount || 0))} Votes`
+                      }).format(Number(data?.voteCount || 0))}`
                     : "Not Released Yet"
                 }
               />
@@ -244,6 +246,7 @@ const TitleDetailsDesktop = () => {
           }
         />
         <DetailsItem
+          largeContentText
           title="Release Date"
           value={
             data.releaseDate
@@ -252,13 +255,19 @@ const TitleDetailsDesktop = () => {
           }
         />
 
-        <DetailsItem title="Creator" value={data?.creators?.[0]} />
         <DetailsItem
+          largeContentText
+          title="Creator"
+          value={data?.creators?.[0]}
+        />
+        <DetailsItem
+          largeContentText
           title="Runtime"
           value={data.runtime}
           halfWidth={allLast4Available}
         />
         <DetailsItem
+          largeContentText
           title="Content"
           value={data?.certificate}
           halfWidth={allLast4Available}
@@ -272,17 +281,7 @@ const TitleDetailsDesktop = () => {
           title=""
           component={
             <Box p=" 0.25rem 0.5rem">
-              <Typography
-                component={"span"}
-                sx={{
-                  bgcolor: "#F5C518",
-                  p: "0.25rem 1rem",
-                  fontWeight: "bold",
-                  borderRadius: "12px",
-                }}
-              >
-                Featured review
-              </Typography>
+              <Text value="Featured review" />
               <Text
                 sx={{ fontWeight: "bold", mt: "1rem" }}
                 value={data.featuredReviews?.[0]?.summary}

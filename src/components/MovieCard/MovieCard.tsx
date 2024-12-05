@@ -1,5 +1,6 @@
 import { Box, styled, Typography } from "@mui/material";
 import { SxProps, Theme } from "@mui/system";
+import { formatDate } from "date-fns";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { motion } from "framer-motion";
 import { createContext, PropsWithChildren, useContext } from "react";
@@ -149,6 +150,20 @@ MovieCard.AddedOn = function MovieCardAddedOn() {
       {formatDistanceToNow(new Date(movie?.addedOn || Date.now()), {
         addSuffix: true,
       }).replace(/^about /, "")}
+    </Typography>
+  );
+};
+
+MovieCard.watchedOn = function MovieCardWatchedOn() {
+  const movie = useMovieCardContext();
+
+  if (!movie.watchedOn) {
+    return null;
+  }
+
+  return (
+    <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
+      {formatDate(movie.watchedOn,"do MMM yyyy")}
     </Typography>
   );
 };

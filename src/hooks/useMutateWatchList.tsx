@@ -19,23 +19,30 @@ const useMutateWatchList = ({ movie }: { movie?: Movie }) => {
     [data, movie]
   );
 
-  const { mutate, isPending } = useAppMutation<Movie, Error, Movie | undefined>(
-    {
-      url: URLS.WATCH_LIST(isAddedToWishList ? movie?.imdbId : ""),
-      method: isAddedToWishList ? "DELETE" : "POST",
-      onSuccess: async (addedItem) => {
-        queryClient.setQueryData<WatchListResponse>(
-          [QUERY_KEYS.WATCH_LIST],
-          (prev) => {
-            if (isAddedToWishList) {
-              return prev?.filter((item) => item.imdbId !== movie?.imdbId);
-            }
-            return prev ? [...prev, addedItem] : [addedItem];
+  const { mutate, isPending } = useAppMutation<
+    undefined,
+    Error,
+    Movie | undefined
+  >({
+    url: URLS.WATCH_LIST(isAddedToWishList ? movie?.imdbId : ""),
+    method: isAddedToWishList ? "DELETE" : "POST",
+    onSuccess: async () => {
+      queryClient.setQueryData<WatchListResponse>(
+        [QUERY_KEYS.WATCH_LIST],
+        (prev) => {
+          if (isAddedToWishList) {
+            return prev?.filter((item) => item.imdbId !== movie?.imdbId);
           }
-        );
-      },
-    }
-  );
+
+          if (!movie) {
+            return prev;
+          }
+          movie.addedOn = Date.now();
+          return prev ? [movie, ...prev] : [movie];
+        }
+      );
+    },
+  });
 
   return {
     isLoading: isFetching || isPending,
