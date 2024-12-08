@@ -44,4 +44,5 @@ export type Movie = {
   }[];
   isAlreadyWatched?: boolean;
   watchedOn?: number;
+  runtimeSeconds?: number;
 };

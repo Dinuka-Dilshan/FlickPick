@@ -5,7 +5,6 @@ import useAuth from "../../hooks/useAuth";
 import useAppQuery from "../../services/query/useAppQuery";
 import { getPopularMoviesTvs } from "../../services/s3";
 import { PopularMovieResponse } from "../../types/apiResponses";
-
 type Props = {
   varient: "TV" | "MOVIE";
 };

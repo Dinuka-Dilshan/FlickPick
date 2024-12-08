@@ -43,7 +43,7 @@ const FlickHistoryButton = ({ movie }: Props) => {
             imdbId: movie.imdbId,
             note: "",
             releaseYear: movie.releaseYear,
-            runtime: 0,
+            runtime: movie.runtimeSeconds || 1,
             title: movie.title,
             type: movie.titleType || "",
             userRating: 10,
@@ -78,7 +78,7 @@ const FlickHistoryButton = ({ movie }: Props) => {
             type: movie.titleType || "",
             userRating: 10,
             watchedOn: Date.now(),
-            runtime: 0,
+            runtime: movie.runtimeSeconds || 0,
           }
     );
   };

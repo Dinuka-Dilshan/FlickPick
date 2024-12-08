@@ -4,7 +4,7 @@ import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
 import EmptyListMessage from "./EmptyListMessage";
 
 type Props<T> = {
-  title: string;
+  title?: string;
   error: unknown;
   isLoading: boolean;
   itemRenderer: (item: T) => ReactNode;
@@ -30,9 +30,11 @@ const ItemListLayout = <T,>({
   }
   return (
     <Box>
-      <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>
-        {title}
-      </Typography>
+      {title && (
+        <Typography fontWeight="bold" sx={{ color: "#EFEFEF" }}>
+          {title}
+        </Typography>
+      )}
       <LoadingItemIndicator
         isLoading={isLoading}
         itemCount={25}
