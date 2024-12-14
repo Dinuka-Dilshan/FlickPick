@@ -1,6 +1,6 @@
 import PopularItemList from "../PopularItemList";
 
-const PopularMoviesTvs = ({ varient }: { varient: "TV" | "MOVIE" }) => (
+const PopularMoviesTvs = ({ varient }: { varient: "TVS" | "MOVIES" }) => (
   <PopularItemList varient={varient} />
 );
 

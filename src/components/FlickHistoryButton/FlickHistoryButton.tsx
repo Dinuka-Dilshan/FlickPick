@@ -5,16 +5,15 @@ import { useState } from "react";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
 import useAppMutation from "../../services/query/useAppMutation";
-import { MovieDetailsResponse } from "../../types/apiResponses";
+import { TitleDetails } from "../../types/apiResponses";
 import {
   FlickHistoryGetResponse,
   FlickHistoryItem,
 } from "../../types/flickHistory";
-import { Movie } from "../../types/movie";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 
 type Props = {
-  movie: Movie;
+  movie: TitleDetails;
 };
 
 const FlickHistoryButton = ({ movie }: Props) => {
@@ -41,19 +40,16 @@ const FlickHistoryButton = ({ movie }: Props) => {
             genre: movie.genres || [],
             image: movie.posterUrl,
             imdbId: movie.imdbId,
-            note: "",
-            releaseYear: movie.releaseYear,
-            runtime: 0,
+            runtime: movie.runtimeSeconds || 1,
             title: movie.title,
+            addedOn: Date.now(),
             type: movie.titleType || "",
-            userRating: 10,
-            watchedOn: Date.now(),
           };
 
           return prev ? [historyItem, ...prev] : [historyItem];
         }
       );
-      queryClient.setQueryData<MovieDetailsResponse>(
+      queryClient.setQueryData<TitleDetails>(
         [QUERY_KEYS.TITLE_DETAILS(movie.imdbId)],
         (prev) => {
           if (!prev) return;
@@ -72,13 +68,10 @@ const FlickHistoryButton = ({ movie }: Props) => {
             imdbId: movie.imdbId,
             genre: movie.genres || [],
             image: movie.posterUrl,
-            note: "",
-            releaseYear: movie.releaseYear,
             title: movie.title,
             type: movie.titleType || "",
-            userRating: 10,
-            watchedOn: Date.now(),
-            runtime: 0,
+            addedOn: Date.now(),
+            runtime: movie.runtimeSeconds || 0,
           }
     );
   };

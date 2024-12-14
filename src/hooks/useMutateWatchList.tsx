@@ -4,10 +4,14 @@ import { QUERY_KEYS } from "../constants/queryKeys";
 import { URLS } from "../constants/urls";
 import useAppMutation from "../services/query/useAppMutation";
 import useAppQuery from "../services/query/useAppQuery";
-import { WatchListResponse } from "../types/apiResponses";
+import { WatchListItem, WatchListResponse } from "../types/apiResponses";
 import { Movie } from "../types/movie";
 
-const useMutateWatchList = ({ movie }: { movie?: Movie }) => {
+const useMutateWatchList = ({
+  watchListItem,
+}: {
+  watchListItem?: WatchListItem;
+}) => {
   const queryClient = useQueryClient();
   const { data, isFetching } = useAppQuery<WatchListResponse>({
     queryKey: QUERY_KEYS.WATCH_LIST,
@@ -15,8 +19,11 @@ const useMutateWatchList = ({ movie }: { movie?: Movie }) => {
   });
 
   const isAddedToWishList = useMemo(
-    () => (movie ? data?.some((item) => item.imdbId === movie.imdbId) : false),
-    [data, movie]
+    () =>
+      watchListItem
+        ? data?.some((item) => item.imdbId === watchListItem.imdbId)
+        : false,
+    [data, watchListItem]
   );
 
   const { mutate, isPending } = useAppMutation<
@@ -24,21 +31,23 @@ const useMutateWatchList = ({ movie }: { movie?: Movie }) => {
     Error,
     Movie | undefined
   >({
-    url: URLS.WATCH_LIST(isAddedToWishList ? movie?.imdbId : ""),
+    url: URLS.WATCH_LIST(isAddedToWishList ? watchListItem?.imdbId : ""),
     method: isAddedToWishList ? "DELETE" : "POST",
     onSuccess: async () => {
       queryClient.setQueryData<WatchListResponse>(
         [QUERY_KEYS.WATCH_LIST],
         (prev) => {
           if (isAddedToWishList) {
-            return prev?.filter((item) => item.imdbId !== movie?.imdbId);
+            return prev?.filter(
+              (item) => item.imdbId !== watchListItem?.imdbId
+            );
           }
 
-          if (!movie) {
+          if (!watchListItem) {
             return prev;
           }
-          movie.addedOn = Date.now();
-          return prev ? [movie, ...prev] : [movie];
+          watchListItem.addedOn = Date.now();
+          return prev ? [watchListItem, ...prev] : [watchListItem];
         }
       );
     },
@@ -48,7 +57,7 @@ const useMutateWatchList = ({ movie }: { movie?: Movie }) => {
     isLoading: isFetching || isPending,
     isAddedToWishList,
     handleAddRemove: () => {
-      mutate(isAddedToWishList ? undefined : movie);
+      mutate(isAddedToWishList ? undefined : watchListItem);
     },
   };
 };

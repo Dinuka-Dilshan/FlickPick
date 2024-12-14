@@ -18,7 +18,7 @@ import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
 import useMutateWatchList from "../../hooks/useMutateWatchList";
 import useAppQuery from "../../services/query/useAppQuery";
-import { MovieDetailsResponse } from "../../types/apiResponses";
+import { TitleDetails } from "../../types/apiResponses";
 import Loader from "./Loader";
 import MoreLikeThis from "./MoreLikeThis";
 import TitleDetailText from "./TitleDetailText";
@@ -28,14 +28,20 @@ const TitleDetailsMobile = () => {
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
   const params = useParams();
   const title = params.id ?? "";
-  const { data, isFetching, isError } = useAppQuery<MovieDetailsResponse>({
+  const { data, isFetching, isError } = useAppQuery<TitleDetails>({
     queryKey: QUERY_KEYS.TITLE_DETAILS(title),
     url: URLS.TITLE_DETAILS(title),
     enabled: !!title,
   });
 
   const { handleAddRemove, isAddedToWishList, isLoading } = useMutateWatchList({
-    movie: data,
+    watchListItem: {
+      addedOn: 0,
+      imdbId: data?.imdbId || "",
+      posterUrl: data?.posterUrl || "",
+      releaseYear: data?.releaseYear || "",
+      title: data?.title || "",
+    },
   });
 
   if (isFetching) {
@@ -216,7 +222,10 @@ const TitleDetailsMobile = () => {
           <Typography sx={{ color: "#EFEFEF" }}>More like this</Typography>
         </Grid2>
         <Grid2 size={{ xs: 12 }}>
-          <MoreLikeThis itemsPerView={isMd ? 6.5 : 2.5} movie={data} />
+          <MoreLikeThis
+            itemsPerView={isMd ? 6.5 : 2.5}
+            moreLikeThis={data.moreLikeThis}
+          />
         </Grid2>
       </Grid2>
     </Grid2>

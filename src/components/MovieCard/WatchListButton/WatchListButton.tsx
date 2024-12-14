@@ -2,15 +2,15 @@ import AddIcon from "@mui/icons-material/AddOutlined";
 import DoneIcon from "@mui/icons-material/DoneOutlined";
 import { Box, Tooltip } from "@mui/material";
 import useMutateWatchList from "../../../hooks/useMutateWatchList";
-import { Movie } from "../../../types/movie";
+import { WatchListItem } from "../../../types/apiResponses";
 import "./style.css";
 type Props = {
-  movie: Movie;
+  watchListItem: WatchListItem;
 };
 
-const WatchListButton = ({ movie }: Props) => {
+const WatchListButton = ({ watchListItem }: Props) => {
   const { handleAddRemove, isAddedToWishList, isLoading } = useMutateWatchList({
-    movie,
+    watchListItem,
   });
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
