@@ -6,8 +6,10 @@ import { QUERY_KEYS } from "../../../constants/queryKeys";
 import { URLS } from "../../../constants/urls";
 import useDebounceValue from "../../../hooks/useDebounceValue";
 import useAppQuery from "../../../services/query/useAppQuery";
-import { SearchMovieResponse } from "../../../types/apiResponses";
-import { Movie } from "../../../types/movie";
+import {
+  SearchMovieItem,
+  SearchMovieResponse,
+} from "../../../types/apiResponses";
 
 const SearchDesktop = () => {
   const [params] = useSearchParams();
@@ -18,7 +20,11 @@ const SearchDesktop = () => {
     value: searchText,
   });
 
-  const { data, isFetching } = useAppQuery<Movie, Error, SearchMovieResponse>({
+  const { data, isFetching } = useAppQuery<
+    SearchMovieItem,
+    Error,
+    SearchMovieResponse
+  >({
     queryKey: QUERY_KEYS.SEARCH_MOVIES_TVS(debouncedSearchText),
     url: URLS.SEARCH(debouncedSearchText),
     enabled: debouncedSearchText.length > 3,
@@ -44,7 +50,12 @@ const SearchDesktop = () => {
         <Grid2 container spacing={1.5} mt={"1rem"}>
           {data?.map((movie, index) => (
             <Grid2 size={{ xs: 6, md: 4, lg: 12 / 5 }} key={index}>
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie}>
+                <MovieCard.TitleContainer>
+                  <MovieCard.Title />
+                  <MovieCard.ReleaseYear />
+                </MovieCard.TitleContainer>
+              </MovieCard>
             </Grid2>
           ))}
         </Grid2>

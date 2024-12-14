@@ -2,11 +2,8 @@ export type FlickHistoryItem = {
   imdbId: string;
   title: string;
   image: string;
-  releaseYear: string;
-  watchedOn: number;
-  userRating: number;
+  addedOn: number;
   type: string;
-  note: string;
   runtime: number;
   genre: string[];
 };

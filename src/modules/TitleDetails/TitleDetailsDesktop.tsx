@@ -20,7 +20,7 @@ import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
 import useMutateWatchList from "../../hooks/useMutateWatchList";
 import useAppQuery from "../../services/query/useAppQuery";
-import { MovieDetailsResponse } from "../../types/apiResponses";
+import { TitleDetails } from "../../types/apiResponses";
 import Loader from "./Loader";
 import MoreLikeThis from "./MoreLikeThis";
 
@@ -118,14 +118,20 @@ const DetailsItem = ({
 const TitleDetailsDesktop = () => {
   const params = useParams();
   const title = params.id ?? "";
-  const { data, isFetching, isError } = useAppQuery<MovieDetailsResponse>({
+  const { data, isFetching, isError } = useAppQuery<TitleDetails>({
     queryKey: QUERY_KEYS.TITLE_DETAILS(title),
     url: URLS.TITLE_DETAILS(title),
     enabled: !!title,
   });
 
   const { handleAddRemove, isAddedToWishList, isLoading } = useMutateWatchList({
-    movie: data,
+    watchListItem: {
+      addedOn: 0,
+      imdbId: data?.imdbId || "",
+      posterUrl: data?.posterUrl || "",
+      releaseYear: data?.releaseYear ||"",
+      title: data?.title || "",
+    },
   });
 
   if (isFetching) {
@@ -346,7 +352,7 @@ const TitleDetailsDesktop = () => {
         <Text value="More like this" sx={{ fontSize: "1.2rem" }} />
       </Grid2>
       <Grid2 size={{ xs: 12 }}>
-        <MoreLikeThis itemsPerView={8.5} movie={data} />
+        <MoreLikeThis itemsPerView={8.5} moreLikeThis={data.moreLikeThis} />
       </Grid2>
     </Grid2>
   );

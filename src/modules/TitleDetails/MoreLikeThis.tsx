@@ -1,13 +1,13 @@
 import { useKeenSlider } from "keen-slider/react";
 import MovieCard from "../../components/MovieCard/MovieCard";
-import { Movie } from "../../types/movie";
+import { TitleDetails } from "../../types/apiResponses";
 
 type Props = {
-  movie: Movie;
+  moreLikeThis: TitleDetails["moreLikeThis"];
   itemsPerView: number;
 };
 
-const MoreLikeThis = ({ itemsPerView, movie }: Props) => {
+const MoreLikeThis = ({ itemsPerView, moreLikeThis }: Props) => {
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: itemsPerView,
@@ -17,10 +17,15 @@ const MoreLikeThis = ({ itemsPerView, movie }: Props) => {
 
   return (
     <div ref={sliderRef} className="keen-slider">
-      {movie?.moreLikeThis?.map((movie) => (
+      {moreLikeThis?.map((movie) => (
         <div className="keen-slider__slide" key={movie.imdbId}>
           <MovieCard
-            movie={movie}
+            movie={{
+              imdbId: movie.imdbId,
+              posterUrl: movie.posterUrl,
+              title: movie.title,
+              releaseYear: movie.releaseYear.toString(),
+            }}
             hideWishListButton
             key={movie.imdbId}
             containerStyles={{

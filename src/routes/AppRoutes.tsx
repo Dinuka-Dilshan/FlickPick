@@ -36,11 +36,11 @@ const AppRoutes = () => {
             />
             <Route
               path={ROUTES.POPULAR_MOVIES}
-              element={<PopularMoviesTvs varient="MOVIE" />}
+              element={<PopularMoviesTvs varient="MOVIES" />}
             />
             <Route
               path={ROUTES.POPULAR_TVS}
-              element={<PopularMoviesTvs varient="TV" />}
+              element={<PopularMoviesTvs varient="TVS" />}
             />
             <Route path={ROUTES.SEARCH} element={<Search />} />
             <Route

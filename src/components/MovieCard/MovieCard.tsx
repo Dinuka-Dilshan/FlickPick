@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { createContext, PropsWithChildren, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import { Movie } from "../../types/movie";
+import FlickHistoryIcon from "../FlickHistoryButton/FlickHistoryIcon";
 import MoviePoster from "./MoviePoster";
 import WishListButton from "./WatchListButton/WatchListButton";
 
@@ -30,7 +30,7 @@ const DetailsContainer = styled(Box)({
   alignItems: "center",
 });
 
-const MovieCardContext = createContext<Movie | undefined>(undefined);
+const MovieCardContext = createContext<MovieCardItem | undefined>(undefined);
 
 const useMovieCardContext = () => {
   const context = useContext(MovieCardContext);
@@ -41,8 +41,18 @@ const useMovieCardContext = () => {
   return context;
 };
 
+export type MovieCardItem = {
+  releaseYear?: string;
+  title: string;
+  posterUrl: string;
+  imdbId: string;
+  addedOn?: number;
+  watchedOn?: number;
+  rank?: number;
+};
+
 type Props = PropsWithChildren<{
-  movie: Movie;
+  movie: MovieCardItem;
   imageStyles?: SxProps<Theme>;
   hideWishListButton?: boolean;
   containerStyles?: SxProps<Theme>;
@@ -87,7 +97,17 @@ const MovieCard = ({
         onClick={clickHandler}
         sx={containerStyles}
       >
-        {!hideWishListButton && <WishListButton movie={movie} />}
+        {!hideWishListButton && (
+          <WishListButton
+            watchListItem={{
+              addedOn: movie.addedOn || 0,
+              imdbId: movie.imdbId,
+              posterUrl: movie.posterUrl,
+              releaseYear: movie.releaseYear || "",
+              title: movie.title,
+            }}
+          />
+        )}
         <ImageContainer>
           <MoviePoster image={movie.posterUrl} sx={imageStyles} />
         </ImageContainer>
@@ -145,9 +165,13 @@ MovieCard.Title = function MovieCardTitle({ sx }: { sx?: SxProps<Theme> }) {
 MovieCard.AddedOn = function MovieCardAddedOn() {
   const movie = useMovieCardContext();
 
+  if (!movie?.addedOn) {
+    return null;
+  }
+
   return (
     <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
-      {formatDistanceToNow(new Date(movie?.addedOn || Date.now()), {
+      {formatDistanceToNow(new Date(movie.addedOn), {
         addSuffix: true,
       }).replace(/^about /, "")}
     </Typography>
@@ -163,8 +187,42 @@ MovieCard.watchedOn = function MovieCardWatchedOn() {
 
   return (
     <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
-      {formatDate(movie.watchedOn,"do MMM yyyy")}
+      {formatDate(movie.watchedOn, "do MMM yyyy")}
     </Typography>
+  );
+};
+
+MovieCard.MovieCardHistoryDetails = function MovieCardHistoryDetails() {
+  const movie = useMovieCardContext();
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%",
+        alignItems: "center",
+      }}
+    >
+      <Box>
+        <Typography
+          sx={{
+            color: "#EFEFEF",
+            fontSize: "0.9rem",
+          }}
+        >
+          {movie.title}
+        </Typography>
+        {movie.addedOn && (
+          <Typography sx={{ color: "#B3B3B3", fontSize: "0.75rem" }}>
+            {formatDate(movie.addedOn, "do MMM yyyy")}
+          </Typography>
+        )}
+      </Box>
+      <Box>
+        <FlickHistoryIcon imdbId={movie.imdbId} />
+      </Box>
+    </Box>
   );
 };
 
