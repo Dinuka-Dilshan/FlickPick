@@ -27,6 +27,7 @@ const PasswordInput = (props: TextFieldProps) => {
     <TextField
       {...props}
       type={show ? "text" : "password"}
+      placeholder="Password"
       slotProps={{
         input: {
           endAdornment: (
@@ -38,7 +39,11 @@ const PasswordInput = (props: TextFieldProps) => {
                 onMouseUp={handleMouseUpPassword}
                 edge="end"
               >
-                {show ? <VisibilityOff /> : <Visibility />}
+                {show ? (
+                  <VisibilityOff sx={{ color: "#fff" }} />
+                ) : (
+                  <Visibility sx={{ color: "#fff" }} />
+                )}
               </IconButton>
             </InputAdornment>
           ),

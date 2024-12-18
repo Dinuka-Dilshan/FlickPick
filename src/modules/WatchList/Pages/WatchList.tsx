@@ -5,8 +5,7 @@ import { QUERY_KEYS } from "../../../constants/queryKeys";
 import { ROUTES } from "../../../constants/routes";
 import { URLS } from "../../../constants/urls";
 import useAppQuery from "../../../services/query/useAppQuery";
-import { WatchListResponse } from "../../../types/apiResponses";
-import { Movie } from "../../../types/movie";
+import { WatchListItem, WatchListResponse } from "../../../types/apiResponses";
 
 const WatchList = () => {
   const { data, isFetching, error } = useAppQuery<WatchListResponse>({
@@ -16,7 +15,7 @@ const WatchList = () => {
   const navigate = useNavigate();
 
   return (
-    <ItemListLayout<Movie>
+    <ItemListLayout<WatchListItem>
       error={error}
       isLoading={isFetching}
       itemList={data || []}

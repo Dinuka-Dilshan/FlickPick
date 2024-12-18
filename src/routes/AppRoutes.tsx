@@ -1,24 +1,20 @@
+
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import FullScreenLoader from "../components/FullScreenLoader/FullScreenLoader";
 import { ROUTES } from "../constants/routes";
+import FlickHistory from "../modules/FlickHistory/Pages/FlickHistory";
+import PopularMoviesTvs from "../modules/PopularList/Pages/PopularMoviesTvs";
+import WatchList from "../modules/WatchList/Pages/WatchList";
+import MainLayout from "./MainLayout";
+import ProtectedRoute from "./ProtectedRoute";
+import Search from "../modules/Search/Pages/Search";
 
-// Lazy loading routes
-const MainLayout = lazy(() => import("./MainLayout"));
 const Login = lazy(() => import("../modules/Auth/Pages/Login"));
 const SignUp = lazy(() => import("../modules/Auth/Pages/SignUp"));
 const VerifyAccount = lazy(() => import("../modules/Auth/Pages/VerifyAccount"));
-const PopularMoviesTvs = lazy(
-  () => import("../modules/PopularList/Pages/PopularMoviesTvs")
-);
-const Search = lazy(() => import("../modules/Search/Pages/Search"));
 const TitleDetails = lazy(
   () => import("../modules/TitleDetails/Pages/TitleDetails")
-);
-const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
-const WatchList = lazy(() => import("../modules/WatchList/Pages/WatchList"));
-const FlickHistory = lazy(
-  () => import("../modules/FlickHistory/Pages/FlickHistory")
 );
 
 const AppRoutes = () => {

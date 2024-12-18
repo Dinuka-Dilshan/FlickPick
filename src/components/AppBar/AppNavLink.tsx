@@ -17,7 +17,7 @@ const AppNavLink = ({ to, text, onClick, style }: Props) => {
       to={to}
       style={({ isActive }) => ({
         textDecoration: "none",
-        color: isActive ? "#0072F5" : "#E7E7E7",
+        color: isActive ? "#f472b6" : "#E7E7E7",
         borderRadius: "8px",
         padding: `${isLargeScreen ? "0.2rem" : "0.5rem"} 0.5rem`,
         ...style,

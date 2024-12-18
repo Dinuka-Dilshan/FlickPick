@@ -29,7 +29,7 @@ const PopularItemList = ({ varient }: Props) => {
           </MovieCard.TitleContainer>
         </MovieCard>
       )}
-      title={`Top Chart: ${varient === "MOVIES" ? "Movies" : "Tv Shows"}`}
+      title={`Trending ${varient === "MOVIES" ? "Movies" : "Tv Shows"}`}
     />
   );
 };

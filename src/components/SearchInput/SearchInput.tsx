@@ -1,36 +1,19 @@
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, InputAdornment, TextField } from "@mui/material";
-import { motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { TextField, ToggleButton, Tooltip } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 
 const SearchInput = () => {
-  const [isClickedOutside, setIsClickedOutside] = useState(false);
-  const iconRef = useRef<SVGSVGElement>(null);
   const textFieldRef = useRef<HTMLInputElement>(null);
   const [params, setParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [text, setText] = useState(params.get("searchText") ?? "");
   const [goBackTo, setGoBackTo] = useState("");
-
-  const handleClickOutSide = useCallback(
-    (e: MouseEvent) => {
-      if (
-        !iconRef.current?.contains(e.target as Node) &&
-        !textFieldRef.current?.contains(e.target as Node) &&
-        text.length === 0
-      ) {
-        setIsClickedOutside(true);
-      }
-    },
-    [text.length]
-  );
-
-  const handleClickInside = () => {
-    setIsClickedOutside(false);
-  };
+  const [exact, setExact] = useState(params.get("exact") ? true : false);
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -47,65 +30,70 @@ const SearchInput = () => {
   };
 
   useEffect(() => {
+    textFieldRef.current?.focus();
     if (location.pathname !== ROUTES.SEARCH || !text) {
       params.delete("searchText");
       setText("");
-      setIsClickedOutside(true);
+      params.delete("exact");
+      setExact(false);
       return;
     }
 
-    setParams({ searchText: text });
-  }, [location.pathname, params, setParams, text]);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutSide);
-    return () => document.removeEventListener("mousedown", handleClickOutSide);
-  }, [handleClickOutSide]);
+    setParams({ searchText: text, exact: exact.toString() });
+  }, [exact, location.pathname, params, setParams, text]);
 
   return (
-    <>
-      {isClickedOutside && (
-        <SearchIcon
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          component={motion.svg}
-          ref={iconRef}
-          onClick={handleClickInside}
-          sx={{
-            m: 0,
-            p: 0,
-            color: "#E7E7E7",
-          }}
-        />
-      )}
-
-      {!isClickedOutside && (
-        <Box
-          component={motion.div}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <TextField
-            value={text}
-            inputRef={textFieldRef}
-            autoFocus
-            sx={{ p: 0, margin: 0 }}
-            size="small"
-            onChange={handleOnChange}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "#E7E7E7" }} />
-                  </InputAdornment>
-                ),
-                style: { color: "#E7E7E7" },
-              },
-            }}
-          />
-        </Box>
-      )}
-    </>
+    <TextField
+      fullWidth
+      inputRef={textFieldRef}
+      value={text}
+      autoFocus
+      onChange={handleOnChange}
+      size="small"
+      placeholder="Search"
+      slotProps={{
+        input: {
+          endAdornment: (
+            <>
+              <Tooltip title="Search for exact title">
+                <ToggleButton
+                  disabled={location.pathname !== ROUTES.SEARCH}
+                  value={exact}
+                  onChange={() => setExact((p) => !p)}
+                >
+                  {exact ? (
+                    <FilterAltOffIcon
+                      fontSize="small"
+                      sx={{
+                        m: 0,
+                        p: 0,
+                        color: "#E7E7E7",
+                      }}
+                    />
+                  ) : (
+                    <FilterAltIcon
+                      fontSize="small"
+                      sx={{
+                        m: 0,
+                        p: 0,
+                        color: "#E7E7E7",
+                      }}
+                    />
+                  )}
+                </ToggleButton>
+              </Tooltip>
+              <SearchIcon
+                sx={{
+                  m: 0,
+                  p: 0,
+                  color: "#E7E7E7",
+                }}
+              />
+            </>
+          ),
+        },
+      }}
+    />
   );
 };
 

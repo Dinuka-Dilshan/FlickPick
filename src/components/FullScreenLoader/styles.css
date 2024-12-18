@@ -9,7 +9,7 @@
   }
   .dancingLetters:before,
   .dancingLetters:after {
-    content: "Loading...";
+    content: "FlickPick";
     grid-area: 1/1;
     background: inherit;
     -webkit-background-clip: text;

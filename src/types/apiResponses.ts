@@ -58,6 +58,7 @@ export type TitleDetails = {
     imdbId: string;
   }[];
   isAlreadyWatched: boolean;
+  cast: { id: string; name: string; image: string;  }[];
 };
 
 export type WatchListItem = {

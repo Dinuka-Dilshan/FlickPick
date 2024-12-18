@@ -1,7 +1,8 @@
 import { TextField } from "@mui/material";
 import { useCallback, useState } from "react";
 import OTPInput from "react-otp-input";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import { ROUTES } from "../../../constants/routes";
 import useAuth from "../../../hooks/useAuth";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
@@ -9,13 +10,16 @@ import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
 const VerifyAccount = () => {
   const { verify, isLoading } = useAuth();
   const { state } = useLocation();
-
   const [otp, setOtp] = useState("");
 
   const verifyOtp = useCallback(
-    (otp: string) => verify({ otp, userName: state.userName || "" }),
-    [state.userName, verify]
+    (otp: string) => verify({ otp, userName: state?.userName || "" }),
+    [state?.userName, verify]
   );
+
+  if (!state?.userName) {
+    return <Navigate to={ROUTES.LOGIN} replace />;
+  }
 
   return (
     <AuthLayout
@@ -25,7 +29,7 @@ const VerifyAccount = () => {
         loading: "Verifying...",
         normal: "Verify",
       }}
-      subtitle={`Enter the verification code sent to ${state.userName} for verify.`}
+      subtitle={`Enter the verification code sent to ${state?.userName} for verify.`}
     >
       <AuthLayoutItem>
         <OTPInput
