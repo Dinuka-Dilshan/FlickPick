@@ -1,9 +1,6 @@
+import { Box, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 
 type Props = {
   title: string;
@@ -37,21 +34,28 @@ const ConfirmationDialog = ({
   };
 
   return (
-    <>
-      <Dialog
-        open={isOpen}
-        onClose={onClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {subtitle}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      sx={{
+        "& .MuiDialog-paper": {
+          backgroundColor: "#1F1F1F",
+          borderRadius: "16px",
+          p: "1rem 0.5rem",
+        },
+      }}
+    >
+      <Box p="1rem" display='flex' flexDirection='column' gap={1}>
+        <Typography variant="h5" sx={{ color: "#FFF" }}>
+          {title}
+        </Typography>
+        <Typography variant="body1" sx={{ color: "#FFF" }}>
+          {subtitle}
+        </Typography>
+        <Box display="flex" gap={1} mt='1rem'>
           <Button
+            fullWidth
+            sx={{ p: "0.5rem 1rem" }}
             onClick={(e) => {
               e.stopPropagation();
               handleCancel();
@@ -60,6 +64,8 @@ const ConfirmationDialog = ({
             {cancelButtonText}
           </Button>
           <Button
+            fullWidth
+            sx={{ p: "0.5rem 1rem" }}
             onClick={(e) => {
               e.stopPropagation();
               handleConfirm();
@@ -68,9 +74,9 @@ const ConfirmationDialog = ({
           >
             {confirmButtonText}
           </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+        </Box>
+      </Box>
+    </Dialog>
   );
 };
 export default ConfirmationDialog;

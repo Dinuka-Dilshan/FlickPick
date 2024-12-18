@@ -5,7 +5,6 @@ import { URLS } from "../constants/urls";
 import useAppMutation from "../services/query/useAppMutation";
 import useAppQuery from "../services/query/useAppQuery";
 import { WatchListItem, WatchListResponse } from "../types/apiResponses";
-import { Movie } from "../types/movie";
 
 const useMutateWatchList = ({
   watchListItem,
@@ -29,7 +28,7 @@ const useMutateWatchList = ({
   const { mutate, isPending } = useAppMutation<
     undefined,
     Error,
-    Movie | undefined
+    WatchListItem | undefined
   >({
     url: URLS.WATCH_LIST(isAddedToWishList ? watchListItem?.imdbId : ""),
     method: isAddedToWishList ? "DELETE" : "POST",

@@ -15,7 +15,7 @@ const AuthMessages = () => {
           {errorMessage}
         </Alert>
       )}
-      {isLoading && <LinearProgress />}
+      {isLoading && <LinearProgress color="primary"/>}
     </Box>
   );
 };

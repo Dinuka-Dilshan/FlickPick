@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { ROUTES } from "../../constants/routes";
 import SearchInput from "../SearchInput/SearchInput";
+import AppBarRoutes from "./AppBarRoutes";
 import AppNavLink from "./AppNavLink";
 import BottomNavBar from "./BottomNavBar";
 import Logo from "./Logo";
@@ -19,58 +20,65 @@ import ProfileAvatar from "./ProfileAvatar";
 
 const Wrapper = styled(Box)({
   display: "flex",
-  justifyContent: "space-between",
   alignItems: "center",
-  height: "7vh",
   background: "#171717", // Uniform dark grey
-  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Adds depth without overwhelming
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Adds depth without overwhelming,
+  position: "sticky",
+  top: 0,
+  zIndex: 1000,
 });
 
 const Container = styled(Box)({
   display: "flex",
-  justifyContent: "space-between",
+  flex: 1,
+  justifyContent: "flex-end",
   alignItems: "center",
-  gap: 15,
+  gap: 4,
 });
 
 const AppBar = () => {
   const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen((p) => !p);
 
   return (
-    <>
-      <Wrapper
-        sx={{
-          px: {
-            xs: "0.5rem",
-            md: "5rem",
-            position: "sticky",
-            top: 0,
-            zIndex: 1000,
-          },
-        }}
-      >
+    <Wrapper
+      sx={{
+        px: {
+          xs: "0.3rem",
+          md: "5rem",
+        },
+        height: {
+          xs: "7vh",
+          md: "8vh",
+        },
+      }}
+    >
+      <Box sx={{ flex: 1, display: "flex" }}>
         <AppNavLink to={ROUTES.DEFAULT} text={<Logo />} />
-        {isLargeScreen ? (
-          <Container>
-            <AppNavLink
-              to={ROUTES.POPULAR_MOVIES}
-              text={<Typography fontSize={"0.9rem"}>Movies</Typography>}
-            />
-            <AppNavLink
-              to={ROUTES.POPULAR_TVS}
-              text={<Typography fontSize={"0.9rem"}>Tvs</Typography>}
-            />
-            <AppNavLink
-              to={ROUTES.WISH_LIST}
-              text={<Typography fontSize={"0.9rem"}>Watch List</Typography>}
-            />
+      </Box>
+      {isLargeScreen ? (
+        <>
+          <Box sx={{ flex: 1 }}>
             <SearchInput />
+          </Box>
+          <Container>
+            {AppBarRoutes.filter((r) => !r.hideOnDesktop).map((route) => (
+              <AppNavLink
+                to={route.route}
+                text={
+                  <Typography fontSize={"0.9rem"}>
+                    {route.labelDesktop}
+                  </Typography>
+                }
+              />
+            ))}
             <ProfileAvatar />
           </Container>
-        ) : (
+        </>
+      ) : (
+        <>
           <IconButton
             edge="start"
             size="large"
@@ -81,12 +89,11 @@ const AppBar = () => {
           >
             <MenuIcon />
           </IconButton>
-        )}
-        <MobileDrawer handleOpen={handleOpen} isOpen={isOpen} />
-      </Wrapper>
-
-      <BottomNavBar />
-    </>
+          <BottomNavBar />
+          <MobileDrawer handleOpen={handleOpen} isOpen={isOpen} />
+        </>
+      )}
+    </Wrapper>
   );
 };
 

@@ -36,11 +36,14 @@ const Login = () => {
     >
       <AuthLayoutItem>
         <TextField
+          variant="outlined"
           {...registerInput({ key: "username", type: "text", label: "Email" })}
         />
       </AuthLayoutItem>
       <AuthLayoutItem>
-        <PasswordInput {...registerInput({key:"password",type: "password"})} />
+        <PasswordInput
+          {...registerInput({ key: "password", type: "password" })}
+        />
       </AuthLayoutItem>
     </AuthLayout>
   );

@@ -19,7 +19,7 @@ const Wrapper = styled(Grid2)({
   height: "100vh",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "#F2F2F2",
+  backgroundColor: "#1F1F1F",
 });
 
 type Props = {
@@ -49,10 +49,10 @@ const AuthLayout = ({
 
   return (
     <Wrapper container>
-      <Grid2 size={{ xs: 11, md: 4, lg: 3 }}>
+      <Grid2 size={{ xs: 11, sm: 6, md: 4, lg: 3 }}>
         <form>
           <Grid2
-            sx={{ p: "1.5rem", bgcolor: "#fff", borderRadius: "12px" }}
+            sx={{ p: "1.5rem", bgcolor: "#171717", borderRadius: "12px" }}
             container
             spacing={1}
           >
@@ -67,6 +67,7 @@ const AuthLayout = ({
                 variant="subtitle2"
                 textAlign="center"
                 fontWeight="bold"
+                sx={{ color: "#fff" }}
               >
                 {subtitle}
               </Typography>
@@ -81,6 +82,12 @@ const AuthLayout = ({
                 startIcon={
                   isLoading ? <CircularProgress size="1.2rem" /> : null
                 }
+                sx={{
+                  background: "linear-gradient(90deg, #9333ea, #f472b6)",
+                  ":disabled": {
+                    background: "#1F1F1F",
+                  },
+                }}
               >
                 {isLoading ? submitButtonText.loading : submitButtonText.normal}
               </Button>
@@ -94,7 +101,7 @@ const AuthLayout = ({
                 <Button
                   onClick={handleSignUp}
                   color="inherit"
-                  sx={{ textTransform: "none" }}
+                  sx={{ textTransform: "none", border: "none" }}
                   size="small"
                 >
                   New to FlickPick? Sign up now.

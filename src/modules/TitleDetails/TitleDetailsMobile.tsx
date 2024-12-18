@@ -19,6 +19,7 @@ import { URLS } from "../../constants/urls";
 import useMutateWatchList from "../../hooks/useMutateWatchList";
 import useAppQuery from "../../services/query/useAppQuery";
 import { TitleDetails } from "../../types/apiResponses";
+import Cast from "./Cast";
 import Loader from "./Loader";
 import MoreLikeThis from "./MoreLikeThis";
 import TitleDetailText from "./TitleDetailText";
@@ -216,8 +217,15 @@ const TitleDetailsMobile = () => {
           </Button>
         </Grid2>
       </Grid2>
-
       <Grid2 size={{ xs: 12 }} container mt="1rem">
+        <Grid2 size={{ xs: 12 }}>
+          <Typography sx={{ color: "#EFEFEF" }}>Top cast</Typography>
+        </Grid2>
+        <Grid2 size={{ xs: 12 }}>
+          <Cast itemsPerView={isMd ? 6.5 : 2.5} cast={data.cast} />
+        </Grid2>
+      </Grid2>
+      <Grid2 size={{ xs: 12 }} container mt="0rem">
         <Grid2 size={{ xs: 12 }}>
           <Typography sx={{ color: "#EFEFEF" }}>More like this</Typography>
         </Grid2>

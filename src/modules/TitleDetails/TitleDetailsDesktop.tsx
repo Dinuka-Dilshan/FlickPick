@@ -21,6 +21,7 @@ import { URLS } from "../../constants/urls";
 import useMutateWatchList from "../../hooks/useMutateWatchList";
 import useAppQuery from "../../services/query/useAppQuery";
 import { TitleDetails } from "../../types/apiResponses";
+import Cast from "./Cast";
 import Loader from "./Loader";
 import MoreLikeThis from "./MoreLikeThis";
 
@@ -129,7 +130,7 @@ const TitleDetailsDesktop = () => {
       addedOn: 0,
       imdbId: data?.imdbId || "",
       posterUrl: data?.posterUrl || "",
-      releaseYear: data?.releaseYear ||"",
+      releaseYear: data?.releaseYear || "",
       title: data?.title || "",
     },
   });
@@ -344,6 +345,15 @@ const TitleDetailsDesktop = () => {
             </Grid2>
           }
         />
+      </Grid2>
+      <Grid2 size={{ xs: 12 }} mt="1.5rem">
+        <Divider sx={{ bgcolor: "#2C3032", height: "2px" }} />
+      </Grid2>
+      <Grid2 size={{ xs: 12 }}>
+        <Text value="Top Cast" sx={{ fontSize: "1.2rem" }} />
+      </Grid2>
+      <Grid2 size={{ xs: 12 }}>
+        <Cast itemsPerView={8.5} cast={data.cast} />
       </Grid2>
       <Grid2 size={{ xs: 12 }} mt="1.5rem">
         <Divider sx={{ bgcolor: "#2C3032", height: "2px" }} />

@@ -19,7 +19,7 @@ type Props = {
 
 const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
   const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const { logout, isLoading, user } = useAuth();
 
   if (isLargeScreen) {
@@ -42,7 +42,7 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
           width: "100vw",
           borderTopRightRadius: "20px",
           borderTopLeftRadius: "20px",
-          bgcolor: "#2D2D2D",
+          backgroundColor: "#1F1F1F",
         },
       }}
     >
