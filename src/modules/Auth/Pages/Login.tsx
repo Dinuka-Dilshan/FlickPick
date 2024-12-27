@@ -1,6 +1,4 @@
 import { TextField } from "@mui/material";
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import PasswordInput from "../../../components/PasswordInput/PasswordInput";
 import useAuth from "../../../hooks/useAuth";
 import useFormState from "../../../hooks/useFormState";
@@ -9,10 +7,7 @@ import AuthLayout from "../AuthLayout/AuthLayout";
 import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
 
 const Login = () => {
-  const { login, isLoading } = useAuth();
-  const [params] = useSearchParams();
-
-  const googleAuthCode = params.get("code");
+  const { login, isLoading, isGoogleLoginLoading } = useAuth();
 
   const { handleSubmit, registerInput, isFormValid } = useFormState({
     fields: {
@@ -29,17 +24,9 @@ const Login = () => {
     },
   });
 
-  useEffect(() => {
-    if (isLoading) return;
-
-    if (googleAuthCode) {
-      login({ googleAuthCode, passWord: "", userName: "" });
-    }
-  }, [googleAuthCode, isLoading, login]);
-
   return (
     <AuthLayout
-      disableSubmit={!isFormValid || isLoading}
+      disableSubmit={!isFormValid || isLoading || isGoogleLoginLoading}
       onSubmit={handleSubmit}
       showNewToFlickPick
       submitButtonText={{

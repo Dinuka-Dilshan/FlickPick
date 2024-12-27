@@ -23,8 +23,11 @@ export type AuthContext = {
     unknown
   >;
   isInitializing: boolean;
+  googleLogin: () => void;
+  isGoogleLoginLoading: boolean;
 };
 export const AuthContext = createContext<AuthContext>({
+  googleLogin: () => null,
   login: () => null,
   logout: () => null,
   user: null,
@@ -46,4 +49,5 @@ export const AuthContext = createContext<AuthContext>({
       isGoogleUser: false,
     }),
   isInitializing: true,
+  isGoogleLoginLoading: false,
 });
