@@ -1,5 +1,4 @@
 import BookmarkIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import CheckOutIcon from "@mui/icons-material/CheckOutlined";
 import ArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import {
@@ -154,41 +153,6 @@ const TitleDetailsMobile = () => {
         />
         <TitleDetailText label="Runtime" value={data?.runtime} />
         <TitleDetailText label="Creator" value={data?.creators?.[0]} />
-        <Grid2
-          size={{ xs: 12, lg: 12 }}
-          container
-          sx={{ display: { xs: "none", lg: "flex" } }}
-        >
-          <Grid2 size={{ xs: 6, lg: 12 }}>
-            <Button
-              color="info"
-              fullWidth
-              sx={{ textTransform: "none" }}
-              variant="outlined"
-            >
-              <CheckOutIcon color="inherit" sx={{ mr: "0.2rem" }} /> Watched
-            </Button>
-          </Grid2>
-          <Grid2 size={{ xs: 6, lg: 12 }}>
-            <Button
-              disabled={isLoading}
-              fullWidth
-              sx={{
-                textTransform: "none",
-                bgcolor: isAddedToWishList ? "#2A2C31" : "",
-              }}
-              variant="outlined"
-              onClick={handleAddRemove}
-            >
-              <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
-              {isLoading
-                ? isAddedToWishList
-                  ? "Removing..."
-                  : "Adding..."
-                : "Want to watch"}
-            </Button>
-          </Grid2>
-        </Grid2>
       </Grid2>
 
       <Grid2 size={{ xs: 12 }} sx={{ display: { lg: "none" } }} container>
@@ -202,6 +166,7 @@ const TitleDetailsMobile = () => {
             sx={{
               textTransform: "none",
               bgcolor: isAddedToWishList ? "#2A2C31" : "",
+              color: isAddedToWishList ? "#00dd82" : "",
             }}
             variant="outlined"
             onClick={handleAddRemove}
