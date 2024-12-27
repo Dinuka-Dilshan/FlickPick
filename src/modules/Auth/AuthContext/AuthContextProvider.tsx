@@ -2,7 +2,7 @@ import { SignUpCommandOutput } from "@aws-sdk/client-cognito-identity-provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 import { PropsWithChildren, useEffect, useLayoutEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { MUTATION_KEYS } from "../../../constants/mutationKeys";
 import { ROUTES } from "../../../constants/routes";
 import {
@@ -25,11 +25,14 @@ import { AuthContext } from "./AuthContext";
 
 const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const googleAuthCode = params.get("code");
   const location = useLocation();
   const [user, setUser] = useState<AuthenticatedUser | null>();
   const [errorMessage, setErrorMessage] = useState("");
   const client = useQueryClient();
   const [isInitializing, setIsInitializing] = useState(true);
+  const [isGoogleLoginLoading, setIsGoogleLoginLoading] = useState(false);
 
   const {
     mutate: login,
@@ -38,6 +41,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   } = useMutation<AuthenticatedUser, Error, CognitoLoginProps>({
     onError: (error, props) => {
       setErrorMessage(error.message);
+      setIsGoogleLoginLoading(false);
       if (error.message.includes("User is not confirmed.")) {
         navigate(ROUTES.VERIFY_ACCOUNT, {
           replace: true,
@@ -48,6 +52,9 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       }
     },
     onSuccess: (user) => {
+      if (user.isGoogleUser) {
+        setIsGoogleLoginLoading(false);
+      }
       setUser(user);
       setLoggedInUserToLocalStrorage(user);
       navigate(location.state?.from || ROUTES.DEFAULT, { replace: true });
@@ -134,9 +141,33 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     mutationKey: [MUTATION_KEYS.VERIFY],
   });
 
+  const googleLogin = () => {
+    setIsGoogleLoginLoading(true);
+    const url = `${
+      import.meta.env.VITE_COGNITO_DOMAIN
+    }/oauth2/authorize?client_id=${
+      import.meta.env.VITE_COGNITO_CLIENT_ID
+    }&redirect_uri=${
+      import.meta.env.VITE_AUTH_REDIRECT_URL
+    }&identity_provider=Google&response_type=code`;
+
+    window.location.href = url;
+  };
+
   useEffect(() => {
     setErrorMessage("");
   }, [location]);
+
+  useLayoutEffect(() => {
+    if (isLoginLoading) {
+      return;
+    }
+
+    if (googleAuthCode) {
+      setIsGoogleLoginLoading(true);
+      login({ googleAuthCode, passWord: "", userName: "" });
+    }
+  }, [googleAuthCode, isLoginLoading, login]);
 
   useLayoutEffect(() => {
     const cachedUser = getLoggedInUserFromLocalStrorage();
@@ -157,6 +188,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       setIsInitializing(false);
     }
   }, [login, refresh]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -166,11 +198,13 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
           isSignUpLoading ||
           isVerifyLoading ||
           isRefreshLoading,
+        isGoogleLoginLoading,
         login,
         logout,
         signUp,
         verify,
         refresh,
+        googleLogin,
         user: user ?? null,
         errorMessage,
         clearErrorMessage: () => setErrorMessage(""),
