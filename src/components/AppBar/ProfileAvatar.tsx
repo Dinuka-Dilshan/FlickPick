@@ -31,6 +31,7 @@ const ProfileAvatar = () => {
           height: 38,
           cursor: "pointer",
         }}
+        src={`${user?.picture}`}
       ></Avatar>
       <Popover
         open={isPopOverOpen}
@@ -58,7 +59,10 @@ const ProfileAvatar = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Avatar sx={{ width: "32px", height: "32px" }}></Avatar>
+            <Avatar
+              sx={{ width: "32px", height: "32px" }}
+              src={user?.picture}
+            />
           </Grid2>
           <Grid2
             size={{ xs: 9 }}

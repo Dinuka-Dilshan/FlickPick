@@ -37,13 +37,13 @@ export const AuthContext = createContext<AuthContext>({
     Promise.resolve({
       accessToken: "",
       accessTokenExpiresOn: 0,
-      birthday: "",
+      picture: "",
       email: "",
-      gender: "",
       idToken: "",
       name: "",
       refreshToken: "",
       refreshTokenExpiresOn: 0,
+      isGoogleUser: false,
     }),
   isInitializing: true,
 });

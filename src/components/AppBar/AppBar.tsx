@@ -33,7 +33,7 @@ const Container = styled(Box)({
   flex: 1,
   justifyContent: "flex-end",
   alignItems: "center",
-  gap: 4,
+  gap: 2,
 });
 
 const AppBar = () => {
@@ -66,6 +66,7 @@ const AppBar = () => {
           <Container>
             {AppBarRoutes.filter((r) => !r.hideOnDesktop).map((route) => (
               <AppNavLink
+                key={route.route}
                 to={route.route}
                 text={
                   <Typography fontSize={"0.9rem"}>
@@ -74,7 +75,9 @@ const AppBar = () => {
                 }
               />
             ))}
-            <ProfileAvatar />
+            <Box sx={{ ml: "1rem" }}>
+              <ProfileAvatar />
+            </Box>
           </Container>
         </>
       ) : (

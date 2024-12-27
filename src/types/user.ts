@@ -6,6 +6,6 @@ export type AuthenticatedUser = {
   refreshToken: string;
   refreshTokenExpiresOn: number;
   name: string;
-  gender: string;
-  birthday: string;
+  picture: string;
+  isGoogleUser: boolean;
 };

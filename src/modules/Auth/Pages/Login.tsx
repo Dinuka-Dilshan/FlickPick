@@ -1,4 +1,6 @@
 import { TextField } from "@mui/material";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import PasswordInput from "../../../components/PasswordInput/PasswordInput";
 import useAuth from "../../../hooks/useAuth";
 import useFormState from "../../../hooks/useFormState";
@@ -8,6 +10,9 @@ import AuthLayoutItem from "../AuthLayout/AuthLayoutItem";
 
 const Login = () => {
   const { login, isLoading } = useAuth();
+  const [params] = useSearchParams();
+
+  const googleAuthCode = params.get("code");
 
   const { handleSubmit, registerInput, isFormValid } = useFormState({
     fields: {
@@ -19,9 +24,18 @@ const Login = () => {
       login({
         userName: values.username.value,
         passWord: values.password.value,
+        googleAuthCode: "",
       });
     },
   });
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (googleAuthCode) {
+      login({ googleAuthCode, passWord: "", userName: "" });
+    }
+  }, [googleAuthCode, isLoading, login]);
 
   return (
     <AuthLayout
@@ -33,6 +47,7 @@ const Login = () => {
         normal: "Sign In",
       }}
       subtitle={"Let's enter your details to login"}
+      showGoogleSignIn
     >
       <AuthLayoutItem>
         <TextField

@@ -2,7 +2,6 @@ import {
   CognitoIdentityProviderClient,
   ConfirmSignUpCommand,
   GetUserCommand,
-  GlobalSignOutCommand,
   InitiateAuthCommand,
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
@@ -11,13 +10,12 @@ import { AuthenticatedUser } from "../../types/user";
 export type CognitoLoginProps = {
   userName: string;
   passWord: string;
+  googleAuthCode: string;
 };
 
 export type CognitoSignupProps = {
   email: string;
   password: string;
-  birthdate: string;
-  gender: string;
   fullname: string;
 };
 
@@ -25,27 +23,77 @@ export type CognitoVerifyProps = { userName: string; otp: string };
 
 export type CognitoUserAttributes = {
   name: string;
-  gender: string;
   email: string;
-  birthdate: string;
+  picture: string;
 };
 
 const client = new CognitoIdentityProviderClient({
   region: import.meta.env.VITE_COGNITO_CLIENT_REGION,
 });
 
-const login = async ({ passWord, userName }: CognitoLoginProps) => {
-  const command = new InitiateAuthCommand({
-    AuthFlow: "USER_PASSWORD_AUTH",
-    ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
-    AuthParameters: { USERNAME: userName, PASSWORD: passWord },
-  });
+const login = async ({
+  passWord,
+  userName,
+  googleAuthCode,
+}: CognitoLoginProps) => {
+  let accessToken = "";
+  let expiresIn = 0;
+  let idToken = "";
+  let refreshToken = "";
 
-  const result = await client.send(command);
+  if (googleAuthCode) {
+    const params = new URLSearchParams();
+    params.append("grant_type", "authorization_code");
+    params.append("client_id", import.meta.env.VITE_COGNITO_CLIENT_ID);
+    params.append("code", googleAuthCode);
+    params.append("redirect_uri", import.meta.env.VITE_AUTH_REDIRECT_URL);
+
+    params.toString();
+
+    const result = await fetch(
+      `${import.meta.env.VITE_COGNITO_DOMAIN}/oauth2/token`,
+      {
+        method: "POST",
+        body: params.toString(),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    if (!result.ok) {
+      throw new Error("unable to access google");
+    }
+
+    const data = (await result.json()) as {
+      access_token: string;
+      id_token: string;
+      refresh_token: string;
+      expires_in: 3600;
+      token_type: string;
+    };
+
+    accessToken = data.access_token;
+    expiresIn = data.expires_in;
+    idToken = data.id_token;
+    refreshToken = data.refresh_token;
+  } else {
+    const command = new InitiateAuthCommand({
+      AuthFlow: "USER_PASSWORD_AUTH",
+      ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+      AuthParameters: { USERNAME: userName, PASSWORD: passWord },
+    });
+
+    const result = await client.send(command);
+    accessToken = result.AuthenticationResult?.AccessToken as string;
+    expiresIn = result.AuthenticationResult?.ExpiresIn as number;
+    idToken = result.AuthenticationResult?.IdToken as string;
+    refreshToken = result.AuthenticationResult?.RefreshToken as string;
+  }
 
   const user = await client.send(
     new GetUserCommand({
-      AccessToken: result.AuthenticationResult?.AccessToken,
+      AccessToken: accessToken,
     })
   );
 
@@ -57,7 +105,7 @@ const login = async ({ passWord, userName }: CognitoLoginProps) => {
 
   const accessTokenExpiresOn =
     new Date(
-      Date.now() + (result?.AuthenticationResult?.ExpiresIn ?? 0) * 1000 // cognito set to 1 hour
+      Date.now() + (expiresIn ?? 0) * 1000 // cognito set to 1 hour
     ).getTime() ?? 0;
 
   const refreshTokenExpiresOn = new Date(
@@ -65,41 +113,38 @@ const login = async ({ passWord, userName }: CognitoLoginProps) => {
   ).getTime(); // cognito set to 30 days but we use 29 days here ):
 
   return {
-    accessToken: result.AuthenticationResult?.AccessToken ?? "",
-    birthday: userData?.birthdate ?? "",
+    accessToken: accessToken ?? "",
     email: userData?.email ?? "",
     accessTokenExpiresOn,
-    gender: userData?.gender ?? "",
-    idToken: result.AuthenticationResult?.IdToken ?? "",
+    idToken: idToken ?? "",
     name: userData?.name ?? "",
-    refreshToken: result.AuthenticationResult?.RefreshToken ?? "",
+    refreshToken: refreshToken ?? "",
     refreshTokenExpiresOn: refreshTokenExpiresOn,
+    picture: userData?.picture ?? "",
+    isGoogleUser: !!googleAuthCode,
   } as AuthenticatedUser;
 };
 
-const logOut = async (user: AuthenticatedUser, isGlobal?: boolean) => {
-  if (isGlobal) {
-    await client.send(
-      new GlobalSignOutCommand({ AccessToken: user.accessToken })
-    );
-  }
+const logOut = async () => {
+  // if (true) {
+  //   await client.send(
+  //     new GlobalSignOutCommand({ AccessToken: user.accessToken })
+  //   );
+  // }
+  const logoutUrl = `${import.meta.env.VITE_COGNITO_DOMAIN}/logout?client_id=${
+    import.meta.env.VITE_COGNITO_CLIENT_ID
+  }&logout_uri=${import.meta.env.VITE_AUTH_REDIRECT_URL}`;
+
+  window.location.href = logoutUrl;
 };
 
-const signUp = async ({
-  password,
-  email,
-  birthdate,
-  gender,
-  fullname,
-}: CognitoSignupProps) => {
+const signUp = async ({ password, email, fullname }: CognitoSignupProps) => {
   const command = new SignUpCommand({
     ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
     Username: email,
     Password: password,
     UserAttributes: [
       { Name: "name", Value: email },
-      { Name: "birthdate", Value: birthdate },
-      { Name: "gender", Value: gender },
       { Name: "name", Value: fullname },
     ] as { Name: keyof CognitoUserAttributes; Value: string }[],
   });
@@ -140,4 +185,10 @@ const refreshTokens = async (user: AuthenticatedUser) => {
   } as AuthenticatedUser;
 };
 
-export const Cognito = { login, logOut, signUp, verify, refreshTokens };
+export const Cognito = {
+  login,
+  logOut,
+  signUp,
+  verify,
+  refreshTokens,
+};
