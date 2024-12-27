@@ -96,6 +96,7 @@ const FlickHistoryButton = ({ movie }: Props) => {
       sx={{
         textTransform: "none",
         bgcolor: isWatched ? "#2A2C31" : "",
+        color: isWatched ? "#00dd82" : "",
       }}
       variant="outlined"
       onClick={handleClick}

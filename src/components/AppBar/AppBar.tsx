@@ -1,5 +1,5 @@
-import MenuIcon from "@mui/icons-material/Menu";
 import {
+  Avatar,
   Box,
   IconButton,
   styled,
@@ -10,6 +10,7 @@ import {
 
 import { useState } from "react";
 import { ROUTES } from "../../constants/routes";
+import useAuth from "../../hooks/useAuth";
 import SearchInput from "../SearchInput/SearchInput";
 import AppBarRoutes from "./AppBarRoutes";
 import AppNavLink from "./AppNavLink";
@@ -17,6 +18,7 @@ import BottomNavBar from "./BottomNavBar";
 import Logo from "./Logo";
 import MobileDrawer from "./MobileDrawer";
 import ProfileAvatar from "./ProfileAvatar";
+
 
 const Wrapper = styled(Box)({
   display: "flex",
@@ -38,6 +40,7 @@ const Container = styled(Box)({
 
 const AppBar = () => {
   const theme = useTheme();
+  const { user } = useAuth();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen((p) => !p);
@@ -90,7 +93,13 @@ const AppBar = () => {
             }}
             onClick={handleOpen}
           >
-            <MenuIcon />
+            <Avatar
+              src={user?.picture}
+              sx={{
+                width: 32,
+                height: 32,
+              }}
+            />
           </IconButton>
           <BottomNavBar />
           <MobileDrawer handleOpen={handleOpen} isOpen={isOpen} />

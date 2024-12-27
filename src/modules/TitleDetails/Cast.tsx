@@ -1,6 +1,9 @@
 import { Avatar, Box, Typography } from "@mui/material";
-import { useKeenSlider } from "keen-slider/react";
+import { Swiper } from "swiper/react";
 import { TitleDetails } from "../../types/apiResponses";
+import { getImageURL } from "../../utils/image";
+
+import Slider from "../../components/Slider/Slider";
 
 type Props = {
   cast: TitleDetails["cast"];
@@ -8,17 +11,12 @@ type Props = {
 };
 
 const Cast = ({ itemsPerView, cast }: Props) => {
-  const [sliderRef] = useKeenSlider({
-    slides: {
-      perView: itemsPerView,
-      spacing: 10,
-    },
-  });
-
   return (
-    <div ref={sliderRef} className="keen-slider">
-      {cast?.map((actor) => (
-        <div className="keen-slider__slide" key={actor.id}>
+    <Swiper spaceBetween={10} slidesPerView={itemsPerView}>
+      <Slider<TitleDetails["cast"][0]>
+        list={cast}
+        itemsPerView={itemsPerView}
+        itemRenderer={(actor) => (
           <Box
             sx={{
               bgcolor: "#2C3032",
@@ -36,7 +34,7 @@ const Cast = ({ itemsPerView, cast }: Props) => {
                 width: 100,
                 height: 100,
               }}
-              src={actor.image}
+              src={getImageURL(actor.image, 150)}
             />
             <Typography
               variant="subtitle1"
@@ -46,9 +44,10 @@ const Cast = ({ itemsPerView, cast }: Props) => {
               {actor.name}
             </Typography>
           </Box>
-        </div>
-      ))}
-    </div>
+        )}
+        getId={(actor) => actor.id}
+      />
+    </Swiper>
   );
 };
 
