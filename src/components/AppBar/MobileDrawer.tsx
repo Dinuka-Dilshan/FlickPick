@@ -63,7 +63,7 @@ const MobileDrawer = ({ handleOpen, isOpen }: Props) => {
             justifyContent="center"
             alignItems="center"
           >
-            <Avatar sx={{ width: "32px", height: "32px" }} />
+            <Avatar sx={{ width: "32px", height: "32px" }} src={user?.picture}/>
           </Grid2>
           <Grid2
             size={{ xs: 9 }}

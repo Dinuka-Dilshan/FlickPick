@@ -23,11 +23,12 @@ const BottomNavBar = () => {
     <Wrapper
       sx={{
         display: { xs: "flex", lg: "none" },
-        px:'0.75rem'
+        px: "0.75rem",
       }}
     >
       {AppBarRoutes.map((item, index) => (
         <Box
+          key={item.route}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -35,7 +36,7 @@ const BottomNavBar = () => {
             alignItems: "center",
             flex: 1,
             py: 5,
-            gap:0.5
+            gap: 0.5,
           }}
         >
           <Box

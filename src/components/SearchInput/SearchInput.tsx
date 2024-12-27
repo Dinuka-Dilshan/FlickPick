@@ -56,31 +56,33 @@ const SearchInput = () => {
           endAdornment: (
             <>
               <Tooltip title="Search for exact title">
-                <ToggleButton
-                  disabled={location.pathname !== ROUTES.SEARCH}
-                  value={exact}
-                  onChange={() => setExact((p) => !p)}
-                >
-                  {exact ? (
-                    <FilterAltOffIcon
-                      fontSize="small"
-                      sx={{
-                        m: 0,
-                        p: 0,
-                        color: "#E7E7E7",
-                      }}
-                    />
-                  ) : (
-                    <FilterAltIcon
-                      fontSize="small"
-                      sx={{
-                        m: 0,
-                        p: 0,
-                        color: "#E7E7E7",
-                      }}
-                    />
-                  )}
-                </ToggleButton>
+                <span>
+                  <ToggleButton
+                    disabled={location.pathname !== ROUTES.SEARCH}
+                    value={exact}
+                    onChange={() => setExact((p) => !p)}
+                  >
+                    {exact ? (
+                      <FilterAltOffIcon
+                        fontSize="small"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                          color: "#E7E7E7",
+                        }}
+                      />
+                    ) : (
+                      <FilterAltIcon
+                        fontSize="small"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                          color: "#E7E7E7",
+                        }}
+                      />
+                    )}
+                  </ToggleButton>
+                </span>
               </Tooltip>
               <SearchIcon
                 sx={{

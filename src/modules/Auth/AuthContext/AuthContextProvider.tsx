@@ -74,7 +74,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
       enqueueSnackbar("Bye, See you again!");
       resetLogin();
     },
-    mutationFn: async () => await Cognito.logOut(user!),
+    mutationFn: async () => await Cognito.logOut(),
     mutationKey: [MUTATION_KEYS.LOGOUT],
   });
 

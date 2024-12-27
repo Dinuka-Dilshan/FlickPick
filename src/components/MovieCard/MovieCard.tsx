@@ -59,24 +59,6 @@ type Props = PropsWithChildren<{
   hideAnimation?: boolean;
 }>;
 
-const animation = {
-  whileHover: {
-    scale: [1, 1.07, 1.06],
-    transition: {
-      duration: 0.5,
-      ease: "easeInOut",
-    },
-  },
-  initial: { scale: 1 },
-  animate: { scale: 1 },
-  whileTap: {
-    scale: 1.08,
-    transition: {
-      duration: 0.2,
-    },
-  },
-};
-
 const MovieCard = ({
   movie,
   children,
@@ -92,11 +74,7 @@ const MovieCard = ({
   };
   return (
     <MovieCardContext.Provider value={movie}>
-      <Container
-        {...(hideAnimation ? {} : animation)}
-        onClick={clickHandler}
-        sx={containerStyles}
-      >
+      <Container onClick={clickHandler} sx={containerStyles}>
         {!hideWishListButton && (
           <WishListButton
             watchListItem={{
@@ -109,7 +87,11 @@ const MovieCard = ({
           />
         )}
         <ImageContainer>
-          <MoviePoster image={movie.posterUrl} sx={imageStyles} />
+          <MoviePoster
+            image={movie.posterUrl}
+            sx={imageStyles}
+            hideAnimation={hideAnimation}
+          />
         </ImageContainer>
         {children && <DetailsContainer>{children}</DetailsContainer>}
       </Container>

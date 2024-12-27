@@ -11,6 +11,7 @@ import { ROUTES } from "../../../constants/routes";
 
 import Logo from "../../../components/AppBar/Logo";
 import useAuth from "../../../hooks/useAuth";
+import GoogleSignInButton from "../Google/GoogleSignInButton";
 import AuthLayoutItem from "./AuthLayoutItem";
 import AuthMessages from "./AuthMessages";
 
@@ -28,6 +29,7 @@ type Props = {
   showNewToFlickPick?: boolean;
   onSubmit: () => void;
   disableSubmit: boolean;
+  showGoogleSignIn?: boolean;
 } & PropsWithChildren;
 
 const AuthLayout = ({
@@ -37,6 +39,7 @@ const AuthLayout = ({
   showNewToFlickPick,
   disableSubmit,
   onSubmit,
+  showGoogleSignIn,
 }: Props) => {
   const { user, isLoading } = useAuth();
   const location = useLocation();
@@ -92,6 +95,11 @@ const AuthLayout = ({
                 {isLoading ? submitButtonText.loading : submitButtonText.normal}
               </Button>
             </AuthLayoutItem>
+            {showGoogleSignIn && (
+              <AuthLayoutItem>
+                <GoogleSignInButton />
+              </AuthLayoutItem>
+            )}
             {showNewToFlickPick && (
               <AuthLayoutItem
                 display="flex"
