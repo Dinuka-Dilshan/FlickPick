@@ -1,7 +1,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import "swiper/css";
+
 
 type Props<T> = {
   list: T[];
