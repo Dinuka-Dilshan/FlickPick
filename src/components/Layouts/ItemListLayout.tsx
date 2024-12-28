@@ -4,11 +4,11 @@ import LoadingItemIndicator from "../LoadingItemIndicator/LoadingItemIndicator";
 import EmptyListMessage from "./EmptyListMessage";
 
 type Props<T> = {
-  title?: string;
+  title?: React.ReactNode;
   error: unknown;
   isLoading: boolean;
   itemRenderer: (item: T) => ReactNode;
-  itemList: T[];
+  itemList: T[] | undefined | null;
   emptyMessage?: {
     show: boolean;
     message: string;
