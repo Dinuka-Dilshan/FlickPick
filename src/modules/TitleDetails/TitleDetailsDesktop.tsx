@@ -1,5 +1,3 @@
-import BookmarkIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import CheckOutIcon from "@mui/icons-material/CheckOutlined";
 import ArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import {
@@ -14,7 +12,9 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { ReactNode } from "react";
+import { MdBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import { useParams } from "react-router-dom";
+import FlickHistoryButton from "../../components/FlickHistoryButton/FlickHistoryButton";
 import MoviePoster from "../../components/MovieCard/MoviePoster";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
@@ -314,14 +314,7 @@ const TitleDetailsDesktop = () => {
           component={
             <Grid2 container spacing={2}>
               <Grid2 size={{ xs: 6, lg: 12 }}>
-                <Button
-                  color="info"
-                  fullWidth
-                  sx={{ textTransform: "none" }}
-                  variant="outlined"
-                >
-                  <CheckOutIcon color="inherit" sx={{ mr: "0.2rem" }} /> Watched
-                </Button>
+                <FlickHistoryButton movie={data} />
               </Grid2>
               <Grid2 size={{ xs: 6, lg: 12 }}>
                 <Button
@@ -330,11 +323,25 @@ const TitleDetailsDesktop = () => {
                   sx={{
                     textTransform: "none",
                     bgcolor: isAddedToWishList ? "#2A2C31" : "",
+                    color: isAddedToWishList ? "#00dd82" : "",
                   }}
                   variant="outlined"
                   onClick={handleAddRemove}
                 >
-                  <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
+                  {!isLoading &&
+                    (isAddedToWishList ? (
+                      <MdBookmarkAdded
+                        color="inherit"
+                        size={20}
+                        style={{ marginRight: "0.2rem" }}
+                      />
+                    ) : (
+                      <MdBookmarkAdd
+                        color="inherit"
+                        size={20}
+                        style={{ marginRight: "0.2rem" }}
+                      />
+                    ))}
                   {isLoading
                     ? isAddedToWishList
                       ? "Removing..."

@@ -1,7 +1,7 @@
-import CheckOutIcon from "@mui/icons-material/CheckOutlined";
 import { Button } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { MdOutlineDone } from "react-icons/md";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
 import useAppMutation from "../../services/query/useAppMutation";
@@ -101,7 +101,13 @@ const FlickHistoryButton = ({ movie }: Props) => {
       variant="outlined"
       onClick={handleClick}
     >
-      {!isPending && <CheckOutIcon color="inherit" sx={{ mr: "0.2rem" }} />}
+      {!isPending && (
+        <MdOutlineDone
+          size={20}
+          color="inherit"
+          style={{ marginRight: "0.2rem" }}
+        />
+      )}
       {isPending ? (isWatched ? "Removing..." : "Adding...") : "Watched"}
       <ConfirmationDialog
         isOpen={isConfirmationOpen}

@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-expect-error
 import "swiper/css";
 
-
 type Props<T> = {
   list: T[];
   itemsPerView: number;
@@ -15,7 +14,12 @@ const Slider = <T,>({ itemsPerView, list, getId, itemRenderer }: Props<T>) => {
   return (
     <Swiper spaceBetween={10} slidesPerView={itemsPerView}>
       {list?.map((item) => (
-        <SwiperSlide key={getId(item)}>{itemRenderer(item)}</SwiperSlide>
+        <SwiperSlide
+          key={getId(item)}
+          style={{ height: "auto", alignSelf: "stretch" }}
+        >
+          {itemRenderer(item)}
+        </SwiperSlide>
       ))}
     </Swiper>
   );

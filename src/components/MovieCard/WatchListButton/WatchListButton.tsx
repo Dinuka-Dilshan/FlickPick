@@ -1,9 +1,9 @@
-import AddIcon from "@mui/icons-material/AddOutlined";
-import DoneIcon from "@mui/icons-material/DoneOutlined";
 import { Box, Tooltip } from "@mui/material";
+import { MdBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import useMutateWatchList from "../../../hooks/useMutateWatchList";
 import { WatchListItem } from "../../../types/apiResponses";
 import "./style.css";
+
 type Props = {
   watchListItem: WatchListItem;
 };
@@ -42,9 +42,9 @@ const WatchListButton = ({ watchListItem }: Props) => {
       ) : (
         <Tooltip title="Add to Wishlist">
           {isAddedToWishList ? (
-            <DoneIcon sx={{ color: "#FFF" }} />
+            <MdBookmarkAdded size={20} style={{ color: "#FFF" }} />
           ) : (
-            <AddIcon sx={{ color: "#FFF" }} />
+            <MdBookmarkAdd size={20} style={{ color: "#FFF" }} />
           )}
         </Tooltip>
       )}

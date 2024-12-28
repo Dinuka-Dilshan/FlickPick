@@ -1,8 +1,6 @@
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
-import SearchIcon from "@mui/icons-material/Search";
 import { TextField, ToggleButton, Tooltip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { MdSearch, MdSettings } from "react-icons/md";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 
@@ -62,32 +60,22 @@ const SearchInput = () => {
                     value={exact}
                     onChange={() => setExact((p) => !p)}
                   >
-                    {exact ? (
-                      <FilterAltOffIcon
-                        fontSize="small"
-                        sx={{
-                          m: 0,
-                          p: 0,
-                          color: "#E7E7E7",
-                        }}
-                      />
-                    ) : (
-                      <FilterAltIcon
-                        fontSize="small"
-                        sx={{
-                          m: 0,
-                          p: 0,
-                          color: "#E7E7E7",
-                        }}
-                      />
-                    )}
+                    <MdSettings
+                      size={22}
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        color: exact ? "#E75480" : "#E7E7E7",
+                      }}
+                    />
                   </ToggleButton>
                 </span>
               </Tooltip>
-              <SearchIcon
-                sx={{
-                  m: 0,
-                  p: 0,
+              <MdSearch
+                size={28}
+                style={{
+                  margin: 0,
+                  padding: 0,
                   color: "#E7E7E7",
                 }}
               />

@@ -1,5 +1,4 @@
-import DeleteIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { CircularProgress, IconButton } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { QUERY_KEYS } from "../../constants/queryKeys";
@@ -12,7 +11,7 @@ type Props = {
   imdbId: string;
 };
 
-const FlickHistoryIcon = ({ imdbId }: Props) => {
+const RemoveButton = ({ imdbId }: Props) => {
   const queryClient = useQueryClient();
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
@@ -41,18 +40,25 @@ const FlickHistoryIcon = ({ imdbId }: Props) => {
 
   return (
     <>
-      {isPending ? (
-        <CircularProgress size="20px" sx={{ color: "#B3B3B3" }} />
-      ) : (
-        <IconButton disabled={isPending} onClick={handleClick}>
-          <DeleteIcon sx={{ color: "#B3B3B3" }} fontSize="small" />
-        </IconButton>
-      )}
+      <Button
+        size="small"
+        fullWidth
+        disabled={isPending}
+        onClick={handleClick}
+        sx={{ textTransform: "none" }}
+      >
+        {isPending && (
+          <CircularProgress size="20px" sx={{ color: "#B3B3B3" }} />
+        )}
+        <Typography sx={{ color: "#fff" }}>
+          {isPending ? "Removing" : "Remove From History"}
+        </Typography>
+      </Button>
 
       <ConfirmationDialog
         isOpen={isConfirmationOpen}
         cancelButtonText="Cancel"
-        confirmButtonText="Delete"
+        confirmButtonText="Remove"
         onCancel={() => setIsConfirmationOpen(false)}
         onClose={() => setIsConfirmationOpen(false)}
         onConfirm={handleAccept}
@@ -63,4 +69,4 @@ const FlickHistoryIcon = ({ imdbId }: Props) => {
   );
 };
 
-export default FlickHistoryIcon;
+export default RemoveButton;
