@@ -26,8 +26,9 @@ const BottomNavBar = () => {
         px: "0.75rem",
       }}
     >
-      {AppBarRoutes.map((item, index) => (
+      {AppBarRoutes.map((item) => (
         <Box
+          component={"button"}
           key={item.route}
           sx={{
             display: "flex",
@@ -35,27 +36,20 @@ const BottomNavBar = () => {
             justifyContent: "center",
             alignItems: "center",
             flex: 1,
-            py: 5,
-            gap: 0.5,
+            bgcolor: "transparent",
+            border: "none",
+          }}
+          onClick={() => {
+            if (item.route) {
+              navigate(item.route);
+            }
           }}
         >
-          <Box
-            component={"span"}
-            key={index}
-            onClick={() => {
-              if (item.route) {
-                navigate(item.route);
-              }
-            }}
-            sx={{ m: 0 }}
-          >
-            {cloneElement(item.icon, {
-              sx: {
-                color: location.pathname === item.route ? "#E75480" : "#FFF",
-                mb: "-8px",
-              },
-            })}
-          </Box>
+          {cloneElement(item.icon, {
+            style: {
+              color: location.pathname === item.route ? "#E75480" : "#FFF",
+            },
+          })}
           <Typography
             sx={{
               color: location.pathname === item.route ? "#E75480" : "#FFF",

@@ -36,7 +36,10 @@ const ConfirmationDialog = ({
   return (
     <Dialog
       open={isOpen}
-      onClose={onClose}
+      onClose={(e) => {
+        e?.stopPropagation();
+        onClose();
+      }}
       sx={{
         "& .MuiDialog-paper": {
           backgroundColor: "#1F1F1F",
@@ -45,14 +48,14 @@ const ConfirmationDialog = ({
         },
       }}
     >
-      <Box p="1rem" display='flex' flexDirection='column' gap={1}>
+      <Box p="1rem" display="flex" flexDirection="column" gap={1}>
         <Typography variant="h5" sx={{ color: "#FFF" }}>
           {title}
         </Typography>
         <Typography variant="body1" sx={{ color: "#FFF" }}>
           {subtitle}
         </Typography>
-        <Box display="flex" gap={1} mt='1rem'>
+        <Box display="flex" gap={1} mt="1rem">
           <Button
             fullWidth
             sx={{ p: "0.5rem 1rem" }}

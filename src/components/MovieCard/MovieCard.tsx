@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { createContext, PropsWithChildren, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import FlickHistoryIcon from "../FlickHistoryButton/FlickHistoryIcon";
+import FlickHistoryIcon from "../FlickHistoryButton/RemoveFromHistoryButton";
+import MoreButton from "../MoreButton/MoreButton";
 import MoviePoster from "./MoviePoster";
 import WishListButton from "./WatchListButton/WatchListButton";
 
@@ -202,7 +203,7 @@ MovieCard.MovieCardHistoryDetails = function MovieCardHistoryDetails() {
         )}
       </Box>
       <Box>
-        <FlickHistoryIcon imdbId={movie.imdbId} />
+        <MoreButton content={<FlickHistoryIcon imdbId={movie.imdbId} />} />
       </Box>
     </Box>
   );

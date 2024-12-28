@@ -1,4 +1,3 @@
-import BookmarkIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import ArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import {
@@ -10,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { format } from "date-fns";
+import { MdBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import AddToFlickHistory from "../../components/FlickHistoryButton/FlickHistoryButton";
 import MovieCard from "../../components/MovieCard/MovieCard";
@@ -171,9 +171,20 @@ const TitleDetailsMobile = () => {
             variant="outlined"
             onClick={handleAddRemove}
           >
-            {!isLoading && (
-              <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
-            )}
+            {!isLoading &&
+              (isAddedToWishList ? (
+                <MdBookmarkAdded
+                  color="inherit"
+                  size={20}
+                  style={{ marginRight: "0.2rem" }}
+                />
+              ) : (
+                <MdBookmarkAdd
+                  color="inherit"
+                  size={20}
+                  style={{ marginRight: "0.2rem" }}
+                />
+              ))}
             {isLoading
               ? isAddedToWishList
                 ? "Removing..."

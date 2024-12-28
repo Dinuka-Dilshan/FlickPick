@@ -1,4 +1,3 @@
-import BookmarkIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import ArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { ReactNode } from "react";
+import { MdBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import FlickHistoryButton from "../../components/FlickHistoryButton/FlickHistoryButton";
 import MoviePoster from "../../components/MovieCard/MoviePoster";
@@ -328,7 +328,20 @@ const TitleDetailsDesktop = () => {
                   variant="outlined"
                   onClick={handleAddRemove}
                 >
-                  <BookmarkIcon color="inherit" sx={{ mr: "0.2rem" }} />
+                  {!isLoading &&
+                    (isAddedToWishList ? (
+                      <MdBookmarkAdded
+                        color="inherit"
+                        size={20}
+                        style={{ marginRight: "0.2rem" }}
+                      />
+                    ) : (
+                      <MdBookmarkAdd
+                        color="inherit"
+                        size={20}
+                        style={{ marginRight: "0.2rem" }}
+                      />
+                    ))}
                   {isLoading
                     ? isAddedToWishList
                       ? "Removing..."
