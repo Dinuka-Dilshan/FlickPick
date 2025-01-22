@@ -107,10 +107,7 @@ const DetailsItem = ({
         )}
       </Box>
       {value && (
-        <Text
-          value={value}
-          sx={{ fontSize: largeContentText ? "1rem" : "" }}
-        />
+        <Text value={value} sx={{ fontSize: largeContentText ? "1rem" : "" }} />
       )}
       {component}
     </Grid2>
@@ -137,7 +134,7 @@ const Card = ({
   );
 };
 
-const SECTION_HEIGHT = 450
+const SECTION_HEIGHT = 450;
 
 const TitleDetailsDesktop = () => {
   const params = useParams();
@@ -171,10 +168,11 @@ const TitleDetailsDesktop = () => {
   }
 
   const allLast4Available =
-    !!data.releaseDate &&
-    !!data?.creators?.[0] &&
-    !!data.runtime &&
-    !!data?.certificate 
+    (!!data.releaseDate &&
+      !!data?.creators?.[0] &&
+      !!data.runtime &&
+      !!data?.certificate) ||
+    (!!data.seasons && !!data.episodes);
 
   return (
     <Grid2 container columnSpacing={2} rowSpacing={1} mb="2rem">
