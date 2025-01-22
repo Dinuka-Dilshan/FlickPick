@@ -16,7 +16,7 @@ const RemoveButton = ({ imdbId }: Props) => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
   const { mutate, isPending } = useAppMutation({
-    url: URLS.FLICK_HISTORY({ imdbId }),
+    url: URLS.FLICK_HISTORY(),
     method: "DELETE",
     onSuccess: async () => {
       queryClient.setQueryData<FlickHistoryGetResponse>(
