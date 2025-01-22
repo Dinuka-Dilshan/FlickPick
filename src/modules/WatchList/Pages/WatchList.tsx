@@ -26,7 +26,7 @@ const WatchList = () => {
   }, [fetchNextPage, isVisible]);
 
   const fullList = useMemo(
-    () => data?.pages.flatMap((page) => page.watchListItems) || [],
+    () => data?.pages?.flatMap((page) => page.watchListItems) || [],
     [data?.pages]
   );
 
@@ -37,7 +37,7 @@ const WatchList = () => {
       isNextPageLoading={isFetchingNextPage}
       itemList={fullList}
       itemRenderer={(movie, index) => (
-        <span ref={index + 1 === fullList.length ? ref : null}>
+        <span ref={index + 1 === fullList?.length ? ref : null}>
           <MovieCard movie={movie}>
             <MovieCard.TitleContainer>
               <MovieCard.Title />

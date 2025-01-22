@@ -4,7 +4,6 @@ import useAuth from "../../../hooks/useAuth";
 
 const GoogleSignInButton = (props: ButtonProps) => {
   const { googleLogin, isGoogleLoginLoading } = useAuth();
-  console.log(isGoogleLoginLoading);
 
   return (
     <Button
