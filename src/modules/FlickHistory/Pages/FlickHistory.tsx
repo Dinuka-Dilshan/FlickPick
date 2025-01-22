@@ -1,37 +1,57 @@
+import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ItemListLayout from "../../../components/Layouts/ItemListLayout";
 import MovieCard from "../../../components/MovieCard/MovieCard";
 import { QUERY_KEYS } from "../../../constants/queryKeys";
 import { ROUTES } from "../../../constants/routes";
 import { URLS } from "../../../constants/urls";
-import useAppQuery from "../../../services/query/useAppQuery";
+import useVisible from "../../../hooks/useVisible";
+import useAppInfiniteQuery from "../../../services/query/useAppInfiniteQuery";
 import { FlickHistoryGetResponse } from "../../../types/flickHistory";
 
 const FlickHistory = () => {
   const navigate = useNavigate();
-  const { data, isFetching, error } = useAppQuery<FlickHistoryGetResponse>({
-    queryKey: QUERY_KEYS.FLICK_HISTORY,
-    url: URLS.FLICK_HISTORY(),
-  });
+
+  const { data, isLoading, error, fetchNextPage, isFetchingNextPage } =
+    useAppInfiniteQuery<FlickHistoryGetResponse>({
+      queryKey: QUERY_KEYS.FLICK_HISTORY,
+      url: URLS.FLICK_HISTORY(),
+    });
+
+  const { isVisible, ref } = useVisible();
+
+  useEffect(() => {
+    if (isVisible) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, isVisible]);
+
+  const fullList = useMemo(
+    () => data?.pages.flatMap((page) => page.historyItems) || [],
+    [data?.pages]
+  );
 
   return (
     <ItemListLayout
       error={error}
-      isLoading={isFetching}
-      itemList={data || []}
+      isLoading={isLoading}
+      isNextPageLoading={isFetchingNextPage}
+      itemList={fullList}
       title="Flick History"
-      itemRenderer={(movie) => (
-        <MovieCard
-          hideWishListButton
-          movie={{
-            posterUrl: movie.image,
-            addedOn: movie.addedOn,
-            imdbId: movie.imdbId,
-            title: movie.title,
-          }}
-        >
-          <MovieCard.MovieCardHistoryDetails />
-        </MovieCard>
+      itemRenderer={(movie, index) => (
+        <span ref={index + 1 === fullList.length ? ref : null}>
+          <MovieCard
+            hideWishListButton
+            movie={{
+              posterUrl: movie.image,
+              addedOn: movie.addedOn,
+              imdbId: movie.imdbId,
+              title: movie.title,
+            }}
+          >
+            <MovieCard.MovieCardHistoryDetails />
+          </MovieCard>
+        </span>
       )}
       emptyMessage={{
         show: true,

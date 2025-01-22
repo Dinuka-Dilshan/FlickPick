@@ -16,12 +16,16 @@ const RemoveButton = ({ imdbId }: Props) => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
   const { mutate, isPending } = useAppMutation({
-    url: URLS.FLICK_HISTORY(imdbId),
+    url: URLS.FLICK_HISTORY({ imdbId }),
     method: "DELETE",
     onSuccess: async () => {
       queryClient.setQueryData<FlickHistoryGetResponse>(
         [QUERY_KEYS.FLICK_HISTORY],
-        (prev) => prev?.filter((item) => item.imdbId !== imdbId)
+        (prev) => ({
+          historyItems:
+            prev?.historyItems?.filter((item) => item.imdbId !== imdbId) || [],
+          lastEvaluatedKey: prev?.lastEvaluatedKey,
+        })
       );
     },
   });

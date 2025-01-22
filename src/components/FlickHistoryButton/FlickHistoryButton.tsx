@@ -29,7 +29,13 @@ const FlickHistoryButton = ({ movie }: Props) => {
         [QUERY_KEYS.FLICK_HISTORY],
         (prev) => {
           if (isWatched) {
-            return prev?.filter((item) => item.imdbId !== movie?.imdbId);
+            return {
+              historyItems:
+                prev?.historyItems?.filter(
+                  (item) => item.imdbId !== movie?.imdbId
+                ) || [],
+              lastEvaluatedKey: prev?.lastEvaluatedKey,
+            };
           }
 
           if (!movie) {
@@ -46,7 +52,12 @@ const FlickHistoryButton = ({ movie }: Props) => {
             type: movie.titleType || "",
           };
 
-          return prev ? [historyItem, ...prev] : [historyItem];
+          return {
+            historyItems: prev
+              ? [historyItem, ...prev.historyItems]
+              : [historyItem],
+            lastEvaluatedKey: prev?.lastEvaluatedKey,
+          };
         }
       );
       queryClient.setQueryData<TitleDetails>(

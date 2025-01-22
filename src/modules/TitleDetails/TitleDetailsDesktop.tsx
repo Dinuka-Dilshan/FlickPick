@@ -15,13 +15,13 @@ import { ReactNode } from "react";
 import { MdBookmarkAdd, MdBookmarkAdded } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import FlickHistoryButton from "../../components/FlickHistoryButton/FlickHistoryButton";
-import MoviePoster from "../../components/MovieCard/MoviePoster";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { URLS } from "../../constants/urls";
 import useMutateWatchList from "../../hooks/useMutateWatchList";
 import useAppQuery from "../../services/query/useAppQuery";
 import { TitleDetails } from "../../types/apiResponses";
 import Cast from "./Cast";
+import ImageCollection from "./ImageCollection";
 import Loader from "./Loader";
 import MoreLikeThis from "./MoreLikeThis";
 
@@ -37,7 +37,7 @@ const Text = ({
   props?: TypographyOwnProps;
 }) => (
   <Typography
-    variant={varient === "header" ? "h5" : "subtitle1"}
+    variant={varient === "header" ? "h4" : "subtitle1"}
     sx={{ color: "#EFEFEF", ...sx }}
     {...props}
   >
@@ -74,8 +74,9 @@ const DetailsItem = ({
       size={{ xs: halfWidth ? 6 : 12 }}
       alignContent={"center"}
       bgcolor="#2C3032"
-      borderRadius="12px"
+      borderRadius="16px"
       p="0.5rem 1rem"
+      boxSizing="border-box"
       sx={containerSx}
     >
       <Box display="flex" justifyContent="space-between">
@@ -108,13 +109,35 @@ const DetailsItem = ({
       {value && (
         <Text
           value={value}
-          sx={{ fontSize: largeContentText ? "1.5rem" : "" }}
+          sx={{ fontSize: largeContentText ? "1rem" : "" }}
         />
       )}
       {component}
     </Grid2>
   );
 };
+
+const Card = ({
+  children,
+  sx,
+}: {
+  children: ReactNode;
+  sx?: SxProps<Theme>;
+}) => {
+  return (
+    <Box
+      sx={sx}
+      bgcolor="#2C3032"
+      borderRadius="16px"
+      height={"100%"}
+      width={"100%"}
+    >
+      {children}
+    </Box>
+  );
+};
+
+const SECTION_HEIGHT = 450
 
 const TitleDetailsDesktop = () => {
   const params = useParams();
@@ -151,7 +174,7 @@ const TitleDetailsDesktop = () => {
     !!data.releaseDate &&
     !!data?.creators?.[0] &&
     !!data.runtime &&
-    !!data?.certificate;
+    !!data?.certificate 
 
   return (
     <Grid2 container columnSpacing={2} rowSpacing={1} mb="2rem">
@@ -176,28 +199,46 @@ const TitleDetailsDesktop = () => {
           <Text value={data?.runtime} />
         </Grid2>
       </Grid2>
-      <Grid2 size={{ xs: 3 }} height={450}>
-        <MoviePoster image={data.posterUrl} />
+
+      <Grid2 size={{ xs: 6 }} height={SECTION_HEIGHT}>
+        <ImageCollection images={data.images} poster={data.posterUrl} />
       </Grid2>
-      <Grid2 size={{ xs: 6.75 }} height={450}>
-        <Box
-          component={"video"}
-          autoPlay
-          muted
-          loop
-          controls
-          src={data?.videoUrls?.[0]}
+      <Grid2 size={{ xs: 3.5 }}>
+        <Card
           sx={{
-            borderRadius: "12px",
-            width: "100%",
-            height: "100%",
-            display: { xs: "none", lg: "block" },
-            objectFit: "cover",
-            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            display: "flex",
+            flexDirection: "column",
+            boxSizing: "border-box",
           }}
-        />
+        >
+          <Box
+            flex={1}
+            component={"video"}
+            autoPlay
+            muted
+            loop
+            controls
+            src={data?.videoUrls?.[0]}
+            sx={{
+              borderTopLeftRadius: "16px",
+              borderTopRightRadius: "16px",
+              width: "100%",
+              height: "50%",
+              display: { xs: "none", lg: "block" },
+              objectFit: "cover",
+              boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            }}
+          />
+          <Box flex={1} display={"flex"}>
+            <Text
+              value={data.plot}
+              sx={{ p: "1rem", boxSizing: "border-box" }}
+            />
+          </Box>
+        </Card>
       </Grid2>
-      <Grid2 size={{ xs: 2.25 }} container>
+
+      <Grid2 size={{ xs: 2.5 }} container height={SECTION_HEIGHT}>
         <DetailsItem
           title="Rating"
           showImdb
@@ -279,92 +320,95 @@ const TitleDetailsDesktop = () => {
           value={data?.certificate}
           halfWidth={allLast4Available}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 3 }} container mt="0.5rem">
-        <DetailsItem title="" value={data.plot} />
-      </Grid2>
-      <Grid2 size={{ xs: 6.75 }} container mt="0.5rem">
         <DetailsItem
-          title=""
-          component={
-            <Box p=" 0.25rem 0.5rem">
-              <Text value="Featured review" />
-              <Text
-                sx={{ fontWeight: "bold", mt: "1rem" }}
-                value={data.featuredReviews?.[0]?.summary}
-              />
-              <Text value={data.featuredReviews?.[0]?.text?.slice(0, 180)} />
-              <Text
-                sx={{ fontWeight: "bold", mt: "1rem" }}
-                value={data.featuredReviews?.[0]?.author}
-              />
-            </Box>
-          }
+          largeContentText
+          title="Seasons"
+          value={data?.seasons?.toString()}
+          halfWidth
+        />
+        <DetailsItem
+          largeContentText
+          title="Episodes"
+          value={data?.episodes?.toString()}
+          halfWidth
         />
       </Grid2>
 
-      <Grid2
-        size={{ xs: 2.25 }}
-        container
-        justifyContent={"space-around"}
-        mt="0.5rem"
-      >
-        <DetailsItem
-          title=""
-          component={
-            <Grid2 container spacing={2}>
-              <Grid2 size={{ xs: 6, lg: 12 }}>
-                <FlickHistoryButton movie={data} />
-              </Grid2>
-              <Grid2 size={{ xs: 6, lg: 12 }}>
-                <Button
-                  disabled={isLoading}
-                  fullWidth
-                  sx={{
-                    textTransform: "none",
-                    bgcolor: isAddedToWishList ? "#2A2C31" : "",
-                    color: isAddedToWishList ? "#00dd82" : "",
-                  }}
-                  variant="outlined"
-                  onClick={handleAddRemove}
-                >
-                  {!isLoading &&
-                    (isAddedToWishList ? (
-                      <MdBookmarkAdded
-                        color="inherit"
-                        size={20}
-                        style={{ marginRight: "0.2rem" }}
-                      />
-                    ) : (
-                      <MdBookmarkAdd
-                        color="inherit"
-                        size={20}
-                        style={{ marginRight: "0.2rem" }}
-                      />
-                    ))}
-                  {isLoading
-                    ? isAddedToWishList
-                      ? "Removing..."
-                      : "Adding..."
-                    : "Want to watch"}
-                </Button>
-              </Grid2>
-            </Grid2>
-          }
+      <Grid2 size={{ xs: 12 }} mt="1.5rem">
+        <Divider sx={{ bgcolor: "#2C3032", height: "2px" }} />
+      </Grid2>
+
+      <Grid2 container size={{ xs: 9.5 }}>
+        <Grid2 size={{ xs: 12 }}>
+          <Text value="Top Cast" sx={{ fontSize: "1.2rem" }} />
+        </Grid2>
+        <Grid2 size={{ xs: 12 }}>
+          <Cast itemsPerView={8.5} cast={data.cast} />
+        </Grid2>
+      </Grid2>
+      <Grid2 container size={{ xs: 0.3 }} justifyContent={"center"}>
+        <Divider
+          orientation="vertical"
+          flexItem
+          variant="fullWidth"
+          sx={{ bgcolor: "#2C3032", width: "2px" }}
         />
       </Grid2>
+      <Grid2 container size={{ xs: 2 }}>
+        <Grid2 size={{ xs: 12 }}>
+          <Text value="Watch Show" sx={{ fontSize: "1.2rem" }} />
+        </Grid2>
+        <Grid2 size={{ xs: 12 }} container justifyContent={"space-around"}>
+          <DetailsItem
+            title=""
+            component={
+              <Grid2 container spacing={2}>
+                <Grid2 size={{ xs: 12 }}>
+                  <FlickHistoryButton movie={data} />
+                </Grid2>
+                <Grid2 size={{ xs: 12 }}>
+                  <Button
+                    disabled={isLoading}
+                    fullWidth
+                    sx={{
+                      textTransform: "none",
+                      bgcolor: isAddedToWishList ? "#2A2C31" : "",
+                      color: isAddedToWishList ? "#00dd82" : "",
+                    }}
+                    variant="outlined"
+                    onClick={handleAddRemove}
+                  >
+                    {!isLoading &&
+                      (isAddedToWishList ? (
+                        <MdBookmarkAdded
+                          color="inherit"
+                          size={20}
+                          style={{ marginRight: "0.2rem" }}
+                        />
+                      ) : (
+                        <MdBookmarkAdd
+                          color="inherit"
+                          size={20}
+                          style={{ marginRight: "0.2rem" }}
+                        />
+                      ))}
+                    {isLoading
+                      ? isAddedToWishList
+                        ? "Removing..."
+                        : "Adding..."
+                      : "Want to watch"}
+                  </Button>
+                </Grid2>
+              </Grid2>
+            }
+          />
+        </Grid2>
+      </Grid2>
+
       <Grid2 size={{ xs: 12 }} mt="1.5rem">
         <Divider sx={{ bgcolor: "#2C3032", height: "2px" }} />
       </Grid2>
-      <Grid2 size={{ xs: 12 }}>
-        <Text value="Top Cast" sx={{ fontSize: "1.2rem" }} />
-      </Grid2>
-      <Grid2 size={{ xs: 12 }}>
-        <Cast itemsPerView={8.5} cast={data.cast} />
-      </Grid2>
-      <Grid2 size={{ xs: 12 }} mt="1.5rem">
-        <Divider sx={{ bgcolor: "#2C3032", height: "2px" }} />
-      </Grid2>
+
       <Grid2 size={{ xs: 12 }}>
         <Text value="More like this" sx={{ fontSize: "1.2rem" }} />
       </Grid2>

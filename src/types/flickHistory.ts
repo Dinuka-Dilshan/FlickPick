@@ -8,4 +8,10 @@ export type FlickHistoryItem = {
   genre: string[];
 };
 
-export type FlickHistoryGetResponse = FlickHistoryItem[];
+export type FlickHistoryGetResponse = {
+  historyItems: FlickHistoryItem[];
+  lastEvaluatedKey?: {
+    PK?: string;
+    SK?: string;
+  };
+};

@@ -142,6 +142,10 @@ const TitleDetailsMobile = () => {
           }
         />
         <TitleDetailText size={{ xs: 12 }} value={data?.plot} />
+        <TitleDetailText
+          label="Genere"
+          value={data?.genres?.slice(0, 2)?.join(", ")}
+        />
         <TitleDetailText label="Content Rating" value={data.certificate} />
         <TitleDetailText
           label="Release Date"
@@ -153,6 +157,12 @@ const TitleDetailsMobile = () => {
         />
         <TitleDetailText label="Runtime" value={data?.runtime} />
         <TitleDetailText label="Creator" value={data?.creators?.[0]} />
+        <TitleDetailText
+          label="No of Seasons"
+          value={
+            data?.seasons 
+          }
+        />
       </Grid2>
 
       <Grid2 size={{ xs: 12 }} sx={{ display: { lg: "none" } }} container>

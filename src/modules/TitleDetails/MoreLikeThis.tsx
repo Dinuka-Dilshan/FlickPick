@@ -18,7 +18,7 @@ const MoreLikeThis = ({ itemsPerView, moreLikeThis }: Props) => {
             imdbId: movie.imdbId,
             posterUrl: movie.posterUrl,
             title: movie.title,
-            releaseYear: movie.releaseYear.toString(),
+            releaseYear: movie?.releaseYear?.toString(),
           }}
           hideWishListButton
           key={movie.imdbId}
