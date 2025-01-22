@@ -6,7 +6,7 @@ import {
   isRefreshTokenValid,
 } from "../../utils/validations";
 
-type Props<T,K> = {
+type Props<T, K> = {
   queryKey: string;
   url?: string;
   method?: "GET" | "POST";
@@ -24,7 +24,7 @@ const useAppQuery = <T, TError = unknown, K = T>({
   enabled = true,
   queryFn,
   select,
-}: Props<T,K>) => {
+}: Props<T, K>) => {
   const { user, refresh, logout } = useAuth();
 
   const result = useQuery<T, TError, K>({
