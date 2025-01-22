@@ -1,6 +1,7 @@
 import { useMediaQuery, useTheme } from "@mui/material";
-import TitleDetailsDesktop from "../TitleDetailsDesktop";
-import TitleDetailsMobile from "../TitleDetailsMobile";
+import { lazy } from "react";
+const TitleDetailsMobile = lazy(() => import("../TitleDetailsMobile"));
+const TitleDetailsDesktop = lazy(() => import("../TitleDetailsDesktop"));
 
 const TitleDetails = () => {
   const theme = useTheme();
