@@ -64,4 +64,10 @@ export type WatchListItem = {
   imdbId: string;
   addedOn: number;
 };
-export type WatchListResponse = WatchListItem[];
+export type WatchListResponse = {
+  watchListItems: WatchListItem[];
+  lastEvaluatedKey?: {
+    PK?: string;
+    SK?: string;
+  };
+};

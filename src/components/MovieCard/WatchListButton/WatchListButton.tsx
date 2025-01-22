@@ -41,11 +41,13 @@ const WatchListButton = ({ watchListItem }: Props) => {
         <div className="loader"></div>
       ) : (
         <Tooltip title="Add to Wishlist">
-          {isAddedToWishList ? (
-            <MdBookmarkAdded size={20} style={{ color: "#FFF" }} />
-          ) : (
-            <MdBookmarkAdd size={20} style={{ color: "#FFF" }} />
-          )}
+          <span>
+            {isAddedToWishList ? (
+              <MdBookmarkAdded size={20} style={{ color: "#FFF" }} />
+            ) : (
+              <MdBookmarkAdd size={20} style={{ color: "#FFF" }} />
+            )}
+          </span>
         </Tooltip>
       )}
     </Box>

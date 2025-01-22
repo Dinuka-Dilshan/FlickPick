@@ -20,7 +20,9 @@ const useMutateWatchList = ({
   const isAddedToWishList = useMemo(
     () =>
       watchListItem
-        ? data?.some((item) => item.imdbId === watchListItem.imdbId)
+        ? data?.watchListItems?.some(
+            (item) => item.imdbId === watchListItem.imdbId
+          )
         : false,
     [data, watchListItem]
   );
@@ -37,16 +39,25 @@ const useMutateWatchList = ({
         [QUERY_KEYS.WATCH_LIST],
         (prev) => {
           if (isAddedToWishList) {
-            return prev?.filter(
-              (item) => item.imdbId !== watchListItem?.imdbId
-            );
+            return {
+              watchListItems:
+                prev?.watchListItems?.filter(
+                  (item) => item.imdbId !== watchListItem?.imdbId
+                ) || [],
+              lastEvaluatedKey: prev?.lastEvaluatedKey,
+            };
           }
 
           if (!watchListItem) {
             return prev;
           }
           watchListItem.addedOn = Date.now();
-          return prev ? [watchListItem, ...prev] : [watchListItem];
+          return {
+            watchListItems: prev?.watchListItems
+              ? [watchListItem, ...prev.watchListItems]
+              : [watchListItem],
+            lastEvaluatedKey: prev?.lastEvaluatedKey,
+          };
         }
       );
     },
