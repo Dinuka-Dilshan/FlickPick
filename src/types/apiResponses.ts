@@ -42,13 +42,6 @@ export type TitleDetails = {
   publicationStatus?: string;
   criticReviewsTotal?: number;
   countriesOfOrigin?: string[];
-  featuredReviews?: {
-    author: string;
-    summary: string;
-    text: string;
-    date: string;
-    authorRating: number;
-  }[];
   creators?: string[];
   moreLikeThis: {
     posterUrl: string;
@@ -58,7 +51,10 @@ export type TitleDetails = {
     imdbId: string;
   }[];
   isAlreadyWatched: boolean;
-  cast: { id: string; name: string; image: string;  }[];
+  cast: { id: string; name: string; image: string }[];
+  episodes?: number;
+  seasons?: number;
+  images?: string[];
 };
 
 export type WatchListItem = {

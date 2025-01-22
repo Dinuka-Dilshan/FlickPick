@@ -5,6 +5,7 @@ type Props = {
   image: string;
   sx?: SxProps<Theme>;
   hideAnimation?: boolean;
+  containerSx?: React.CSSProperties;
 };
 
 const animation = {
@@ -33,7 +34,7 @@ const Image = styled(motion.img)({
   width: "100%",
 });
 
-const MoviePoster = ({ image, sx, hideAnimation }: Props) => {
+const MoviePoster = ({ image, sx, hideAnimation, containerSx }: Props) => {
   return (
     <motion.div
       style={{
@@ -41,6 +42,7 @@ const MoviePoster = ({ image, sx, hideAnimation }: Props) => {
         width: "100%",
         height: "100%",
         borderRadius: "16px",
+        ...containerSx,
       }}
     >
       <Image
