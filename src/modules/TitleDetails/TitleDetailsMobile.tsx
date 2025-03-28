@@ -82,7 +82,7 @@ const TitleDetailsMobile = () => {
         </Grid2>
       </Grid2>
       <Grid2 size={{ xs: 12, lg: 2.75 }} height="400">
-        <MovieCard hideWishListButton movie={data} />
+        <MovieCard hideWishListButton movie={data} isAddedToWatchList={false} />
       </Grid2>
       <Grid2 size={{ xs: 0, lg: 6.25 }}>
         <Box
@@ -157,12 +157,7 @@ const TitleDetailsMobile = () => {
         />
         <TitleDetailText label="Runtime" value={data?.runtime} />
         <TitleDetailText label="Creator" value={data?.creators?.[0]} />
-        <TitleDetailText
-          label="No of Seasons"
-          value={
-            data?.seasons 
-          }
-        />
+        <TitleDetailText label="No of Seasons" value={data?.seasons} />
       </Grid2>
 
       <Grid2 size={{ xs: 12 }} sx={{ display: { lg: "none" } }} container>

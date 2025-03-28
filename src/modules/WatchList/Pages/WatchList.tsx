@@ -10,7 +10,7 @@ import useAppInfiniteQuery from "../../../services/query/useAppInfiniteQuery";
 import { WatchListItem, WatchListResponse } from "../../../types/apiResponses";
 
 const WatchList = () => {
-  const { data, isLoading, error, fetchNextPage , isFetchingNextPage} =
+  const { data, isLoading, error, fetchNextPage, isFetchingNextPage } =
     useAppInfiniteQuery<WatchListResponse>({
       url: URLS.WATCH_LIST(),
       queryKey: QUERY_KEYS.WATCH_LIST,
@@ -38,7 +38,11 @@ const WatchList = () => {
       itemList={fullList}
       itemRenderer={(movie, index) => (
         <span ref={index + 1 === fullList?.length ? ref : null}>
-          <MovieCard movie={movie}>
+          <MovieCard
+            movie={movie}
+            isAddedToWatchList
+            keyToInvalidateOnWatchListChange={QUERY_KEYS.WATCH_LIST}
+          >
             <MovieCard.TitleContainer>
               <MovieCard.Title />
               <MovieCard.AddedOn />

@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import ItemListLayout from "../../components/Layouts/ItemListLayout";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { QUERY_KEYS } from "../../constants/queryKeys";
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const PopularItemList = ({ varient }: Props) => {
+  const queryClient = useQueryClient();
   const { data, error, isFetching } = useAppQuery<PopularMovieResponse>({
     queryKey: QUERY_KEYS.POPULAR_MOVIES_TVS(varient),
     url: URLS.POPULAR(varient),
@@ -21,7 +23,22 @@ const PopularItemList = ({ varient }: Props) => {
       isLoading={isFetching}
       itemList={data || []}
       itemRenderer={(movie) => (
-        <MovieCard movie={movie}>
+        <MovieCard
+          movie={movie}
+          isAddedToWatchList={movie.isAddedToWatchList}
+          onAddToWatchListChange={(operation) => {
+            queryClient.setQueryData<PopularMovieResponse>(
+              [QUERY_KEYS.POPULAR_MOVIES_TVS(varient)],
+              (prev) =>
+                prev?.map((m) =>
+                  m.imdbId === movie.imdbId
+                    ? { ...m, isAddedToWatchList: operation === "Added" }
+                    : m
+                )
+            );
+          }}
+          keyToInvalidateOnWatchListChange={QUERY_KEYS.WATCH_LIST}
+        >
           <MovieCard.Rank />
           <MovieCard.TitleContainer>
             <MovieCard.Title />
