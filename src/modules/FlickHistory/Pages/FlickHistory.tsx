@@ -48,6 +48,7 @@ const FlickHistory = () => {
               imdbId: movie.imdbId,
               title: movie.title,
             }}
+            isAddedToWatchList={false} //flick history page does not have watchlist button ):
           >
             <MovieCard.MovieCardHistoryDetails />
           </MovieCard>

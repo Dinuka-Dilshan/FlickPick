@@ -12,6 +12,7 @@ export type PopularItem = {
   releaseYear: string;
   posterUrl: string;
   rank: number;
+  isAddedToWatchList: boolean;
 };
 export type PopularMovieResponse = PopularItem[];
 

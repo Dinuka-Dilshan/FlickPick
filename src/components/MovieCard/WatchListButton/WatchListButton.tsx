@@ -6,11 +6,22 @@ import "./style.css";
 
 type Props = {
   watchListItem: WatchListItem;
+  isAddedToWatchList: boolean;
+  keyToInvalidate?: string;
+  onAddToWatchListChange?: (operation: "Added" | "Deleted") => void;
 };
 
-const WatchListButton = ({ watchListItem }: Props) => {
-  const { handleAddRemove, isAddedToWishList, isLoading } = useMutateWatchList({
+const WatchListButton = ({
+  watchListItem,
+  isAddedToWatchList,
+  keyToInvalidate,
+  onAddToWatchListChange,
+}: Props) => {
+  const { handleAddRemove, isLoading } = useMutateWatchList({
     watchListItem,
+    isAddedToWatchList,
+    keyToInvalidate,
+    onAddToWatchListChange,
   });
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -26,7 +37,7 @@ const WatchListButton = ({ watchListItem }: Props) => {
         top: 0,
         left: 0,
         zIndex: 950,
-        bgcolor: isAddedToWishList
+        bgcolor: isAddedToWatchList
           ? "rgba(255, 215, 0, 0.9)"
           : "rgba(64, 64, 64, 0.8)",
         borderTopLeftRadius: "12px",
@@ -42,7 +53,7 @@ const WatchListButton = ({ watchListItem }: Props) => {
       ) : (
         <Tooltip title="Add to Wishlist">
           <span>
-            {isAddedToWishList ? (
+            {isAddedToWatchList ? (
               <MdBookmarkAdded size={20} style={{ color: "#FFF" }} />
             ) : (
               <MdBookmarkAdd size={20} style={{ color: "#FFF" }} />

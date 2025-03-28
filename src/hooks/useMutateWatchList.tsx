@@ -1,73 +1,44 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { QUERY_KEYS } from "../constants/queryKeys";
 import { URLS } from "../constants/urls";
 import useAppMutation from "../services/query/useAppMutation";
-import useAppQuery from "../services/query/useAppQuery";
-import { WatchListItem, WatchListResponse } from "../types/apiResponses";
+import { WatchListItem } from "../types/apiResponses";
+
+type Props = {
+  watchListItem?: WatchListItem;
+  isAddedToWatchList: boolean;
+  keyToInvalidate?: string;
+  onAddToWatchListChange?: (operation: "Added" | "Deleted") => void;
+};
 
 const useMutateWatchList = ({
   watchListItem,
-}: {
-  watchListItem?: WatchListItem;
-}) => {
+  isAddedToWatchList,
+  keyToInvalidate,
+  onAddToWatchListChange,
+}: Props) => {
   const queryClient = useQueryClient();
-  const { data, isFetching } = useAppQuery<WatchListResponse>({
-    queryKey: QUERY_KEYS.WATCH_LIST,
-    url: URLS.WATCH_LIST(),
-  });
-
-  const isAddedToWishList = useMemo(
-    () =>
-      watchListItem
-        ? data?.watchListItems?.some(
-            (item) => item.imdbId === watchListItem.imdbId
-          )
-        : false,
-    [data, watchListItem]
-  );
 
   const { mutate, isPending } = useAppMutation<
     undefined,
     Error,
     WatchListItem | undefined
   >({
-    url: URLS.WATCH_LIST(isAddedToWishList ? watchListItem?.imdbId : ""),
-    method: isAddedToWishList ? "DELETE" : "POST",
+    url: URLS.WATCH_LIST(isAddedToWatchList ? watchListItem?.imdbId : ""),
+    method: isAddedToWatchList ? "DELETE" : "POST",
     onSuccess: async () => {
-      queryClient.setQueryData<WatchListResponse>(
-        [QUERY_KEYS.WATCH_LIST],
-        (prev) => {
-          if (isAddedToWishList) {
-            return {
-              watchListItems:
-                prev?.watchListItems?.filter(
-                  (item) => item.imdbId !== watchListItem?.imdbId
-                ) || [],
-              lastEvaluatedKey: prev?.lastEvaluatedKey,
-            };
-          }
-
-          if (!watchListItem) {
-            return prev;
-          }
-          watchListItem.addedOn = Date.now();
-          return {
-            watchListItems: prev?.watchListItems
-              ? [watchListItem, ...prev.watchListItems]
-              : [watchListItem],
-            lastEvaluatedKey: prev?.lastEvaluatedKey,
-          };
-        }
-      );
+      if (keyToInvalidate) {
+        queryClient.invalidateQueries({
+          queryKey: [keyToInvalidate],
+        });
+      }
+      onAddToWatchListChange?.(isAddedToWatchList ? "Deleted" : "Added");
     },
   });
 
   return {
-    isLoading: isFetching || isPending,
-    isAddedToWishList,
+    isLoading: isPending,
     handleAddRemove: () => {
-      mutate(isAddedToWishList ? undefined : watchListItem);
+      mutate(isAddedToWatchList ? undefined : watchListItem);
     },
   };
 };

@@ -58,6 +58,9 @@ type Props = PropsWithChildren<{
   hideWishListButton?: boolean;
   containerStyles?: SxProps<Theme>;
   hideAnimation?: boolean;
+  isAddedToWatchList: boolean;
+  keyToInvalidateOnWatchListChange?: string;
+  onAddToWatchListChange?: (operation: "Added" | "Deleted") => void;
 }>;
 
 const MovieCard = ({
@@ -67,6 +70,9 @@ const MovieCard = ({
   hideWishListButton,
   containerStyles,
   hideAnimation,
+  isAddedToWatchList,
+  keyToInvalidateOnWatchListChange,
+  onAddToWatchListChange,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -85,6 +91,9 @@ const MovieCard = ({
               releaseYear: movie.releaseYear || "",
               title: movie.title,
             }}
+            isAddedToWatchList={isAddedToWatchList}
+            keyToInvalidate={keyToInvalidateOnWatchListChange}
+            onAddToWatchListChange={onAddToWatchListChange}
           />
         )}
         <ImageContainer>

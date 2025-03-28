@@ -28,6 +28,7 @@ const MoreLikeThis = ({ itemsPerView, moreLikeThis }: Props) => {
             borderRadius: "12px",
           }}
           hideAnimation
+          isAddedToWatchList={false} // watch list button is hidden
         >
           <MovieCard.TitleContainer>
             <MovieCard.Title

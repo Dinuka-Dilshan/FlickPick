@@ -8,9 +8,16 @@ import WishListButton from "./WatchListButton/WatchListButton";
 type Props = {
   movie: MovieCardItem;
   onClick?: () => void;
+  keyToInvalidateOnWatchListChange?: string;
+  isAddedToWatchList: boolean;
 };
 
-const MiniMovieCard = ({ movie, onClick }: Props) => {
+const MiniMovieCard = ({
+  movie,
+  onClick,
+  keyToInvalidateOnWatchListChange,
+  isAddedToWatchList,
+}: Props) => {
   const navigate = useNavigate();
 
   const clickHandler = () => {
@@ -31,6 +38,8 @@ const MiniMovieCard = ({ movie, onClick }: Props) => {
           releaseYear: movie.releaseYear || "",
           title: movie.title,
         }}
+        keyToInvalidate={keyToInvalidateOnWatchListChange}
+        isAddedToWatchList={isAddedToWatchList}
       />
       <Grid2 size={{ xs: 4 }}>
         <MoviePoster image={movie.posterUrl} sx={{ aspectRatio: 2 / 3 }} />
