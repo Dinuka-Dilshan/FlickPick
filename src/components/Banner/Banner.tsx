@@ -16,7 +16,7 @@ const Banner = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         This site is no longer maintained. Plese visit{" "}
         <a
-          href="https://www.myanimelist.net/"
+          href="https://flick-pick-new.vercel.app/movies"
           target="_blank"
           rel="noopener noreferrer"
         >
