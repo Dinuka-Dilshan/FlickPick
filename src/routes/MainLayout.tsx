@@ -16,7 +16,7 @@ const MainLayout = () => {
   }, [location.pathname]);
 
   return (
-    <>
+    <div style={{ marginTop: 70 }}>
       <AppBar />
       <Box
         sx={{
@@ -29,7 +29,7 @@ const MainLayout = () => {
       >
         <Outlet />
       </Box>
-    </>
+    </div>
   );
 };
 
