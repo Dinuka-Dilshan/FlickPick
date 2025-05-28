@@ -13,7 +13,7 @@ const Banner = () => {
         zIndex: 1000,
       }}
     >
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography component="h1" gutterBottom>
         This site is no longer maintained. Plese visit{" "}
         <a
           href="https://flick-pick-new.vercel.app/movies"
